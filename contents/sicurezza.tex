@@ -268,5 +268,76 @@ Il prossimo teorema mostra che il \textit{One-time-pad} è il massimo che si pu�
     allora $k_1$ deve $x_1 = d_{k_1}$ deve essere presente in $S$, ciò non è possibile, per cui (\ref{eq2}) è vero. 
 \end{proof}
 
-\subsection{Sicurezza Semantica}
+Il teorema seguente permette di tenere conto, nella sicurezza, di una funzione booleana $\phi$ che ``rivela'' qualcosa sul messaggio cifrato, come ad esempio una funzione di parità o anche qualche test statistico.
 
+\begin{theorem}[Generalizzazione sicurezza perfetta]
+    Sia $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ un sistema crittografico, sia $K$ una variabile aleatoria definita in modo uniforme su $\mathcal{K}$, il sistema ha perfetta sicurezza se e solo se per ogni predicato $\phi$ su $C$ e per ogni coppia di messaggi $x_0,x_1 \in M$
+    \[
+        \Pr[\phi(e_K(x_0))] = \Pr[\phi(e_K(x_1))]
+    \]
+\end{theorem}
+\begin{proof}
+    Supponiamo il sistema sia sicuro, e definiamo un insieme di messaggi cifrati per cui il predicato è vero $S = \{ y \in C \mid \phi(y) \}$, si ha allora
+    \[ 
+        \Pr[\phi(e_K(x_0))] = \sum_{y \in S}\Pr[e_K(x_0) = y] = \sum_{y \in S}\Pr[e_K(x_1) = y] = \Pr[\phi(e_K(x_1))].
+    \]
+    Al contrario, si supponga che il sistema non abbia sicurezza perfetta, esistono $x_0,x_1 \in M\ y \in C$ tali che 
+    \[
+        \Pr[\phi(e_K(x_0))] \neq \Pr[\phi(e_K(x_1))]
+    \] essendo $\phi$ vero solo per alcuni messaggi cifrati
+    \[ 
+        \Pr[\phi(e_K(x_0))] = \Pr[e_K(x_0) = y] \neq \Pr[e_K(x_1) = y] = \Pr[\phi(e_K(x_1))].
+    \]
+
+\end{proof}
+% Il teorema 2.4 di B.S. unisce "segretezza perfetta" di S.P e "sicurezza perfetta" di B.S.
+% Se le variabili aleatorie del messaggio e del messaggio cifrato sono indipendenti, si ha sicurezza perfetta e viceversa
+
+\subsection{Sicurezza Semantica}
+Per capire perché è necessario definire la sicurezza semantica si ``rilassa'' l'uguaglianza della sicurezza perfetta \ref{def:perfect_secrecy}
+\[
+    \Pr[\phi(e_K(x_0)) = y] = \Pr[\phi(e_K(x_1)) = y]
+\] in cui $K$ è una variabile aleatoria distribuita in modo uniforme su $\mathcal{K}$.
+
+\vspace{1em}
+Al posto dell'uguaglianza si richiede 
+\[
+    \Bigl|\Pr[\phi(e_K(x_0)) = y] - \Pr[\phi(e_K(x_1)) = y] \Bigr| \leq \varepsilon
+\]
+per un valore di $\varepsilon$ molto piccolo.
+
+\vspace{1em}
+In questo modo è possibile definire una sicurezza che sia più flessibile, anche attraverso un parametro $\varepsilon$ a scelta. Ancora questa definizione non è sufficiente per descrivere applicazioni pratiche, come ad esempio rimuovere dalla definizione di sicurezza la lunghezza di un dato messaggio. Per fare ciò si descrive il funzionamento del gioco d'attacco
+
+\vspace{1em}
+% \begin{definition}[Gioco d'attacco]
+    Il gioco d'attacco è giocato tra due parti, lo \emph{sfidante} e l'\emph{avversario}. In generale l'attaccante segue un protocollo  fissato e semplice, mentre l'avversario fa uso di un protocollo arbitrario. Avviene uno scambio di messaggi tra le due parti, al termine della quale, l'avversario restituisce un valore, il valore definisce il \emph{vantaggio} dell'avversario
+% \end{definition}
+Per la sicurezza semantica si definisce un gioco d'attacco specifico
+\begin{definition}[Vantaggio di sicurezza semantica]
+    Per un dato cifrario $L = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ e un dato avversario $\mathcal{A}$ si definiscono due diversi esperimenti $b = 0,1$
+
+    \vspace{1em}
+    \noindent
+    \textbf{Esperimento} $b$:
+        \begin{itemize}
+            \item L'avversario sceglie due messaggi $x_0,x_1 \in M$ e li manda allo sfidante
+            \item Lo sfidante sceglie $K \in \mathcal{K}$ e calcola $y = e_K(x_b)$, e manda $y$ all'avversario
+            \item L'avversario restituisce $\hat{b} \in \{0,1\}$
+        \end{itemize}
+
+        Per $b = 0,1$ si definisce $W_b$ come l'evento in cui $\mathcal{A}$ restituisce 1 nell'esperimento $b$.
+        
+    Infine si definisce il vantaggio di sicurezza semantica di $\mathcal{A}$ rispetto a $L$ come
+    \[
+        \text{SSadv}[\mathcal{A},L] = \big| \Pr[W_0] - \Pr[W_1] \big|.
+    \]
+\end{definition}
+
+\begin{definition}[Sicurezza semantica]
+    Un cifrario $L = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ è detto sicuro semanticamente se per tutti gli avversari efficienti $\mathcal{A}$ il vantaggio di sicurezza semantica è trascurabile
+    \[
+        \text{SSadv}[\mathcal{A},L] = \big| \Pr[W_0] - \Pr[W_1] \big| \leq \varepsilon
+    \]
+    per una $\varepsilon$ appropriata.
+\end{definition}
