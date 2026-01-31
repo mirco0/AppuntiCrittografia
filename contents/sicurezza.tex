@@ -296,13 +296,13 @@ Il teorema seguente permette di tenere conto, nella sicurezza, di una funzione b
 \subsection{Sicurezza Semantica}
 Per capire perché è necessario definire la sicurezza semantica si ``rilassa'' l'uguaglianza della sicurezza perfetta \ref{def:perfect_secrecy}
 \[
-    \Pr[\phi(e_K(x_0)) = y] = \Pr[\phi(e_K(x_1)) = y]
+    \Pr[\phi(e_K(x_0))] = \Pr[\phi(e_K(x_1))]
 \] in cui $K$ è una variabile aleatoria distribuita in modo uniforme su $\mathcal{K}$.
 
 \vspace{1em}
 Al posto dell'uguaglianza si richiede 
 \[
-    \Bigl|\Pr[\phi(e_K(x_0)) = y] - \Pr[\phi(e_K(x_1)) = y] \Bigr| \leq \varepsilon
+    \Bigl|\Pr[\phi(e_K(x_0))] - \Pr[\phi(e_K(x_1))] \Bigr| \leq \varepsilon
 \]
 per un valore di $\varepsilon$ molto piccolo.
 
@@ -327,7 +327,7 @@ Per la sicurezza semantica si definisce un gioco d'attacco specifico
         \end{itemize}
 
         Per $b = 0,1$ si definisce $W_b$ come l'evento in cui $\mathcal{A}$ restituisce 1 nell'esperimento $b$.
-        
+
     Infine si definisce il vantaggio di sicurezza semantica di $\mathcal{A}$ rispetto a $L$ come
     \[
         \text{SSadv}[\mathcal{A},L] = \big| \Pr[W_0] - \Pr[W_1] \big|.
