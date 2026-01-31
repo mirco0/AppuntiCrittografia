@@ -1,0 +1,21 @@
+\begin{algorithm}[H]
+    \label{alg:spn}
+    
+    \DontPrintSemicolon
+    \TitleOfAlgo{SPN($x, \pi_S, \pi_P, (K^1, \dots, K^{\mathcal{N}+1})$)}
+
+    $w^0 \leftarrow x$\;
+    \For{$r \leftarrow 1$ \KwTo $\mathcal{N}-1$}{
+        $u^r \leftarrow w^{r-1} \oplus K^r$\;
+        \For{$i \leftarrow 1$ \KwTo $m$}{
+            $v^r_{\langle i \rangle} \leftarrow \pi_S(u^r_{\langle i \rangle})$\;
+        }
+        $w^r \leftarrow (v^r_{\pi_P(1)}, \dots, v^r_{\pi_P(\ell m)})$\;
+    }
+    $u^{\mathcal{N}} \leftarrow w^{\mathcal{N}-1} \oplus K^{\mathcal{N}}$\;
+    \For{$i \leftarrow 1$ \KwTo $m$}{
+        $v^{\mathcal{N}}_{\langle i \rangle} \leftarrow \pi_S(u^{\mathcal{N}}_{\langle i \rangle})$\;
+    }
+    $y \leftarrow v^{\mathcal{N}} \oplus K^{\mathcal{N}+1}$\;
+    \Return{$y$}\;
+\end{algorithm}

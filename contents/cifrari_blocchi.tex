@@ -1,0 +1,15 @@
+I cifrari a blocchi fanno uno di una sequenza di \emph{permutazioni} e \emph{sostituzioni}. inoltre spesso sono implementati sotto forma di cifrari iterati. Un cifrario iterato lavora su $\mathcal{N}$ ``round'', per cui è necessario definire una \emph{funzione round} e una \emph{key-schedule} (una tupla delle chiavi relative ai round). La funzione del round $g$ ha due input, la chiave relativa al round $K^r$ e uno \emph{stato corrente} $w^{r-1}$. Inoltre per far si che il messaggio si possa decifrare $g$ deve essere iniettiva rispetto alla chiave.
+
+\subsection{Sostitution Permutation Network}
+Il cifrario \emph{SPN} è una modifica di un cifrario iterato in cui i \emph{plaintext} e \emph{ciphertext} sono divisi in $m$ blocchi lunghi $\ell$.
+\begin{definition}[SPN]
+    Siano $\ell,m, \mathcal{N}$ interi positivi $M = C = \{0,1\}^{\ell m}$, siano $\pi_S, \pi_P$ funzioni di permutazione
+    \begin{align*}
+        \pi_S: \{0,1\}^{\ell} &\to \{0,1\}^{\ell}\\
+        \pi_P: \{1,\dots,\ell m\} &\to \{1,\dots, \ell m\}
+    \end{align*}
+    con $\mathcal{K} \subseteq (\{0,1\}^{\ell m})^{\mathcal{N}+1}$ i \emph{key-schedule} possibili derivati da una chiave iniziale K.
+
+    La funzione di cifratura è descritta dall'algoritmo \ref{alg:spn}, e il l'\textit{i-esimo} blocco è descritto come $x_{<i>}$ per $i = 1,\dots,m$
+\end{definition}
+\include{algorithms/spn}

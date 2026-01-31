@@ -6,6 +6,7 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{hyperref}
+\usepackage[ruled,vlined]{algorithm2e}
 
 \theoremstyle{definition}
 \newtheorem{notation}{Notazione}[section]
@@ -23,14 +24,16 @@
     \section{Sistemi Crittografici Sicurezza e Segretezza}
     \input{contents/sicurezza.tex}
     % 1-2-3 
-    % Perché il cifratura, zero knowledge proof, tipi di crittografia simmetria
+    % Perché la cifratura, zero knowledge proof, tipi di crittografia simmetria
     % Spazio di Messaggi e chiavi
     % Tipi di sicurezza
     % Tipi di attacco, potenza di attacco
     \section{Crittosistemi semplici}
     \input{contents/cifrari.tex}
-    % 5-6-9 AES, SPN, Feistel Network
     
+    \section{Cifrari a blocchi}
+    \input{contents/cifrari_blocchi.tex}
+    % 5-6-9 AES, SPN, Feistel Network
     \section{Campi finiti e Gruppi}
     % 6-7-8-11-14
 
