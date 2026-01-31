@@ -1,0 +1,50 @@
+\documentclass{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{hyperref}
+
+\theoremstyle{definition}
+\newtheorem{notation}{Notazione}[section]
+\newtheorem{example}{Esempio}
+\newtheoremstyle{break}{}{}{}{}{\bfseries}{}{\newline}{}
+\theoremstyle{break}
+\newtheorem{definition}{Definizione}[section]
+\newtheorem{theorem}{Teorema}[section]
+
+\begin{document}
+    \input{titolo.tex}
+    \tableofcontents
+    \newpage
+
+    \section{Sistemi Crittografici Sicurezza e Segretezza}
+    \input{contents/sicurezza.tex}
+    % 1-2-3 
+    % Perché il criptaggio, zero knowledge proof, tipi di crittografia simmetria
+    % Spazio di Messaggi e chiavi
+    % Tipi di sicurezza
+    % Tipi di attacco, potenza di attacco
+    \section{Crittosistemi semplici}
+    \input{contents/cifrari.tex}
+    % 5-6-9 AES, SPN, Feistel Network
+    
+    \section{Campi finiti e Gruppi}
+    % 6-7-8-11-14
+
+    \section{Funzioni Hash}
+    % 12
+    % Resistenza a collisioni, Birthday Paradox, funzione di compressione di SHA-256, costruzione Merkle Damgard
+    
+    \subsection{Scambio di Chiavi}
+    % 13-15
+    % Diffie Hellman, logaritmo discreto encryption asimmetrico, pohlig Hellmann
+    
+    \section{Curve ellittiche}
+    % 17-18-19-20-21-22
+    
+    \section{RSA e fattorizzazione}
+
+\end{document}

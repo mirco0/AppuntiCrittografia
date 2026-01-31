@@ -1,0 +1,148 @@
+\subsection{Sistemi Crittografici}
+La crittografia permette lo scambio di informazioni attraverso una funzione di \emph{encryption} che permette di trasformare le informazioni \emph{plaintext} in stringhe di caratteri mescolati \emph{ciphertext} e viceversa. Un crittosistema (sistema di crittografia) descrive una specifica completa delle chiavi e di come farne uso per cifrare e decifrare i messaggi. Le tecniche utilizzate da un avversario per la rottura di un sistema crittografico è detto \emph{crittoanalisi}, di cui la più banale è la ricerca esaustiva della chiave.
+
+\begin{definition}
+    Un crittosistema è una quintupla $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ in cui
+    \begin{enumerate}
+        \item $M$ è l'insieme finito dei possibili messaggi
+        \item $C$ è l'insieme finito dei possibili messaggi criptati
+        \item $\mathcal{K}$ è lo spazio delle chiavi possibili
+        \begin{align*}
+            &\forall k \in \mathcal{K}, e_{K} \in \mathcal{E}, d_{K} \in \mathcal{D}\\
+            e_{K}&: M \to C \text{ regola di criptaggio}\\
+            d_{K}&: C \to M \text{ regola di decriptaggio}
+        \end{align*}
+    \end{enumerate}  
+\end{definition}
+
+\vspace{1em}\noindent
+I sistemi crittografici con una sola chiave segreta sono limitati, in quanto, entrambe le parti che intendono comunicare devono essere in conoscenza della chiave prima di iniziare la conversazione. In cui la chiave descrive la funzione di criptaggio e decriptaggio.
+
+Esistono anche sistemi crittografici a \emph{chiave pubblica} introdotti nel 1970 da Diffie e Hellman. In questo tipo di sistemi esistono due chiavi, la \textbf{chiave pubblica} e \textbf{chiave privata}, in cui la prima permette di criptare e la seconda di decriptare. La chiave privata deve essere posseduta esclusivamente dal destinatario dei messaggi, al contrario la chiave pubblica può essere posseduta da chiunque. Questo tipo di crittosistema permette di scambiare messaggi senza accordare una chiave tra le parti in precedenza
+
+\subsection{Sicurezza}
+Per un sistema di crittografia si misura la ``sicurezza'', che permette di definire quanto un sistema sia resistente ad attacchi. In crittografia la sicurezza coinvolge tre diversi aspetti
+\begin{itemize}
+    \item Modello di attacco
+    \item Obiettivo dell'avversario
+    \item Livello di sicurezza
+\end{itemize}
+Il \textbf{modello di attacco} definisce le informazioni disponibili a un attaccante, spesso si assume che l'attaccante conosca il protocollo utilizzato (\emph{Principio di Kerckhoff}), insieme alla chiave pubblica se si fa uso di un sistema asimmetrico, al contrario l'avversario è considerato non a conoscenza di chiavi private.
+
+L' \textbf{obiettivo dell'avversario} specifica il criterio per cui il sistema di crittografia è considerabile ``rotto'' (sconfitto). Specifica le informazioni che si vogliono tenere segrete, se l'avversario viene a conoscenza di tali informazioni l'attacco è \emph{ben riuscito}.
+
+Il \textbf{livello di sicurezza} è utilizzato per quantificare l'impegno dell'avversario per ottenere un attacco \emph{ben riuscito}. In modo analogo il tipo e la quantità di risorse computazionali che l'avversario ha a disposizione.
+
+\newpage
+\subsubsection{Tipi di attacchi}
+Ci sono quattro tipi di attacchi noti in crittografia, ordinati per forza di attacco
+\begin{enumerate}
+    \item \emph{known-ciphertext attack}
+    \item \emph{known-plaintext attack}
+    \item \emph{chosen-ciphertext attack}
+    \item \emph{chosen-plaintext attack}
+\end{enumerate}
+Nel \emph{known-ciphertext attack} l'avversario ha accesso a una quantità di \emph{ciphertext} criptati con la stessa chiave sconosciuta. Nel \emph{known-plaintext attack} l'avversario ha accesso a delle coppie di \emph{plaintext} e \emph{ciphertext} corrispondenti criptati con la stessa chiave. Nel \emph{chosen-plaintext attack} l'avversario ha la possibilità di criptare dei \emph{plaintext} a scelta, mentre nel \emph{chosen-ciphertext attack} l'avversario ha la possibilità di decriptare dei \emph{ciphertext} a scelta.
+
+\vspace{1em} \noindent
+Riprendendo l'obiettivo dell'avversario si presenta il concetto di ``rottura completa'', in cui un avversario ottiene accesso alle chiavi, di conseguenza ha accesso completo ai messaggi scambiati. La rottura completa non è comunque l'unico obiettivo di un possibile attaccante, come la possibilità di decriptare un singolo messaggio, o essere capace di distinguere due \emph{ciphertext} di due \emph{plaintext} con una probabilità non nulla.
+
+%(pagina 11 Stinson Paterson) In altri sistemi di crittografia, come la firma ci sono altri obiettivi dell'avversario.
+
+\vspace{1em}\noindent
+I livelli di sicurezza studiati sono tre, \emph{sicurezza computazionale}, \emph{sicurezza dimostrabile} \emph{sicurezza incondizionata}.
+
+La \emph{sicurezza computazionale} misura quanto ragionevole è la rottura di un algoritmo in un lasso di tempo. Questo tipo di sicurezza varia con l'avanzare della tecnologia, un esempio è \emph{RSA}.
+
+Il prossimo livello di sicurezza è la \emph{sicurezza riduzionale}, in cui la rottura di un sistema di crittografia può essere ridotta computazionalmente alla risoluzione di un problema matematico. Alcuni esempi sono la \emph{fattorizzazione} e il problema del \emph{logaritmo discreto}. 
+
+
+La \emph{sicurezza incondizionata} significa che il sistema di crittografia non può essere rotto con nessuna quantità di calcolo e tempo, in quanto nel \emph{ciphertext} non ci sono abbastanza informazioni. Un esempio è il \emph{One-time-pad}
+
+\vspace{1em}\noindent
+Questi tipi di sicurezza non includono tutti i casi, ci sono possibili attacchi anche nelle implementazioni degli algoritmi, come gli attacchi \emph{side-channel}. Poiché per alcuni tipi di sistemi di crittografia è necessario fare uso di blocchi di lunghezza fissata, spesso nei messaggi non abbastanza lunghi vengono aggiunti dei bit di \emph{padding}. In passato è stato sviluppato un attacco, come il \emph{padding-oracle attack}
+
+\subsection{Segretezza e autenticità dell'informazione}
+I sistemi crittografici permettono di ottenere una \emph{segretezza} rispetto alle intercettazioni da parte di avversari (\emph{avversari passivi}), per intercettazioni si intendono accessi a messaggi inviati. 
+
+Il pericolo della comunicazione a distanza non riguarda solamente la segretezza delle informazioni inviate, ma anche l'affidabilità di tali informazioni. Un avversario potrebbe essere interessato ad \emph{alterare i messaggi} scambiati, \emph{impersonare una delle due parti} o anche \emph{deviare i messaggi} verso terze parti.
+
+\vspace{1em}\noindent
+Il cifraggio delle informazioni da solo non permette di difendersi da questo tipo di attacchi, per esempio i cifrari a stream sono suscettibili agli attacchi \emph{bit-flipping}, in cui alcuni bit del messaggio vengono scambiati, cambiando così le informazioni del \emph{plaintext} in modo prevedibile, anche se sconosciuto. Per questi motivi vengono utilizzati dei metodi crittografici che permettono di attestare l'autenticità dei messaggi, che fanno uso di crittografia a \emph{chiave pubblica} e a \emph{chiave privata}.
+
+\subsubsection{MAC e Schemi di firme}
+I \textit{MAC} \textit{Message Authentication Code} fanno uso di una sola chiave privata per entrambe le parti, quando un messaggio viene spedito, si fa uso della chiave per creare un \textbf{tag} dipendente dalla chiave e dal messaggio stesso. Alla ricezione del messaggio si verifica che il tag ricevuto sia coerente con il messaggio ricevuto, nel caso in cui il messaggio sia cifrato il tag viene calcolato sul messaggio dopo la cifratura (\textbf{encrypt-then-MAC}).
+
+Negli schemi di firme si fa uso di due chiavi, una privata e una pubblica, la chiave privata è utilizzata per definire un algoritmo di firma (in possesso solo al mittente), mentre la chiave pubblica definisce un algoritmo di verifica, può essere utilizzata da chiunque per verificare il mittente. Nel caso in cui si voglia firmare un messaggio cifrato, la firma avviene sul \emph{plaintext}, che successivamente viene cifrato (\textbf{sign-then-encrypt}).
+
+Si introduce il concetto della repudiabilità, nello schema di firme la verifica è pubblica e può essere eseguita da chiunque, la firma identifica il mittente per cui, il messaggio è detto \textbf{non repudiabile}. Mentre nello schema MAC, non c'è modo di determinare il mittente del messaggio attraverso il tag generato, poicé la chiave è unica per tutti.
+
+\subsubsection{Segretezza perfetta}
+Poiché la sicurezza di un crittosistema non può essere definita solamente in un piano di complessità computazionale (permettendo un tempo di esecuzione infinito), i sistemi crittografici vengono studiati anche attraverso la probabilità.
+
+\vspace{1em}\noindent
+Si assume che in un crittosistema $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ una chiave $K \in \mathcal{K}$ venga utilizzata una sola volta.
+
+Fissato un messaggio $X \in M$, $X$ è una variabile aleatoria, possiamo quindi definire la probabilità che assuma un valore fissato $x$ ovvero $\Pr[X = x]$. In modo analogo si assume che le chiavi $K$ abbiano una distribuzione fissata (non necessariamente uniforme) anche $K$ è una variabile aleatoria ed è possibile definire la probabilità che assuma un valore fissato $k$, per cui $\Pr[K = k]$. $X$ e $K$ sono due variabili indipendenti.
+
+\vspace{1em}\noindent
+Per cui le due distribuzioni di probabilità inducono una distribuzione di probabilità sullo spazio dei messaggi criptati $C$, è quindi possibile definire una variabile aleatoria $Y$ per un messaggio criptato fissato e stabilirne la probabilità, $\Pr[Y = y]$. Per una data chiave $K$ si definisce
+\[
+    C(K) = \{e_K(x) \mid x \in M\}
+\]
+ovvero tutti i possibili messaggi criptati in cui $K$ è la chiave utilizzata. Per studiare la probabilità di un messaggio criptato si ha
+\[
+    \Pr[Y = y] = \sum_{\{K \mid y \in C(K)\}} \Pr[K = k]\Pr[X = d_K(y)]
+\]
+e anche la probabilità condizionata $\Pr[Y = y | X = x]$
+\[
+    \Pr[Y = y | X = x] = \sum_{\{K \mid y \in C(K)\}} \Pr[K = k]
+\]
+
+Ora è possibile calcolare la probabilità condizionale $\Pr[X = x | Y = y]$, che permette di stimare un possibile messaggio dato un messaggio cifrato
+\[
+    \Pr[X = x | Y = y] = \frac{\Pr[X = x] \cdot \sum_{\{K \mid y \in C(K)\}}\Pr[K = k]}{\sum_{\{K \mid y \in C(K)\}} \Pr[K = k]\Pr[X = d_K(y)]}
+\]
+il calcolo è banale date le distribuzioni di probabilità di $M,C,K$.
+
+\begin{definition}[Segretezza perfetta]
+    Un sistema di crittografia è detto perfetto se $\Pr[x | y] = \Pr[x]$ per qualsiasi messaggio $x \in M, y \in C$. Il messaggio criptato non da informazioni sul messaggio originale.
+\end{definition}
+
+\begin{theorem}
+    Il cifrario di Cesare ha segretezza perfetta. Supponiamo che le 26 chiavi del cifrario abbiano probabilità uniforme $p = \frac{1}{26}$. Qualunque sia la distribuzione dei messaggi, il cifrario ha segretezza perfetta.
+\end{theorem}
+\begin{proof}
+    Si ricorda che $M = C = \mathcal{K} = \mathbb{Z}_{26}$ e per $0 \leq K \leq 25$, $e_K(x) = x + K \mod 26 $ $\Pr[K = k] = \frac{1}{26}$
+    \begin{align*}
+        \Pr[Y = y] &= \sum_{K \in \mathbb{Z}_{26}} \Pr[K = k]\Pr[X = d_K(y)]\\
+        & \sum_{K \in \mathbb{Z}_{26}} \frac{1}{26} \Pr[X = y - K]\\
+        & \frac{1}{26} \sum_{K \in \mathbb{Z}_{26}}\Pr[X = y - K]
+    \end{align*}
+    Per una $y$ fissata, il valore $(y-K) \mod 26$ è una permutazione di $\mathbb{Z}_{26}$ per cui
+    \[
+        \sum_{K \in \mathbb{Z}_{26}}\Pr[X = y - K] = \Pr[X = x] = 1
+    \]
+    Ora
+    \[
+        \Pr[y | x] = \Pr[K = (y-x) \mod 26] = \frac{1}{26}
+    \]
+    Infine 
+    \begin{align*}        
+        \Pr[x | y] &= \frac{\Pr[x]\Pr[y]}{\Pr[y]} =\\
+        &= \frac{\Pr[x]\frac{1}{26}}{\frac{1}{26}} =\\
+        & = \Pr[x].
+    \end{align*}
+\end{proof}
+% Pagina 68 Stinson Paterson
+
+\begin{theorem}
+    Supponiamo un crittosistema $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ in cui $|\mathcal{K}| = |C| = |M|$, l'insieme delle chiavi, dei \textit{ciphertext} e dei messaggi \textit{plaintext}.
+
+    \vspace{1em}\noindent
+    Il sistema crittografico è sicuro se e solo se ogni chiave è utilizzata con probabilità uniforme, e per ogni messagio $x \in M$ e \textit{ciphertext} $y \in \mathcal{C}$ c'è un unica chiave $K$ per cui $e_{K}(x) = y$
+\end{theorem}
+
+\begin{proof}
+    Supponiamo il sistema crittografico con segretezza perfetta
+\end{proof}
