@@ -9,16 +9,29 @@ La crittografia permette lo scambio di informazioni attraverso una funzione di \
         \item $\mathcal{K}$ è lo spazio delle chiavi possibili
         \begin{align*}
             &\forall k \in \mathcal{K}, e_{K} \in \mathcal{E}, d_{K} \in \mathcal{D}\\
-            e_{K}&: M \to C \text{ regola di criptaggio}\\
-            d_{K}&: C \to M \text{ regola di decriptaggio}
+            e_{K}&: M \to C \text{ regola di cifratura}\\
+            d_{K}&: C \to M \text{ regola di decifratura}
         \end{align*}
     \end{enumerate}  
 \end{definition}
 
 \vspace{1em}\noindent
-I sistemi crittografici con una sola chiave segreta sono limitati, in quanto, entrambe le parti che intendono comunicare devono essere in conoscenza della chiave prima di iniziare la conversazione. In cui la chiave descrive la funzione di criptaggio e decriptaggio.
+I sistemi crittografici con una sola chiave segreta sono limitati, in quanto, entrambe le parti che intendono comunicare devono essere in conoscenza della chiave prima di iniziare la conversazione. In cui la chiave descrive la funzione di cifratura e decifratura.
 
 Esistono anche sistemi crittografici a \emph{chiave pubblica} introdotti nel 1970 da Diffie e Hellman. In questo tipo di sistemi esistono due chiavi, la \textbf{chiave pubblica} e \textbf{chiave privata}, in cui la prima permette di criptare e la seconda di decriptare. La chiave privata deve essere posseduta esclusivamente dal destinatario dei messaggi, al contrario la chiave pubblica può essere posseduta da chiunque. Questo tipo di crittosistema permette di scambiare messaggi senza accordare una chiave tra le parti in precedenza
+
+\vspace{1em}
+Per parlare di sicurezza al livello pratico nel mondo reale è necessario un modo per definire attacchi non solo teorici, ma anche pratici, attacchi che nel mondo reale siano realizzabili con risorse e tempo ragionevoli. Quindi un modo per distinguere attacchi attuabili realmente e \emph{computazionalmente ragionevoli}, questo più avanti porta alla definizione di \textbf{sicurezza semantica}. Si continua quindi parlando di funzioni di cifratura e decifratura che facciano uso di algoritmi efficienti.
+
+%B.S. Definizione  2.2.1
+\begin{definition}[Cifrario Computazionale]
+    Un cifrario computazionale $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ è un cifrario in cui $\mathcal{E},\mathcal{D}$ sono \emph{algoritmi efficienti} per le regole di cifratura e decifratura, definite, come prima, sullo spazio di messaggi $M$, spazio delle chiavi $\mathcal{K}$ e spazio dei messaggi cifrati $C$.
+    
+    %Salto la parte probabilistica y \stackrel{R}{\gets} e_k(x)
+\end{definition}
+
+
+
 
 \subsection{Sicurezza}
 Per un sistema di crittografia si misura la ``sicurezza'', che permette di definire quanto un sistema sia resistente ad attacchi. In crittografia la sicurezza coinvolge tre diversi aspetti
@@ -68,14 +81,14 @@ I sistemi crittografici permettono di ottenere una \emph{segretezza} rispetto al
 Il pericolo della comunicazione a distanza non riguarda solamente la segretezza delle informazioni inviate, ma anche l'affidabilità di tali informazioni. Un avversario potrebbe essere interessato ad \emph{alterare i messaggi} scambiati, \emph{impersonare una delle due parti} o anche \emph{deviare i messaggi} verso terze parti.
 
 \vspace{1em}\noindent
-Il cifraggio delle informazioni da solo non permette di difendersi da questo tipo di attacchi, per esempio i cifrari a stream sono suscettibili agli attacchi \emph{bit-flipping}, in cui alcuni bit del messaggio vengono scambiati, cambiando così le informazioni del \emph{plaintext} in modo prevedibile, anche se sconosciuto. Per questi motivi vengono utilizzati dei metodi crittografici che permettono di attestare l'autenticità dei messaggi, che fanno uso di crittografia a \emph{chiave pubblica} e a \emph{chiave privata}.
+La cifratura delle informazioni da solo non permette di difendersi da questo tipo di attacchi, per esempio i cifrari a stream sono suscettibili agli attacchi \emph{bit-flipping}, in cui alcuni bit del messaggio vengono scambiati, cambiando così le informazioni del \emph{plaintext} in modo prevedibile, anche se sconosciuto. Per questi motivi vengono utilizzati dei metodi crittografici che permettono di attestare l'autenticità dei messaggi, che fanno uso di crittografia a \emph{chiave pubblica} e a \emph{chiave privata}.
 
 \subsubsection{MAC e Schemi di firme}
 I \textit{MAC} \textit{Message Authentication Code} fanno uso di una sola chiave privata per entrambe le parti, quando un messaggio viene spedito, si fa uso della chiave per creare un \textbf{tag} dipendente dalla chiave e dal messaggio stesso. Alla ricezione del messaggio si verifica che il tag ricevuto sia coerente con il messaggio ricevuto, nel caso in cui il messaggio sia cifrato il tag viene calcolato sul messaggio dopo la cifratura (\textbf{encrypt-then-MAC}).
 
 Negli schemi di firme si fa uso di due chiavi, una privata e una pubblica, la chiave privata è utilizzata per definire un algoritmo di firma (in possesso solo al mittente), mentre la chiave pubblica definisce un algoritmo di verifica, può essere utilizzata da chiunque per verificare il mittente. Nel caso in cui si voglia firmare un messaggio cifrato, la firma avviene sul \emph{plaintext}, che successivamente viene cifrato (\textbf{sign-then-encrypt}).
 
-Si introduce il concetto della repudiabilità, nello schema di firme la verifica è pubblica e può essere eseguita da chiunque, la firma identifica il mittente per cui, il messaggio è detto \textbf{non repudiabile}. Mentre nello schema MAC, non c'è modo di determinare il mittente del messaggio attraverso il tag generato, poicé la chiave è unica per tutti.
+Si introduce il concetto della ripudiabilità, nello schema di firme la verifica è pubblica e può essere eseguita da chiunque, la firma identifica il mittente per cui, il messaggio è detto \textbf{non ripudiabile}. Mentre nello schema MAC, non c'è modo di determinare il mittente del messaggio attraverso il tag generato, poiché la chiave è unica per tutti.
 
 \subsubsection{Segretezza perfetta}
 Poiché la sicurezza di un crittosistema non può essere definita solamente in un piano di complessità computazionale (permettendo un tempo di esecuzione infinito), i sistemi crittografici vengono studiati anche attraverso la probabilità.
@@ -106,8 +119,55 @@ Ora è possibile calcolare la probabilità condizionale $\Pr[X = x | Y = y]$, ch
 il calcolo è banale date le distribuzioni di probabilità di $M,C,K$.
 
 \begin{definition}[Segretezza perfetta]
-    Un sistema di crittografia è detto perfetto se $\Pr[x | y] = \Pr[x]$ per qualsiasi messaggio $x \in M, y \in C$. Il messaggio criptato non da informazioni sul messaggio originale.
+    Un sistema di crittografia è detto essere a segretezza perfetta se $\Pr[x | y] = \Pr[x]$ per qualsiasi messaggio $x \in M, y \in C$. Il messaggio criptato non da informazioni sul messaggio originale.
 \end{definition}
+
+In maniera alternativa è possibile descrivere la segretezza perfetta come di seguito
+
+%B.S. Definizione 2.1
+\begin{definition}[Sicurezza/Segretezza perfetta]
+    \label{def:perfect_secrecy}
+    Un sistema di crittografia $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ è detto essere a sicurezza perfetta se considerando $K \in \mathcal{K}$ con distribuzione uniforme e per tutte le possibili coppie di messaggi $x_0,x_1 \in M$, per ogni $y \in C$
+    \[
+        \Pr[e_K(x_0) = y] = \Pr[e_K(x_1) = y]
+    \]
+\end{definition}
+
+%B.S. Teorema 2.1
+\begin{theorem}
+    \label{def:perfect_secrecy_alternative}
+    Sia $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ un sistema di crittografia. Le seguenti affermazioni sono equivalenti
+
+    \begin{enumerate}
+        \item Il sistema è a sicurezza perfetta
+        \item Per ogni $y \in C$ esiste un intero $N_y$ tale che per ogni $x \in M$ vale
+        \[
+            |\{ K \in \mathcal{K} \mid e_K(x) = y \}| = N_y
+        \]
+        \item Se la variabile aleatoria $K$ è distribuita in modo uniforme su $\mathcal{K}$ allora per ogni messaggio $x \in M$, $y = e_K(x)$ ha la stessa distribuzione. 
+    \end{enumerate}
+\end{theorem}
+\begin{proof}\mbox{}
+   
+    $(2 \iff 3)$
+    
+    Riscrivendo la seconda affermazione come: per ogni $y \in C$ esiste un numero $P_y$ tale che per ogni $x \in M$ si ha $\Pr[e_K(x) = y] = P_y$, in cui $K$ è una variabile distribuita in modo uniforme si nota $P_y = \frac{N_y}{\mathcal{K}}$.
+    
+    \vspace{1em}
+    $(1 \implies 2)$
+
+    Sia $y \in C$ un messaggio cifrato fissato. Sia $x_0 \in M$ un messaggio, si definisce $P_y = \Pr[e_K(x) = y]$. Da 1, per tutti i messaggi $x \in M$ è vero che 
+    \[
+        \Pr[e_K(x) = y] = \Pr[e_K(x_0) = y] = P_y
+    \] 2 è perciò vero.
+
+    \vspace{1em}
+    $(2 \implies 1)$
+
+    Siano $x_0,x_1 \in M$ due messaggi fissati e $y \in C$ un messaggio cifrato fissato. Da 2 $\Pr[e_K(x_0)] = P_y$ e $\Pr[e_K(x_1)] = P_y$, anche 1 è dimostrato.
+\end{proof}
+
+
 
 \begin{theorem}
     Il cifrario di Cesare ha segretezza perfetta. Supponiamo che le 26 chiavi del cifrario abbiano probabilità uniforme $p = \frac{1}{26}$. Qualunque sia la distribuzione dei messaggi, il cifrario ha segretezza perfetta.
@@ -140,9 +200,73 @@ il calcolo è banale date le distribuzioni di probabilità di $M,C,K$.
     Supponiamo un crittosistema $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ in cui $|\mathcal{K}| = |C| = |M|$, l'insieme delle chiavi, dei \textit{ciphertext} e dei messaggi \textit{plaintext}.
 
     \vspace{1em}\noindent
-    Il sistema crittografico è sicuro se e solo se ogni chiave è utilizzata con probabilità uniforme, e per ogni messagio $x \in M$ e \textit{ciphertext} $y \in \mathcal{C}$ c'è un unica chiave $K$ per cui $e_{K}(x) = y$
+    Il sistema crittografico è sicuro se e solo se ogni chiave è utilizzata con probabilità uniforme, e per ogni messaggio $x \in M$ e \textit{ciphertext} $y \in \mathcal{C}$ c'è un unica chiave $K$ per cui $e_{K}(x) = y$
 \end{theorem}
 
 \begin{proof}
-    Supponiamo il sistema crittografico con segretezza perfetta
+    Supponiamo il sistema crittografico con segretezza perfetta, per ogni messaggio $x \in M$ e messaggio cifrato $y \in C$ deve esistere almeno una chiave per cui $e_K(x) = y$, si hanno le disuguaglianze
+
+    \begin{align*}
+        &|C| = |\{ e_K(x) \mid K \in \mathcal{K}\}| \leq |\mathcal{K}|    
+    \end{align*} poiché $|C| = |K|$
+    \[
+        |\{ e_K(x) \mid K \in \mathcal{K}\}| = |C|
+    \] 
+    per cui non esistono due chiavi diverse $K_1,K_2 \in \mathcal{K}$ che cifrano lo stesso messaggio $x$ in $y$ ($e_{K_1}(x) = e_{K_2}(x)$), per ogni messaggio $x$ esiste quindi un'unica chiave $K$ tale che $e_K(x) = y$
+
+    Sia $n = |\mathcal{K}|$ e lo spazio dei messaggi $M = \{x_i: 1 \leq i \leq n\}$, fissato un messaggio cifrato $y$ è possibile definire una sequenza di chiavi $K_1,\dots,K_n$ tale che $e_{K_i}(x_i) = y$ per ogni $i = 1,\dots,n$, inoltre
+    \[
+        \Pr[x_i | y] = \frac{\Pr[y | x_i]\Pr[x_i]}{\Pr[y]} = \frac{\Pr[K = K_i]\Pr[x_i]}{\Pr[y]}
+    \]
+    poiché abbiamo assunto un sistema a \emph{segretezza perfetta} $\Pr[x_i | y] = \Pr[x_i]$ e $\Pr[K_i] = \Pr[y]$ per ogni $i = 1,\dots,n$, si ottiene che le chiavi sono scelte con la stessa distribuzione di $y \in C$, e poiché il numero di chiavi è $n$ allora $\Pr[K] = \frac{1}{n}$ per ogni $K \in \mathcal{K}$.
 \end{proof}
+
+\vspace{1em} Un esempio di sistema a sicurezza perfetta è il \emph{One-time-pad} descritto da Gilbert Vernam nel 1917.
+
+\begin{definition}[One-time-pad]
+    Sia $n \geq 1$ un intero, e sia $M = C = \mathcal{K} = (\mathbb{Z}_{2})^n$. Per $K \in (\mathbb{Z}_{2})^n$, si definisce la cifratura come la somma della chiave e del messaggio modulo 2. Per $x \in M$ $x = (x_1,\dots,x_n)$ e $K \in \mathcal{K} \ K = (K_1,\dots,K_n)$
+    \begin{align*}
+        e_K(x) = (x_1 + K_1, \dots, x_n + K_n) \mod 2\\
+        d_K(y) = (x_1 + K_1, \dots, x_n + K_n) \mod 2\\
+    \end{align*}
+\end{definition}
+
+Il \textit{One-time-pad} fornisce segretezza perfetta, ma un principale svantaggio riguarda la lunghezza delle chiavi $|\mathcal{K}| \geq |M|$, la quantità di chiavi scambiate deve essere almeno pari alla quantità di messaggi scambiati, la sicurezza e robustezza del sistema sono basate sull'utilizzo singolo delle chiavi. Il cifrario è inoltre vulnerabile ad attacchi del tipo \emph{known-plaintext} dal momento che una chiave $K$ può essere determinata con lo \texttt{xor} tra messaggio originale e messaggio cifrato $x \oplus e_K(x) = K$. 
+Ne segue ora la dimostrazione della segretezza perfetta di \textit{One-time-pad}
+
+%B.S. Teorema 2.2
+\begin{proof}
+    Supponiamo il sistema di \textit{One-time-pad}, per ogni messaggio fissato $x \in \{0,1\}^n$ e messaggio cifrato $y \in \{0,1\}^n$ anch'esso fissato, esiste un'unica chiave $K$ che soddisfa 
+    \[
+        K \oplus x = y
+    \]
+    ovvero $K = x \oplus y$, quindi $N_y = 1$ è il numero di soluzioni per ogni $y$, il cifrario soddisfa quindi la condizione 2 del teorema \ref{def:perfect_secrecy_alternative}. 
+\end{proof}
+
+%B.S. 2.5 saltati teoremi 2.3 2.4 
+Il prossimo teorema mostra che il \textit{One-time-pad} è il massimo che si può fare per ottenere sicurezza perfetta.  
+\begin{theorem}[Teorema di Shannon]
+    Sia un sistema di crittografia $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$, se il sistema è perfettamente sicuro allora $|\mathcal{K}| \geq |M|$.
+\end{theorem}
+\begin{proof} Supponiamo che $|\mathcal{K}| < |M|$ è necessario dimostrare che il sistema non sia perfettamente sicuro dato dall'esistenza di due messaggi $x_0,x_1$ tali che
+    \begin{align}
+        \Pr[e_K(x_0) = y] > 0 \label{eq1} \\ 
+        \Pr[e_K(x_1) = y] = 0 \label{eq2}
+    \end{align}
+
+    Per una variabile $K$ distribuita in modo uniforme su $\mathcal{K}$.
+
+    \vspace{1em}\noindent
+    Scegliendo un qualsiasi messaggio $x_0 \in M$ e una chiave $k_0 \in \mathcal{K}$ è chiaro che (\ref{eq1}) sia vero.
+
+    \vspace{1em}\noindent
+    Sia $S = \{ d_{k_1}(y) \mid k_1 \in \mathcal{K}\}$ l'insieme dei messaggi decifrabili, ovviamente $|S| \leq |\mathcal{K}| < |M|$. È possibile prendere un messaggio $x_1 \in M-S$. Si assuma $k_1$ tale che $e_{k_1}(x_1) = y$, allora per la correttezza del cifrario
+    \[
+        d_{k_1}(y) = d_{k_1}(e_{k_1}(x_1)) = x_1
+    \]
+
+    allora $k_1$ deve $x_1 = d_{k_1}$ deve essere presente in $S$, ciò non è possibile, per cui (\ref{eq2}) è vero. 
+\end{proof}
+
+\subsection{Sicurezza Semantica}
+
