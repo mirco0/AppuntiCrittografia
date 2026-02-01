@@ -25,45 +25,47 @@ x       &\leftarrow w^0
 
 
 %S.P. 4.5
-\subsection{Sostitution Permutation Network}
+\subsection{Substitution-Permutation Network}
 Il cifrario \emph{SPN} è una modifica di un cifrario iterato in cui i \emph{plaintext} e \emph{ciphertext} sono divisi in $m$ blocchi lunghi $\ell$. L'algoritmo è semplice ed efficiente sia in \textit{hardware} che in \textit{software}.
 \begin{definition}[SPN]
-    Siano $\ell,m, \mathcal{N}$ interi positivi $M = C = \{0,1\}^{\ell m}$, siano $\pi_S, \pi_P$ funzioni di permutazione
+    Siano $\ell,m, \mathcal{N}$ interi positivi, $M = C = \{0,1\}^{\ell m}$, e $\pi_S, \pi_P$ funzioni di permutazione:
     \begin{align*}
-        \pi_S: \{0,1\}^{\ell} &\to \{0,1\}^{\ell}\\
-        \pi_P: \{1,\dots,\ell m\} &\to \{1,\dots, \ell m\}
+        \pi_S: \{0,1\}^{\ell} &\to \{0,1\}^{\ell} \qquad \text{\underline{S} = \underline{S}ubstitution = \underline{S}-box}\\
+        \pi_P: \{1,\dots,\ell m\} &\to \{1,\dots, \ell m\} \qquad \text{\underline{P}=\underline{P}ermutation}
     \end{align*}
     con $\mathcal{K} \subseteq (\{0,1\}^{\ell m})^{\mathcal{N}+1}$ i \emph{key-schedule} possibili derivati da una chiave iniziale K.
 
-    La funzione di cifratura è descritta dall'algoritmo \ref{alg:spn}, e l'\textit{i-esimo} blocco è descritto come $x_{<i>}$ per $i = 1,\dots,m$
+    \noindent La funzione di cifratura è descritta dall'algoritmo \ref{alg:spn}, e l'\textit{i-esimo} blocco è descritto come $x_{<i>}$ per $i = 1,\dots,m$
 \end{definition}
 
-\input{algorithms/spn}
-Nell'algoritmo \ref{alg:spn} per ogni round ,vengono incorporate le \emph{round key} attraverso lo \texttt{xor} successivamente si eseguono $m$ sostituzioni con $\pi_S$ con una permutazione finale con $\pi_P$
+\input{algorithms/spn} 
+\noindent L'algoritmo \ref{alg:spn} consiste di $N$ round; per ciascun round vengono incorporate le \emph{round key} attraverso lo \texttt{xor} e successivamente si eseguono $m$ sostituzioni con $\pi_S$ e una permutazione finale con $\pi_P$. 
 \begin{itemize}
     \item $u_i$ è l'\emph{input} delle S-Box
     \item $v_i$ è l'\emph{output} delle S-Box
-    \item $w_i = \pi_S(v_i)$ la sostituzione applicata a ogni blocco 
+    \item $w_i = \pi_P(v_i)$ la sostituzione applicata a ogni blocco 
     \item $u_{i+1} = w_i \oplus K_{i+1}$ $w_i$ in \texttt{xor} con la chiave del round 
 \end{itemize}
-si presenta una figura di esempio
-
+\noindent Si presenta una figura di esempio:
 \input{figures/spn.tex}
 
-\subsection{Feistel Network e Data Encryption Standard}
-Il cifrario \emph{DES} è un tipo di cifrario a iterazione chiamato \textbf{Cifrario di Feistel}.
+\paragraph{Osservazione} La memoria richiesta dalle S-box è $\ell \cdot 2^{\ell}$ bit. \\ S-box piccole occupano meno memoria, ma rendono SPN vulnerabile ad attacchi brute force, quindi non sono molto sicure; S-box più grandi, più round, una key più lunga aumentano sicurezza, ma anche la memoria (AES). 
 
-Nel cifrario di Feistel ogni stato $u_i$ è diviso in due metà $L_i|R_i$, la funzione del round $g$ ha la seguente forma $g(L_{i-1},R_{i-1},K_{i}) = (L_i,R_i)$ in cui 
+
+\subsection{Feistel Network e Data Encryption Standard}
+Il cifrario \emph{DES} è un caso particolare del \textbf{cifrario} iterato \textbf{di Feistel}.
+
+\noindent Nel cifrario di Feistel ogni stato $u_i$ è diviso in due metà uguali, ovvero $u_i=(L_i,R_i)$, dove $L_i$ è la metà sinistra e $D_i$ la destra. Invece la funzione del round $g$ ha la seguente forma: $g(L_{i-1},R_{i-1},K_{i}) = (L_i,R_i)$ in cui 
 \begin{align*}
     L_i &= R_{i-1}\\
-    R_i &= L_{i-1} \oplus f(R_{i-1},K_i)
+    R_i &= L_{i-1} \oplus f(R_{i-1},K_i).
 \end{align*}
-In altre parole, la funzione $g$ prende la metà destra del round precedente come metà destra del round corrente. Come parte destra del round corrente imposta una combinazione della parte sinistra del round precedente con una funzione $f$, le relazioni inverse per determinare lo stato precedente sono inoltre banali.
+In altre parole, la funzione $g$ prende la metà destra del round precedente come metà sinistra del round corrente. Come parte destra del round corrente imposta una combinazione della parte sinistra del round precedente con una funzione $f$. \\ Le relazioni inverse per determinare lo stato precedente sono inoltre banali: non è necessaria la proprietà di iniettività per $f$ poiché ogni round è sempre invertibile grazie allo xor (se si conosce $K_i$, si può risalire allo stato precedente con $L_{i-1}=R_i \oplus f(L_i,K_i)$ e $R_{i-1}=L_i$). 
 
 \input{figures/feistel_round_function.tex}
 
 \begin{definition}[Data Encryption Standard]
-    \emph{DES} è un Cifrario di Feistel con $\mathcal{N} = 16$ round, $\ell = 16$ lunghezza dei blocchi e le chiavi $\mathcal{K} \in \{0,1\}^{56}$ di 56 bit, $f: \{0,1\}^{32} \times \{0,1\}^{48} \to \{0,1\}^{32}$. Inoltre è presente una funzione di permutazione iniziale ($IP$), applicata al \emph{plaintext} $x$.
+    \emph{DES} è un Cifrario di Feistel con $\mathcal{N} = 16$ round, $\ell = 64$ lunghezza dei blocchi e le chiavi $\mathcal{K} \in \{0,1\}^{56}$ di 56 bit, $f: \{0,1\}^{32} \times \{0,1\}^{48} \to \{0,1\}^{32}$. Inoltre è presente una funzione di permutazione iniziale ($IP$), applicata al \emph{plaintext} $x$.
 
     \vspace{1em}
     $L_i,R_i \in \{0,1\}^{32}$. Il \emph{key-schedule} $K = (K_1\dots,K_{16})$ è composto da permutazioni di $\mathcal{K}$.
