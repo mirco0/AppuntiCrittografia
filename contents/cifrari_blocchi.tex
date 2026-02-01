@@ -1,4 +1,28 @@
-I cifrari a blocchi sono i cifrari usati al giorno d'oggi, fanno uno di una sequenza di \emph{permutazioni} e \emph{sostituzioni}, spesso implementati sotto forma di cifrari iterati. Un cifrario iterato lavora su $\mathcal{N}$ ``round'', per cui è necessario definire una \emph{funzione round} e una \emph{key-schedule} (una tupla delle chiavi relative ai round). La funzione del round $g$ ha due input, la chiave relativa al round $K^r$ e uno \emph{stato corrente} $w^{r-1}$. Inoltre per far si che il messaggio si possa decifrare $g$ deve essere iniettiva rispetto alla chiave.
+I cifrari a blocchi sono i cifrari usati al giorno d'oggi, fanno uno di una sequenza di \emph{permutazioni} e \emph{sostituzioni}, spesso implementati sotto forma di cifrari iterati. Un cifrario iterato lavora su $\mathcal{N}$ ``round'', per cui è necessario definire una \emph{funzione round} e una \emph{key-schedule} (una tupla delle chiavi relative ai round). La funzione del round $g$ ha due input, la chiave relativa al round $K^r$ e uno \emph{stato corrente} $w^{r-1}$. Lo \emph{stato successivo} è $w^r=g(w^{r-1},K^r)$, ovvero:
+\[
+\begin{array}{c c}
+\begin{aligned}
+w^0     &\leftarrow x \\
+w^1     &\leftarrow g(w^0, K^1) \\
+        &\vdots \\
+w^N     &\leftarrow g(w^{N-1}, K^N) \\
+y       &\leftarrow w^N
+\end{aligned}
+&
+\begin{aligned}
+w^N     &\leftarrow y \\
+w^{N-1}&\leftarrow g^{-1}(w^N, K^N) \\
+        &\vdots \\
+w^0     &\leftarrow g^{-1}(w^{1}, K^1) \\
+x       &\leftarrow w^0
+\end{aligned}
+\\[1.5cm]
+\text{Cifratura} & \text{Decifratura}
+\end{array}
+\]
+
+\noindent È facile intuire che $g$ debba essere biettiva rispetto alla chiave, ovvero $\exists g^{-1} \mid g^{-1}(g(w,y),y)=w \quad \forall\, w,y$.
+
 
 %S.P. 4.5
 \subsection{Sostitution Permutation Network}
