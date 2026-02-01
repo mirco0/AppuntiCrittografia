@@ -87,6 +87,37 @@ In altre parole, la funzione $g$ prende la metà destra del round precedente com
     \end{enumerate} 
 \end{definition}
 
-%Scrivere perché non sicuro e 3DES (discusso a lezione)
+%Scrivere perché non sicuro e 3DES (discusso a lezione) pagina 113 B.S.
+\subsubsection{Ricerca Esaustiva su DES}
+Un attacco a ricerca esaustiva su \emph{DES}, sperimentato negli anni, è il \emph{known-ciphertext attack}, in cui è disponibile una sequenza di messaggi $(x_1,\dots,x_Q) \quad x_i \in M$ per $i = 1,\dots, Q$, e una sequenza di altrettanti messaggi cifrati corrispondenti, tutti cifrati con la stessa chiave $K \in \mathcal{K}$.
 
-%Scrivere perché non sicuro e 3DES (parlato a lezione)
+Lo scopo dell'attaccante è determinare una chiave $k_0$ che permetta di decifrare l'intera sequenza di messaggi cifrati ($\forall i \quad d_{k_0}(y_i) = x_i$). 
+
+\vspace{1em}\noindent
+Nei cifrari a blocchi come \emph{DES}, solitamente, è sufficiente una coppia di sequenze di 3 elementi per essere certi che la chiave sia unica. Negli anni le chiavi a 56 bit del cifrario, si sono dimostrate inadeguate contro attacchi simili. Nel 1999 \emph{DES} è stato rotto in ben 22 ore.
+
+Nonostante però il cifrario non sia sicuro contro gli attacchi per enumerazione, \emph{DES} è resistente ad attacchi più sofisticati. In un tentativo di rendere lo spazio delle chiavi più grande nasce \emph{3DES}.
+
+\begin{definition}[3 DES]
+    Sia $\emph{DES} = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$, si definisce il cifrario $\emph{3DES} = (M,C,\mathcal{K}^3,\mathcal{E}_3,\mathcal{D}_3)$ in cui le regole di cifratura e decifratura sono le seguenti
+    \[
+        \mathcal{e}_{}
+    \]
+\end{definition}
+
+\subsection{Advanced Encryption Standard}
+\emph{AES} nasce dalla necessità di avere un cifrario libero globalmente e con una sicurezza migliore di \emph{DES}, che supportasse una lunghezza dei blocchi a 128,192 e 256 bit. Il nome originale dell'algoritmo era \emph{Rijndael} prima di essere selezionato come standard, utilizzato ancora oggi. 
+
+\begin{definition}[Advanced Encryption Standard]
+    \emph{AES} fornisce un supporto a diverse lunghezze di blocchi e numero di round
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{c|c}
+            $\ell$ & $\mathcal{N} $\\
+            \hline
+            128 & 10\\
+            192 & 12\\
+            256 & 14\\
+        \end{tabular}
+    \end{table}
+\end{definition}
