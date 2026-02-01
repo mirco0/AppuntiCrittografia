@@ -1,0 +1,9 @@
+\begin{tikzpicture}[
+    box/.style={draw, minimum height=0.5cm}
+]
+    \foreach \y in {0,...,3} {
+        \foreach \x in {0,...,3} {
+            \node[box] at ({\x*(0.75cm)}, {(-\y)*(0.5cm+\pgflinewidth*2)}) {$S_{\y\x}$};
+        }
+    }
+\end{tikzpicture}
