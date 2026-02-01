@@ -2,20 +2,20 @@
     
     \begin{tikzpicture}[
         % node distance=1cm and 1.0cm,
-        box/.style={draw, thick, minimum width=1.2cm, minimum height=0.6cm},
+        box/.style={draw, minimum width=1.2cm, minimum height=0.6cm},
         circle_node/.style={draw, thick, circle, minimum size=0.4cm},
-        arrow/.style={-{Stealth[scale=1]}, thick}
+        arrow/.style={-{Stealth[scale=1]}}
         ]
         
         \node[box] (L_prev) {$L_{i-1}$};
-        \node[box, right=-1pt of L_prev] (R_prev) {$R_{i-1}$};
+        \node[box, right=-0.5pt of L_prev] (R_prev) {$R_{i-1}$};
         
         \node[circle_node, below=0.8cm of R_prev] (f) {$f$};
         \node[box, right=1cm of f] (K) {$K_i$};
         \node[circle_node, below=0.6cm of f] (xor) {$+$};
         
         \node[box, below=3.5cm of L_prev] (L_curr) {$L_i$};
-        \node[box, right=-1pt of L_curr] (R_curr) {$R_i$};
+        \node[box, right=-0.5pt of L_curr] (R_curr) {$R_i$};
         
         \draw[arrow] (R_prev.south) -- (f.north);
         \draw[arrow] (f.south) -- (xor.north);

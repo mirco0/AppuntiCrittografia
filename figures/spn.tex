@@ -1,0 +1,51 @@
+\begin{center}
+    \begin{tikzpicture}[
+        box/.style={draw, minimum width=0.5cm, minimum height=0.5cm},
+        sbox/.style={draw, minimum width=2.0cm, minimum height=0.7cm},
+        arrow/.style={-{Stealth[scale=0.8]}},
+        permline/.style={ -{Stealth[scale=0.8]}}
+        ]
+        
+        \def\outbits{0,0,0,0,0,1,1,0,0,0,1,1,0,1,0,0}
+        %Definisce la permutazione
+        \def\pmap{1,5,9,13,2,6,10,14,3,7,11,15,4,8,12,16}
+        \foreach \b [count=\i] in {1,0,0,1, 0,1,1,1, 1,0,0,1, 0,0,0,1} {
+            \pgfmathsetmacro{\xpos}{(\i-1)*0.5 + floor((\i-1)/4)*0.4}
+            \node[box] (in\i) at (\xpos, 0) {$\b$};
+        }
+        \node[left=0.5cm of in1] {$u_{i-1}$};
+            
+        \foreach \s in {1,2,3,4} {
+            \pgfmathsetmacro{\sboxX}{(\s-1)*2.4 + 0.75}
+            \node[sbox] (sb\s) at (\sboxX, -1.2) {$S_{\s}$};
+            
+            \pgfmathsetmacro{\idxStart}{int((\s-1)*4+1)}
+            \pgfmathsetmacro{\idxEnd}{int(\s*4)}
+            
+            \draw[arrow] ($(in\idxStart.south)!0.5!(in\idxEnd.south)$) -- (sb\s.north);
+        }
+                
+        \foreach \b [count=\i] in {0,0,0,0, 0,1,0,1, 0,1,1,0, 0,0,1,0} {
+            \pgfmathsetmacro{\xpos}{(\i-1)*0.5 + floor((\i-1)/4)*0.4}
+            \node[box] (v\i) at (\xpos, -2.4) {$\b$};
+        }
+        \node[left=0.5cm of v1] {$v_{i-1}$};
+            
+        \foreach \s in {1,2,3,4} {
+            \pgfmathsetmacro{\idxStart}{int((\s-1)*4+1)}
+            \pgfmathsetmacro{\idxEnd}{int(\s*4)}
+            \draw[arrow] (sb\s.south) -- ($(v\idxStart.north)!0.5!(v\idxEnd.north)$);
+        }
+                        
+        \foreach \b [count=\i] in \outbits {
+        \pgfmathsetmacro{\xpos}{(\i-1)*0.5 + floor((\i-1)/4)*0.4}
+        \node[box] (out\i) at (\xpos, -5.0) {$\b$};
+    }
+        \node[left=0.5cm of out1] {$u_i$};
+                            
+        \foreach \dest [count=\src] in \pmap {
+        % This draws a line from the bottom of V bit (\src) to the top of U bit (\dest)
+        \draw[permline] (v\src.south) -- (out\dest.north);
+    }                    
+    \end{tikzpicture}
+\end{center}
