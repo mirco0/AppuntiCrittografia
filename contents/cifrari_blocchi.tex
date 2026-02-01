@@ -1,20 +1,20 @@
-I cifrari a blocchi sono i cifrari usati al giorno d'oggi, fanno uno di una sequenza di \emph{permutazioni} e \emph{sostituzioni}, spesso implementati sotto forma di cifrari iterati. Un cifrario iterato lavora su $\mathcal{N}$ ``round'', per cui è necessario definire una \emph{funzione round} e una \emph{key-schedule} (una tupla delle chiavi relative ai round). La funzione del round $g$ ha due input, la chiave relativa al round $K^r$ e uno \emph{stato corrente} $w^{r-1}$. Lo \emph{stato successivo} è $w^r=g(w^{r-1},K^r)$, ovvero:
+I cifrari a blocchi sono i cifrari usati al giorno d'oggi, fanno uno di una sequenza di \emph{permutazioni} e \emph{sostituzioni}, spesso implementati sotto forma di cifrari iterati. Un cifrario iterato lavora su $\mathcal{N}$ ``round'', per cui è necessario definire una \emph{funzione round} e una \emph{key-schedule} (una tupla delle chiavi relative ai round). La funzione del round $g$ ha due input, la chiave relativa al round $K_r$ e uno \emph{stato corrente} $w_{r-1}$. Lo \emph{stato successivo} è $w_r=g(w_{r-1},K_r)$, ovvero:
 \[
 \begin{array}{c c}
 \begin{aligned}
-w^0     &\leftarrow x \\
-w^1     &\leftarrow g(w^0, K^1) \\
+w_0     &\leftarrow x \\
+w_1     &\leftarrow g(w_0, K_1) \\
         &\vdots \\
-w^N     &\leftarrow g(w^{N-1}, K^N) \\
-y       &\leftarrow w^N
+w_{\mathcal{N}}     &\leftarrow g(w_{\mathcal{N}-1}, K_{\mathcal{N}}) \\
+y       &\leftarrow w_{\mathcal{N}}
 \end{aligned}
 &
 \begin{aligned}
-w^N     &\leftarrow y \\
-w^{N-1}&\leftarrow g^{-1}(w^N, K^N) \\
+w_{\mathcal{N}}     &\leftarrow y \\
+w_{\mathcal{N}-1}&\leftarrow g^{-1}(w_{\mathcal{N}}, K_{\mathcal{N}}) \\
         &\vdots \\
-w^0     &\leftarrow g^{-1}(w^{1}, K^1) \\
-x       &\leftarrow w^0
+w_0     &\leftarrow g^{-1}(w_{1}, K_1) \\
+x       &\leftarrow w_0
 \end{aligned}
 \\[1.5cm]
 \text{Cifratura} & \text{Decifratura}
@@ -39,10 +39,10 @@ Il cifrario \emph{SPN} è una modifica di un cifrario iterato in cui i \emph{pla
 \end{definition}
 
 \input{algorithms/spn} 
-\noindent L'algoritmo \ref{alg:spn} consiste di $N$ round; per ciascun round vengono incorporate le \emph{round key} attraverso lo \texttt{xor} e successivamente si eseguono $m$ sostituzioni con $\pi_S$ e una permutazione finale con $\pi_P$. 
+\noindent L'algoritmo \ref{alg:spn} consiste di $\mathcal{N}$ round; per ciascun round vengono incorporate le \emph{round key} attraverso lo \texttt{xor} e successivamente si eseguono $m$ sostituzioni con $\pi_S$ e una permutazione finale con $\pi_P$. 
 \begin{itemize}
-    \item $u_i$ è l'\emph{input} delle S-Box
-    \item $v_i$ è l'\emph{output} delle S-Box
+    \item $u_i$ è l'\emph{input} delle S-box
+    \item $v_i$ è l'\emph{output} delle S-box
     \item $w_i = \pi_P(v_i)$ la sostituzione applicata a ogni blocco 
     \item $u_{i+1} = w_i \oplus K_{i+1}$ $w_i$ in \texttt{xor} con la chiave del round 
 \end{itemize}
@@ -55,12 +55,12 @@ Il cifrario \emph{SPN} è una modifica di un cifrario iterato in cui i \emph{pla
 \subsection{Feistel Network e Data Encryption Standard}
 Il cifrario \emph{DES} è un caso particolare del \textbf{cifrario} iterato \textbf{di Feistel}.
 
-\noindent Nel cifrario di Feistel ogni stato $u_i$ è diviso in due metà uguali, ovvero $u_i=(L_i,R_i)$, dove $L_i$ è la metà sinistra e $D_i$ la destra. Invece la funzione del round $g$ ha la seguente forma: $g(L_{i-1},R_{i-1},K_{i}) = (L_i,R_i)$ in cui 
+\noindent Nel cifrario di Feistel ogni stato $u_i$ è diviso in due metà uguali, ovvero $u_i=(L_i,R_i)$, dove $L_i$ è la metà sinistra e $R_i$ la destra. Invece la funzione del round $g$ ha la seguente forma: $g(L_{i-1},R_{i-1},K_{i}) = (L_i,R_i)$ in cui 
 \begin{align*}
     L_i &= R_{i-1}\\
     R_i &= L_{i-1} \oplus f(R_{i-1},K_i).
 \end{align*}
-In altre parole, la funzione $g$ prende la metà destra del round precedente come metà sinistra del round corrente. Come parte destra del round corrente imposta una combinazione della parte sinistra del round precedente con una funzione $f$. \\ Le relazioni inverse per determinare lo stato precedente sono inoltre banali: non è necessaria la proprietà di iniettività per $f$ poiché ogni round è sempre invertibile grazie allo xor (se si conosce $K_i$, si può risalire allo stato precedente con $L_{i-1}=R_i \oplus f(L_i,K_i)$ e $R_{i-1}=L_i$). 
+In altre parole, la funzione $g$ prende la metà destra del round precedente come metà sinistra del round corrente. Come parte destra del round corrente imposta una combinazione della parte sinistra del round precedente con una funzione $f$. \\ Le relazioni inverse per determinare lo stato precedente sono inoltre banali: non è necessaria la proprietà di iniettività per $f$ poiché ogni round è sempre invertibile grazie allo \texttt{xor} (se si conosce $K_i$, si può risalire allo stato precedente con $L_{i-1}=R_i \oplus f(L_i,K_i)$ e $R_{i-1}=L_i$). 
 
 \input{figures/feistel_round_function.tex}
 
@@ -94,15 +94,16 @@ Un attacco a ricerca esaustiva su \emph{DES}, sperimentato negli anni, è il \em
 Lo scopo dell'attaccante è determinare una chiave $k_0$ che permetta di decifrare l'intera sequenza di messaggi cifrati ($\forall i \quad d_{k_0}(y_i) = x_i$). 
 
 \vspace{1em}\noindent
-Nei cifrari a blocchi come \emph{DES}, solitamente, è sufficiente una coppia di sequenze di 3 elementi per essere certi che la chiave sia unica. Negli anni le chiavi a 56 bit del cifrario, si sono dimostrate inadeguate contro attacchi simili. Nel 1999 \emph{DES} è stato rotto in ben 22 ore.
+Nei cifrari a blocchi come \emph{DES}, solitamente, è sufficiente una coppia di sequenze di 3 elementi per essere certi che la chiave sia unica. Negli anni le chiavi a 56 bit del cifrario, si sono dimostrate inadeguate contro attacchi simili (nel 1999 \emph{DES} è stato rotto in ben 22 ore).
 
 Nonostante però il cifrario non sia sicuro contro gli attacchi per enumerazione, \emph{DES} è resistente ad attacchi più sofisticati. In un tentativo di rendere lo spazio delle chiavi più grande nasce \emph{3DES}.
 
-\begin{definition}[3 DES]
-    Sia $\emph{DES} = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$, si definisce il cifrario $\emph{3DES} = (M,C,\mathcal{K}^3,\mathcal{E}_3,\mathcal{D}_3)$ in cui le regole di cifratura e decifratura sono le seguenti
+\begin{definition}[\emph{3DES}]
+    Sia $\emph{DES} = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$, si definisce il cifrario $\emph{3DES} = (M,C,\mathcal{K}^3,\mathcal{E}_3,\mathcal{D}_3)$ in cui le regole di cifratura, quindi decifratura, sono le seguenti (si indicano $e^3$ gli elementi di $\mathcal{E}_3$)
     \[
-        \mathcal{e}_{}
+        e^{3}_{(k_{1},k_{2},k_{3})}(x) = e_{k_3}\left(d_{k_2}\left(e_{k_1}\left(x\right)\right)\right)
     \]
+    con $k_1,k_2,k_3 \in \mathcal{K}$ e $x \in M$.
 \end{definition}
 
 \subsection{Advanced Encryption Standard}
