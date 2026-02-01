@@ -65,20 +65,28 @@ In altre parole, la funzione $g$ prende la metà destra del round precedente com
 \input{figures/feistel_round_function.tex}
 
 \begin{definition}[Data Encryption Standard]
-    \emph{DES} è un Cifrario di Feistel con $\mathcal{N} = 16$ round, $\ell = 64$ lunghezza dei blocchi e le chiavi $\mathcal{K} \in \{0,1\}^{56}$ di 56 bit, $f: \{0,1\}^{32} \times \{0,1\}^{48} \to \{0,1\}^{32}$. Inoltre è presente una funzione di permutazione iniziale ($IP$), applicata al \emph{plaintext} $x$.
+    \emph{DES} è un Cifrario di Feistel con $\mathcal{N} = 16$ round, $\ell = 64$ lunghezza dei blocchi e le chiavi $\mathcal{K} \in \{0,1\}^{56}$ di 56 bit. 
+    
+    \vspace{0.2cm} \noindent Prima dei 16 round, si applica una funzione di permutazione iniziale ($IP$) al \emph{plaintext} $x$: \\  $IP(x)=L_0R_0$ dove $L_0$ e $R_0$ sono le due metà da 32bit ciascuna. 
+
+    \vspace{0.2cm} \noindent  Invece dopo i 16 round, le 2 metà $R_{16}$ e $L_{16}$ vengono scambiate e si applica la permutazione inversa $(IP^{-1})$: $y=IP^{-1}(R_{16}L_{16})$. 
+
+    \vspace{0.2cm}
+    \noindent $L_i, R_i \in \{0,1\}^{32}$, ovvero sono stringhe a 32 bit. Il \emph{key-schedule} $K = (K_1\dots,K_{16})$ è composto da permutazioni di $\mathcal{K}$. \\ Poiché ogni round di DES trasforma $(L_{i-1}, R_{i-1})$ in $(L_i,R_i)$ tramite la funzione $f$
+    e la chiave del round $K_i$ si ha che $f:\{0,1\}^{32} \times \{0,1\}^{48} \to \{0,1\}^{32}$, ovvero $f: R_i \times K_i \to \{0,1\}^{32}= f(R_i,K_i)=f(A,K)$. 
 
     \vspace{1em}
-    $L_i,R_i \in \{0,1\}^{32}$. Il \emph{key-schedule} $K = (K_1\dots,K_{16})$ è composto da permutazioni di $\mathcal{K}$.
-
     \noindent
     Per calcolare $f(A,K)$ è necessario definire delle funzioni. Sia $E: \{0,1\}^{32} \to \{0,1\}^{48}$ una funzione di espansione che duplica 16 bit dalla stringa originale, delle funzioni di sostituzione $S_i : \{0,1\}^6 \to \{0,1\}^4$ per $i = 1,\dots,8$ che sostituiscono blocchi di 6 bit con blocchi di 4 bit e una funzione di permutazione $P: \{1,\dots,32\} \to \{1,\dots,32\}$.
-    La funzione $f(A,K)$ è calcolata nel seguente modo
+    La funzione $f(A,K)$ è calcolata nel seguente modo:
     \begin{enumerate}
-        \item Viene calcolato $E(A)$, espandendo così i dati originali
+        \item Viene calcolato $E(A)$, ``espandendo'' così $A$ a 48 bit
         \item Si calcola $B_1B_2\dots B_8 = E(A) \oplus K$, una stringa di 8 blocchi con 6 bit ciascuno
-        \item Si definiscono $C_i = S_i(B_i)$ per $i = 1,\dots,8$, ogni blocco viene ridotto a 4 bit con una funzione di sostituzione, ottienendo così $C_1\dots C_8$
-        \item Si permuta la stringa $P(C_1\dots C_8)$.
+        \item Si applicano le 8 S-box: $C_i = S_i(B_i)$ per $i = 1,\dots,8$, ogni blocco viene ridotto a 4 bit, ottenendo così $C_1\dots C_8$
+        \item Infine si permuta la stringa $C$, ovvero $P(C)=f(A,K)$.
     \end{enumerate} 
 \end{definition}
 
 %Scrivere perché non sicuro e 3DES (discusso a lezione)
+
+%Scrivere perché non sicuro e 3DES (parlato a lezione)
