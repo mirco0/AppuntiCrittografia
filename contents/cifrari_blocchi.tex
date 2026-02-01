@@ -1,7 +1,7 @@
 I cifrari a blocchi fanno uno di una sequenza di \emph{permutazioni} e \emph{sostituzioni}. inoltre spesso sono implementati sotto forma di cifrari iterati. Un cifrario iterato lavora su $\mathcal{N}$ ``round'', per cui è necessario definire una \emph{funzione round} e una \emph{key-schedule} (una tupla delle chiavi relative ai round). La funzione del round $g$ ha due input, la chiave relativa al round $K^r$ e uno \emph{stato corrente} $w^{r-1}$. Inoltre per far si che il messaggio si possa decifrare $g$ deve essere iniettiva rispetto alla chiave.
 
 \subsection{Sostitution Permutation Network}
-Il cifrario \emph{SPN} è una modifica di un cifrario iterato in cui i \emph{plaintext} e \emph{ciphertext} sono divisi in $m$ blocchi lunghi $\ell$.
+Il cifrario \emph{SPN} è una modifica di un cifrario iterato in cui i \emph{plaintext} e \emph{ciphertext} sono divisi in $m$ blocchi lunghi $\ell$. L'algoritmo è semplice ed efficiente sia in \textit{hardware} che in \textit{software}.
 \begin{definition}[SPN]
     Siano $\ell,m, \mathcal{N}$ interi positivi $M = C = \{0,1\}^{\ell m}$, siano $\pi_S, \pi_P$ funzioni di permutazione
     \begin{align*}
@@ -12,4 +12,37 @@ Il cifrario \emph{SPN} è una modifica di un cifrario iterato in cui i \emph{pla
 
     La funzione di cifratura è descritta dall'algoritmo \ref{alg:spn}, e il l'\textit{i-esimo} blocco è descritto come $x_{<i>}$ per $i = 1,\dots,m$
 \end{definition}
-\include{algorithms/spn}
+
+\input{algorithms/spn}
+Nell'algoritmo \ref{alg:spn} per ogni round ,vengono incorporate le \emph{round key} attraverso lo \texttt{xor} successivamente si eseguono $m$ sostituzioni con $\pi_S$ con una permutazione finale con $\pi_P$
+\begin{itemize}
+    \item $u_i$ è l'\emph{input} delle SBOX
+    \item $v_i$ è l'\emph{output} delle SBOX
+    \item $w_i = \pi_S(v_i)$ la sostituzione applicata a ogni blocco 
+    \item $u_{i+1} = w_i \oplus K_{i+1}$ $w_i$ in \texttt{xor} con la chiave del round 
+\end{itemize}
+si presenta una figura di esempio
+
+\input{figures/spn.tex}
+
+\subsection{Feistel Network e Data Encryption Standard}
+Il cifrario \emph{DES} è un tipo di cifrario a iterazione chiamato \textbf{Cifrario di Feistel}.
+
+Nel cifrario di Feistel ogni stato $u_i$ è diviso in due metà $L_i|R_i$, la funzione del round $g$ ha la seguente forma $g(L_{i-1},R_{i-1},K_{i}) = (L_i,R_i)$ in cui 
+\begin{align*}
+    L_i &= R_{i-1}\\
+    R_i &= L_{i-1} \oplus f(R_{i-1},K_i)
+\end{align*}
+In altre parole, la funzione $g$ prende la metà destra del round precedente come metà destra del round corrente. Come parte destra del round corrente imposta una combinazione della parte sinistra del round precedente con una funzione $f$, le relazioni inverse per determinare lo stato precedente sono inoltre banali.
+
+\input{figures/feistel_round_function.tex}
+
+\begin{definition}[Data Encryption Standard]
+    \emph{DES} è un Cifrario di Feistel con $\mathcal{N} = 16$ round, $\ell = 16$ lunghezza dei blocchi e le chiavi $\mathcal{K} \in \{0,1\}^{56}$ di 56 bit, $f: \{0,1\}^{32} \times \{0,1\}^{48} \to \{0,1\}^{32}$. Inoltre è presente una funzione di permutazione iniziale ($IP$), applicata al \emph{plaintext} $x$.
+
+    \vspace{1em}
+    $L_i,R_i \in \{0,1\}^{32}$. Il \emph{key-schedule} $K = (K_1\dots,K_{16})$ è composto da permutazioni di $\mathcal{K}$.
+
+    Si descrive ora la funzione $f$ usata, per calcolare $f(A,K)$ è necessario definire delle funzioni. Sia $E: \{0,1\}^{32} \to \{0,1\}^{48}$ una funzione di espansione che duplica 16 bit dalla stringa originale, Delle funzioni di sostituzione $S_i : \{0,1\}^6 \to \{0,1\}^4$ che sostituiscono blocchi di 6 bit con blocchi di 4 bit
+
+\end{definition}
