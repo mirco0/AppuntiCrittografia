@@ -1,5 +1,6 @@
-I cifrari a blocchi fanno uno di una sequenza di \emph{permutazioni} e \emph{sostituzioni}. inoltre spesso sono implementati sotto forma di cifrari iterati. Un cifrario iterato lavora su $\mathcal{N}$ ``round'', per cui è necessario definire una \emph{funzione round} e una \emph{key-schedule} (una tupla delle chiavi relative ai round). La funzione del round $g$ ha due input, la chiave relativa al round $K^r$ e uno \emph{stato corrente} $w^{r-1}$. Inoltre per far si che il messaggio si possa decifrare $g$ deve essere iniettiva rispetto alla chiave.
+I cifrari a blocchi sono i cifrari usati al giorno d'oggi, fanno uno di una sequenza di \emph{permutazioni} e \emph{sostituzioni}, spesso implementati sotto forma di cifrari iterati. Un cifrario iterato lavora su $\mathcal{N}$ ``round'', per cui è necessario definire una \emph{funzione round} e una \emph{key-schedule} (una tupla delle chiavi relative ai round). La funzione del round $g$ ha due input, la chiave relativa al round $K^r$ e uno \emph{stato corrente} $w^{r-1}$. Inoltre per far si che il messaggio si possa decifrare $g$ deve essere iniettiva rispetto alla chiave.
 
+%S.P. 4.5
 \subsection{Sostitution Permutation Network}
 Il cifrario \emph{SPN} è una modifica di un cifrario iterato in cui i \emph{plaintext} e \emph{ciphertext} sono divisi in $m$ blocchi lunghi $\ell$. L'algoritmo è semplice ed efficiente sia in \textit{hardware} che in \textit{software}.
 \begin{definition}[SPN]
@@ -16,8 +17,8 @@ Il cifrario \emph{SPN} è una modifica di un cifrario iterato in cui i \emph{pla
 \input{algorithms/spn}
 Nell'algoritmo \ref{alg:spn} per ogni round ,vengono incorporate le \emph{round key} attraverso lo \texttt{xor} successivamente si eseguono $m$ sostituzioni con $\pi_S$ con una permutazione finale con $\pi_P$
 \begin{itemize}
-    \item $u_i$ è l'\emph{input} delle SBOX
-    \item $v_i$ è l'\emph{output} delle SBOX
+    \item $u_i$ è l'\emph{input} delle S-Box
+    \item $v_i$ è l'\emph{output} delle S-Box
     \item $w_i = \pi_S(v_i)$ la sostituzione applicata a ogni blocco 
     \item $u_{i+1} = w_i \oplus K_{i+1}$ $w_i$ in \texttt{xor} con la chiave del round 
 \end{itemize}
@@ -43,6 +44,15 @@ In altre parole, la funzione $g$ prende la metà destra del round precedente com
     \vspace{1em}
     $L_i,R_i \in \{0,1\}^{32}$. Il \emph{key-schedule} $K = (K_1\dots,K_{16})$ è composto da permutazioni di $\mathcal{K}$.
 
-    Si descrive ora la funzione $f$ usata, per calcolare $f(A,K)$ è necessario definire delle funzioni. Sia $E: \{0,1\}^{32} \to \{0,1\}^{48}$ una funzione di espansione che duplica 16 bit dalla stringa originale, Delle funzioni di sostituzione $S_i : \{0,1\}^6 \to \{0,1\}^4$ che sostituiscono blocchi di 6 bit con blocchi di 4 bit
-
+    \noindent
+    Per calcolare $f(A,K)$ è necessario definire delle funzioni. Sia $E: \{0,1\}^{32} \to \{0,1\}^{48}$ una funzione di espansione che duplica 16 bit dalla stringa originale, delle funzioni di sostituzione $S_i : \{0,1\}^6 \to \{0,1\}^4$ per $i = 1,\dots,8$ che sostituiscono blocchi di 6 bit con blocchi di 4 bit e una funzione di permutazione $P: \{1,\dots,32\} \to \{1,\dots,32\}$.
+    La funzione $f(A,K)$ è calcolata nel seguente modo
+    \begin{enumerate}
+        \item Viene calcolato $E(A)$, espandendo così i dati originali
+        \item Si calcola $B_1B_2\dots B_8 = E(A) \oplus K$, una stringa di 8 blocchi con 6 bit ciascuno
+        \item Si definiscono $C_i = S_i(B_i)$ per $i = 1,\dots,8$, ogni blocco viene ridotto a 4 bit con una funzione di sostituzione, ottienendo così $C_1\dots C_8$
+        \item Si permuta la stringa $P(C_1\dots C_8)$.
+    \end{enumerate} 
 \end{definition}
+
+%Scrivere perché non sicuro e 3DES (parlato a lezione)
