@@ -49,7 +49,7 @@ Il cifrario \emph{SPN} è una modifica di un cifrario iterato in cui i \emph{pla
 \noindent Si presenta una figura di esempio:
 \input{figures/spn.tex}
 
-\paragraph{Osservazione} La memoria richiesta dalle S-box è $\ell \cdot 2^{\ell}$ bit. \\ S-box piccole occupano meno memoria, ma rendono SPN vulnerabile ad attacchi brute force, quindi non sono molto sicure; S-box più grandi, più round, una key più lunga aumentano sicurezza, ma anche la memoria (AES). 
+\paragraph{Osservazione} La memoria richiesta dalle S-box è $\ell \cdot 2^{\ell}$ bit. \\ S-box piccole occupano meno memoria, ma rendono SPN vulnerabile ad attacchi brute force, quindi non sono molto sicure; S-box più grandi, più round, una chiave più lunga aumentano sicurezza, ma anche la memoria (AES). 
 
 
 \subsection{Feistel Network e Data Encryption Standard}
@@ -87,9 +87,9 @@ In altre parole, la funzione $g$ prende la metà destra del round precedente com
     \end{enumerate} 
 \end{definition}
 
-%Scrivere perché non sicuro e 3DES (discusso a lezione) pagina 113 B.S.
 \subsubsection{Ricerca Esaustiva su DES}
-Un attacco a ricerca esaustiva su \emph{DES}, sperimentato negli anni, è il \emph{known-ciphertext attack}, in cui è disponibile una sequenza di messaggi $(x_1,\dots,x_Q) \quad x_i \in M$ per $i = 1,\dots, Q$, e una sequenza di altrettanti messaggi cifrati corrispondenti, tutti cifrati con la stessa chiave $K \in \mathcal{K}$.
+Un attacco a ricerca esaustiva su \emph{DES}, sperimentato negli anni, è condotto nel modello di
+\emph{known-plaintext attack}, in cui è disponibile una sequenza di messaggi $(x_1,\dots,x_Q) \quad x_i \in M$ per $i = 1,\dots, Q$, e una sequenza di altrettanti messaggi cifrati corrispondenti, tutti cifrati con la stessa chiave $K \in \mathcal{K}$.
 
 Lo scopo dell'attaccante è determinare una chiave $k_0$ che permetta di decifrare l'intera sequenza di messaggi cifrati ($\forall i \quad d_{k_0}(y_i) = x_i$). 
 
@@ -105,6 +105,25 @@ Nonostante però il cifrario non sia sicuro contro gli attacchi per enumerazione
     \]
     con $k_1,k_2,k_3 \in \mathcal{K}$ e $x \in M$.
 \end{definition}
+
+Si mostra ora perché una costruzione di un cifrario \emph{2DES} non è più sicura di un cifrario \emph{DES}. Si supponga una strategia d'attacco chiamata \textbf{meet in the middle}. Si supponga la funzione di cifratura in \textit{2DES} come segue 
+\[
+    e^2_{(k_1,k_2)}(x) = e_{k_2}(e_{k_1}(x)).
+\]
+
+\vspace{1em}
+Per un attacco \textit{known-plaintext} come in \emph{DES}, in cui si è a conoscenza di una sequenza di \emph{plaintext} $(x_1,\dots,x_Q)$ e relativi \emph{ciphertext}, cifrati tutti con la stessa chiave $(k_1,k_2) \in \mathcal{K}^2$, \textbf{meet in the middle}, supponendo di voler trovare $y = e^{2}_{(k_1,k_2)}$,opera nel seguente modo:
+
+\vspace{1em}
+\begin{enumerate}
+    \item \emph{Fase Forward}: prova tutte le possibili chiavi $k_i \in \mathcal{K}$ per cui $e_{k_i}(x) = z_i$, salvando tutti i valori di $z_i$ in una tabella
+    \item \emph{Fase Backward}: prova tutte le possibili chiavi $k_j \in \mathcal{K}$ per cui $z'_j = d_{k_j}(y)$ 
+    \item \emph{Matching}: verifica se $z'_j$ è presente nella tabella, se esiste una corrispondenza $z'_j = z_i$ la coppia $(k_i,k_j)$ è una chiave candidata per la decifratura in \emph{2DES}.
+\end{enumerate}
+\newpage
+\input{figures/mitm.tex}
+
+%TODO: scrivere teorema 4.2 B.S.
 
 \subsection{Advanced Encryption Standard}
 \emph{AES} nasce dalla necessità di avere un cifrario libero globalmente e con una sicurezza migliore di \emph{DES}, che supportasse una lunghezza dei blocchi a 128,192 e 256 bit. Il nome originale dell'algoritmo era \emph{Rijndael} prima di essere selezionato come standard, utilizzato ancora oggi. 
