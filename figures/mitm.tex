@@ -1,36 +1,36 @@
 \begin{figure}[ht]
-\centering
-\begin{tikzpicture}[
-    node distance=2.4cm,
-    every node/.style={font=\small},
-    circle_node/.style={draw, thick, circle, minimum size=0.4cm},
-    arrow/.style={-{Stealth[scale=1]}}
-]
+    \centering
+    \begin{tikzpicture}[
+        node distance=2.4cm,
+        every node/.style={font=\small},
+        circle_node/.style={draw, thick, circle, minimum size=0.4cm},
+        arrow/.style={-{Stealth[scale=1]}}
+    ]
 
-\node[circle_node] (x) at (-4,0) {$x$};
-\node[circle_node] (y) [right=8cm of x] {$y$};
+    \node[circle_node] (x) at (-4,0) {$x$};
+    \node[circle_node] (y) [right=8cm of x] {$y$};
 
-\node (z1) [right=2cm of x, yshift=1.2cm] {$z_1$};
-\node (z2) [right=2cm of x] {$z_2$};
-\node (z3) [right=2cm of x, yshift=-1.2cm] {$z_3$};
+    \node (z1) [right=2cm of x, yshift=1.2cm] {$z_1$};
+    \node (z2) [right=2cm of x] {$z_2$};
+    \node (z3) [right=2cm of x, yshift=-1.2cm] {$z_3$};
 
-\node (w1) [left=2cm of y, yshift=1.2cm] {$z'_1$};
-\node (w2) [left=2cm of y] {$z'_2$};
-\node (w3) [left=2cm of y, yshift=-1.2cm] {$z'_3$};
+    \node (w1) [left=2cm of y, yshift=1.2cm] {$z'_1$};
+    \node (w2) [left=2cm of y] {$z'_2$};
+    \node (w3) [left=2cm of y, yshift=-1.2cm] {$z'_3$};
 
-\draw[arrow] (x) -- node[above left] {$k_1^{(1)}$} (z1);
-\draw[arrow] (x) -- node[above] {$k_1^{(2)}$} (z2);
-\draw[arrow] (x) -- node[below left] {$k_1^{(3)}$} (z3);
+    \draw[arrow] (x) -- node[above left] {$k_1^{(1)}$} (z1);
+    \draw[arrow] (x) -- node[above] {$k_1^{(2)}$} (z2);
+    \draw[arrow] (x) -- node[below left] {$k_1^{(3)}$} (z3);
 
-\draw[arrow] (y) -- node[above right] {$k_2^{(1)}$} (w1);
-\draw[arrow] (y) -- node[above] {$k_2^{(2)}$} (w2);
-\draw[arrow] (y) -- node[below right] {$k_2^{(3)}$} (w3);
+    \draw[arrow] (y) -- node[above right] {$k_2^{(1)}$} (w1);
+    \draw[arrow] (y) -- node[above] {$k_2^{(2)}$} (w2);
+    \draw[arrow] (y) -- node[below right] {$k_2^{(3)}$} (w3);
 
-\draw[dashed] (z2) -- (w2) ;
+    \draw[dashed] (z2) -- (w2) ;
 
-\node at (0,-2) {chiave candidata $(k_1^{(2)},k_2^{(2)})$};
+    \node at (0,-2) {chiave candidata $(k_1^{(2)},k_2^{(2)})$};
 
-\end{tikzpicture}
-\caption{attacco Meet-in-the-middle su \emph{2DES}: solo un valore combiacia}
-\label{fig:mitm}
+    \end{tikzpicture}
+    \caption{attacco Meet-in-the-middle su \emph{2DES}: solo un valore combiacia}
+    \label{fig:mitm}
 \end{figure}

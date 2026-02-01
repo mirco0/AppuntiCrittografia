@@ -33,7 +33,7 @@ Il cifrario \emph{SPN} è una modifica di un cifrario iterato in cui i \emph{pla
         \pi_S: \{0,1\}^{\ell} &\to \{0,1\}^{\ell} \qquad \text{\underline{S} = \underline{S}ubstitution = \underline{S}-box}\\
         \pi_P: \{1,\dots,\ell m\} &\to \{1,\dots, \ell m\} \qquad \text{\underline{P}=\underline{P}ermutation}
     \end{align*}
-    con $\mathcal{K} \subseteq (\{0,1\}^{\ell m})^{\mathcal{N}+1}$ i \emph{key-schedule} possibili derivati da una chiave iniziale K.
+    con $\mathcal{K} \subseteq (\{0,1\}^{\ell m})^{\mathcal{N}+1}$ i \emph{key-schedule} possibili derivati da una chiave iniziale $K$.
 
     \noindent La funzione di cifratura è descritta dall'algoritmo \ref{alg:spn}, e l'\textit{i-esimo} blocco è descritto come $x_{<i>}$ per $i = 1,\dots,m$
 \end{definition}
@@ -106,15 +106,12 @@ Nonostante però il cifrario non sia sicuro contro gli attacchi per enumerazione
     con $k_1,k_2,k_3 \in \mathcal{K}$ e $x \in M$.
 \end{definition}
 
-Si mostra ora perché una costruzione di un cifrario \emph{2DES} non è più sicura di un cifrario \emph{DES}. Si supponga una strategia d'attacco chiamata \textbf{meet in the middle}. Si supponga la funzione di cifratura in \textit{2DES} come segue 
+\vspace{1em}\noindent
+Si mostra ora perché una costruzione di un cifrario \emph{2DES} non è più sicura di un cifrario \emph{DES} e una strategia d'attacco chiamata \textbf{meet in the middle}. Si supponga la funzione di cifratura in \textit{2DES} come segue 
 \[
-    e^2_{(k_1,k_2)}(x) = e_{k_2}(e_{k_1}(x)).
+    e^2_{(k_1,k_2)}(x) = e_{k_2}(e_{k_1}(x))
 \]
-
-\vspace{1em}
-Per un attacco \textit{known-plaintext} come in \emph{DES}, in cui si è a conoscenza di una sequenza di \emph{plaintext} $(x_1,\dots,x_Q)$ e relativi \emph{ciphertext}, cifrati tutti con la stessa chiave $(k_1,k_2) \in \mathcal{K}^2$, \textbf{meet in the middle}, supponendo di voler trovare $y = e^{2}_{(k_1,k_2)}$,opera nel seguente modo:
-
-\vspace{1em}
+e un attacco \textit{known-plaintext} come in \emph{DES}, in cui si è a conoscenza di una sequenza di \emph{plaintext} $(x_1,\dots,x_Q)$ e relativi \emph{ciphertext}, cifrati tutti con la stessa chiave $(k_1,k_2) \in \mathcal{K}^2$ (supponendo di voler trovare $y = e^{2}_{(k_1,k_2)}(x)$), meet in the middle opera nel seguente modo:
 \begin{enumerate}
     \item \emph{Fase Forward}: prova tutte le possibili chiavi $k_i \in \mathcal{K}$ per cui $e_{k_i}(x) = z_i$, salvando tutti i valori di $z_i$ in una tabella
     \item \emph{Fase Backward}: prova tutte le possibili chiavi $k_j \in \mathcal{K}$ per cui $z'_j = d_{k_j}(y)$ 
@@ -123,7 +120,35 @@ Per un attacco \textit{known-plaintext} come in \emph{DES}, in cui si è a conos
 \newpage
 \input{figures/mitm.tex}
 
-%TODO: scrivere teorema 4.2 B.S.
+\begin{theorem}[\emph{2DES} non è più sicuro di \emph{DES}]
+    Sia $\emph{2DES} = (M,C,\mathcal{K}^2,\mathcal{E}_2,\mathcal{D}_2)$. Esiste un algoritmo $\mathcal{A}$ che prende in input una sequenza di \emph{plaintext} $\bar{x} = (x_1,\dots,x_Q)$ e una sequenza di corrispondenti \emph{ciphertext} $\bar{y} = (y_1,\dots,y_Q)$, cifrati con la stessa chiave $(k_1,k_2) \in \mathcal{K}^2$. 
+    
+    Che restituisce la coppia $(k_1,k_2)$ valutando $O(2Q \cdot |\mathcal{K}|)$ funzioni in $\mathcal{E}_2,\mathcal{D}_2$.
+\end{theorem}
+
+\begin{proof}
+    Per $\bar{x}$ e $\bar{y}$ si possono riscrivere le $Q$ relazioni come 
+    \[
+        \bar{y} = e^{2}_{(k_1,k_2)}(\bar{x}) = e_{k_2}(e_{k_1}(\bar{x}))
+    \]
+    in modo equivalente
+    \begin{align}        
+        \label{eq3}
+        d_{k_2}(\bar{y}) = e_{k_1}(\bar{x})
+    \end{align}
+
+    Per trovare una coppia che soddisfa (\ref{eq3}) l'algoritmo
+    \begin{enumerate}
+        \item Costruisce una tabella $T$ contentente tutte le coppie $(k_1,z_i)$ $z_i = e_{k_1}(\bar{x})$ per ogni $k_1 \in \mathcal{K}$
+        \item Per ogni $k_2 \in \mathcal{K}$ calcola $z_j = d_{k_2}(\bar{y})$,
+        se in $T$ appare una coppia $(k_1,z_j)$, restituisce $(k_1,k_2)$.
+    \end{enumerate}
+    L'attacco è presentato in figura \ref{fig:mitm}, l'output soddisfa $d_{k_2}(\bar{y}) = e_{k_1}(\bar{x})$.
+    
+    \vspace{1em}
+    Inoltre nel passo 1 vengono calcolate $Q \cdot |\mathcal{K}|$ funzioni in $\mathcal{E}$, nel passo 2 vengono calcolate $Q \cdot |\mathcal{K}|$ funzioni in $\mathcal{D}$, per cui il numero totale di funzioni valutate è $2Q \cdot |\mathcal{K}|$.
+
+\end{proof}
 
 \subsection{Advanced Encryption Standard}
 \emph{AES} nasce dalla necessità di avere un cifrario libero globalmente e con una sicurezza migliore di \emph{DES}, che supportasse una lunghezza dei blocchi a 128,192 e 256 bit. Il nome originale dell'algoritmo era \emph{Rijndael} prima di essere selezionato come standard, utilizzato ancora oggi. 
