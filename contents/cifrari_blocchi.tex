@@ -1,37 +1,3 @@
-    \textcolor{red}{Pag 96 (libro) B.S. Da inizio Cap4 a paragrafo 4.1.1.3 incluso; da sistemare; \\ Riferimento lezione: 15/10 Cifrari a blocchi: SPN e inizio di AES. Dettaglio: Un cifrario a blocchi, da un punto di vista di teoria dell'informazione, corrisponde a una scelta, per ogni chiave, di una permutazione dell'insieme dei messaggi. Usare tutte le possibile permutazioni richiede troppa memoria per le chiavi (Boneh-Shoup I.4.1, inizio della sezione)}
-
-    \vspace{0.2cm} \noindent Un cifrario a blocchi è un cifrario deterministico in cui $M=C$ coincidono con lo stesso insieme finito $X$, costituito da ``blocchi'' di dimensione fissata. 
-
-    \vspace{0.2cm}\noindent $\forall k \in K$ \underline{fissata}, possiamo definire $f_k=E(k,\cdot)$, cioè $f_k:X \to X$. \\$f_k$ è una permutazione su $X$ e $D(k,\cdot)$ è la permutazione inversa di $f_k^{-1}$. \\ Per una chiave $k$ \underline{casuale}, la permutazione $E(k,\cdot)$ dovrebbe "apparire" come una permutazione casuale. (Se si prendono tuttii possibili blocchi di plaintext e li si cifra con la stessa chiave, si otterranno tutti i possibili blocchi di ciphertext, ma rimescolati).
-
-    \vspace{0.2cm}\noindent La definizione di sicurezza per un cifrario a blocchi è formulata come un ``test a scatola nera'', basata sull'indistinguibilità: un avversario interagisce con la scatola, contentente una permutazione $f$ su $X$. \\ $f$ è generabile in 2 modi: \begin{enumerate}
-        \item scegliere $f$ per una chiave $k$ scelta casualamente;
-        \item  $f$ è una permutazione casuale, scelta uniformemente su tutte. 
-    \end{enumerate} L'avversario, non conoscendo il contenuto della scatola, pone quindi varie query, fornendo un valore $x \in X$ e ricevendo $y=f(x) \in X$. 
-    
-    \vspace{0.2cm} \noindent (Le query dell'avversario possono essere adattive: può guardare il risultato di $y_{i-1}$ ancor prima di decidere quale $x_i$ inviare.) 
-
-    \vspace{0.2cm}\noindent La sicurezza richiede che l'avversario efficiente, con una potenza di calcolo realistica quindi, non sia in grado di distinguere quale dei due casi sopra: in altre parole, un cifrario a blocchi deve essere \textbf{computazionalmente indistinguibile} da una permutazione casuale. 
-
-    \vspace{0.2cm} \noindent Sia $Perms[X]$ l'insieme di tutte le permutazioni su $X$. Si noti che $|Perms[X]|=|X|!$ 
-
-    \vspace{0.2cm}\noindent Per definire la sicurezza si introduce un gioco d'attacco:\\ Per un dato cifrario a blocchi $(E,D)$ definito su $(K,X)$, e per un dato avversario $A$, definiamo 2 esperimenti, Esp0 e Esp1. Per b=0,1, esperimento b:
-
-    \begin{enumerate} 
-        \item Lo sfidante seleziona $f$: \\ if b=0: sceglie randomicamente la chiave; se b=1 sceglie randomicamente la permutazione; 
-        \item L'avversario invia una sequenza di query al challenger: $\forall i=1,\dots$ la i-esima query è un blocco $x_i \in X$. Lo sfidante calcola $y_i=f(x_i)$ e lo dà all'avversario. 
-        \item L'avversario calcola e restituisce un bit $b \in \{0,1\}$. 
-    \end{enumerate} 
-
-    \vspace{0.2cm} \noindent Per $b=0,1$, $W_b$ è l'evento che $A$ ritorna 1 nell'Esperimento b. \\ Definiamo il vantaggio di $A$ come $BC_{adv}=|Pr[W_0]-Pr[W_1]|$. \\Infine diciamo che $A$ è un avversario BC con Q-query se invia al massimo  Q query. 
-
-    \vspace{0.2cm} \noindent Un cifrario a blocchi è sicuro, indistinguibile da una permutazione casuale, se per tutti gli avversari efficienti il valore $BC_{adv}$ è trascurabile. 
-
-    \vspace{0.2cm} \noindent Un cifrario a blocchi sicuro è imprevedibile, e ciò implica che sia sicuro contro recovery key. Ma allora $|K|$ deve esser grande: con un attacco di brute force, l'avversario vincerebbe il gioco con probabilità \textit{quasi} certa, ma con un tempo di esecuzione lineare in $|K|$, motivo per cui lo spazio delle chiavi deve esser ampio. 
-
-
-\vspace{0.2cm} \noindent 
-\hrule
 \vspace{0.2cm} \noindent I cifrari a blocchi sono i cifrari usati al giorno d'oggi, fanno uno di una sequenza di \emph{permutazioni} e \emph{sostituzioni}, spesso implementati sotto forma di cifrari iterati. Un cifrario iterato lavora su $\mathcal{N}$ ``round'', per cui è necessario definire una \emph{funzione round} e una \emph{key-schedule} (una tupla delle chiavi relative ai round). La funzione del round $g$ ha due input, la chiave relativa al round $K_r$ e uno \emph{stato corrente} $w_{r-1}$. Lo \emph{stato successivo} è $w_r=g(w_{r-1},K_r)$, ovvero:
 \[
 \begin{array}{c c}
@@ -57,6 +23,47 @@ x       &\leftarrow w_0
 
 \noindent È facile intuire che $g$ debba essere biettiva rispetto alla chiave, ovvero $\exists g^{-1} \mid g^{-1}(g(w,y),y)=w \quad \forall\, w,y$.
 
+\vspace{0.5cm} \noindent
+È anche possibile avere una visione alternativa di un cifrario a blocchi, si consideri l'insieme $X := M = C$ di un cifrario $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$
+
+\vspace{1em}\noindent
+Prendendo $e_K \in \mathcal{E}$, una funzione di cifratura fissata, possiamo definire $f_K=e_K(\cdot)$, cioè $f_K:X \to X$, ovvero una permutazione su $X$, inoltre esiste una funzione $d_K$ permutazione inversa $f_K^{-1}$. 
+
+Prendendo una funzione casuale $e_{i} \in \mathcal{E}$ la permutazione $f_{i}$ dovrebbe "apparire" come una permutazione casuale. (Se si prendono tutti possibili blocchi di \emph{plaintext} e li si cifra con la stessa chiave, si otterranno tutti i possibili blocchi di \emph{ciphertext}, ma rimescolati).
+
+\vspace{0.2cm}\noindent La definizione di sicurezza per un cifrario a blocchi è formulata come un ``test a scatola nera'', basata sull'indistinguibilità: un avversario interagisce con la scatola, contente una permutazione $f$ su $X$. \\ $f$ è generabile in 2 modi: \begin{enumerate}
+    \item scegliere $f$ attraverso una funzione $e_i$, con $i$ scelta casualmente;
+    \item scegliere $f$ come una permutazione casuale, scelta uniformemente su tutte le possibili permutazioni. 
+\end{enumerate} L'avversario, non conoscendo il contenuto della scatola, pone quindi varie domande, fornendo un valore $x \in X$ e ricevendo $y=f(x) \in X$.
+
+\vspace{0.2cm} \noindent (Le domande dell'avversario possono essere adattive: può guardare il risultato di $y_{i-1}$ ancor prima di decidere quale $x_i$ inviare.) 
+
+\vspace{0.2cm}\noindent La sicurezza richiede che l'avversario efficiente, con una potenza di calcolo realistica quindi, non sia in grado di distinguere quale dei due casi sopra: in altre parole, un cifrario a blocchi deve essere \textbf{computazionalmente indistinguibile} da una permutazione casuale. 
+
+\vspace{0.2cm} \noindent Sia $Perms[X]$ l'insieme di tutte le permutazioni su $X$. Si noti che $|Perms[X]|=|X|!$ 
+
+\vspace{0.2cm}\noindent Per definire la sicurezza si introduce un gioco d'attacco:
+
+\begin{definition}[Vantaggio Block Cipher]
+    Per un dato cifrario a blocchi $L = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$, con $X := M = C$ e per un dato avversario $\mathcal{A}$, definiamo due esperimenti:
+
+    \vspace{1em}
+    \textbf{Esperimento} $b$:
+    \begin{itemize} 
+        \item Lo sfidante seleziona $f$: \\ Se $b=0$: sceglie casualmente $i$, di conseguenza la funzione $e_i$; altrimenti per $b=1$ sceglie casualmente la permutazione; 
+        \item L'avversario invia una sequenza di query allo sfidante: in cui l'$i$-esima query è un blocco $x_i \in X$. Lo sfidante calcola $y_i=f(x_i)$ e lo dà all'avversario. 
+        \item L'avversario calcola e restituisce un bit $b \in \{0,1\}$. 
+    \end{itemize} 
+
+    \vspace{0.2cm} \noindent Per $b=0,1$, $W_b$ è l'evento che $\mathcal{A}$ ritorna 1 nell'Esperimento $b$. \\ Definiamo il vantaggio di $A$ come \[BC_{adv}(\mathcal{A},L)=|Pr[W_0]-Pr[W_1]|.\]Infine diciamo che $\mathcal{A}$ è un avversario BC con Q-query se invia al massimo  Q query. 
+
+    \vspace{0.2cm} \noindent Un cifrario a blocchi è sicuro, indistinguibile da una permutazione casuale, se per tutti gli avversari efficienti il valore $BC_{adv}$ è trascurabile. 
+
+\end{definition}
+
+\vspace{0.2cm} \noindent Un cifrario a blocchi sicuro è imprevedibile, e ciò implica che sia sicuro contro \emph{recovery key}. Ma allora $|\mathcal{K}|$ deve esser grande: con un attacco per enumerazione, l'avversario vincerebbe il gioco con probabilità \textit{quasi} certa, ma con un tempo di esecuzione lineare in $|\mathcal{K}|$, motivo per cui lo spazio delle chiavi deve esser ampio. 
+
+\vspace{0.2cm}
 
 %S.P. 4.5
 \subsection{Substitution-Permutation Network}
@@ -83,7 +90,7 @@ Il cifrario \emph{SPN} è una modifica di un cifrario iterato in cui i \emph{pla
 \noindent Si presenta una figura di esempio:
 \input{figures/spn.tex}
 
-\paragraph{Osservazione} La memoria richiesta dalle S-box è $\ell \cdot 2^{\ell}$ bit. \\ S-box piccole occupano meno memoria, ma rendono SPN vulnerabile ad attacchi brute force, quindi non sono molto sicure; S-box più grandi, più round, una chiave più lunga aumentano sicurezza, ma anche la memoria (AES). 
+\paragraph{Osservazione} La memoria richiesta dalle S-box è $\ell \cdot 2^{\ell}$ bit. \\ S-box piccole occupano meno memoria, ma rendono SPN vulnerabile ad attacchi per enumerazione, quindi non sono molto sicure; S-box più grandi, più round, una chiave più lunga aumentano sicurezza, ma anche la memoria (AES). 
 
 
 \subsection{Feistel Network e Data Encryption Standard}
@@ -128,7 +135,7 @@ Un attacco a ricerca esaustiva su \emph{DES}, sperimentato negli anni, è condot
 \noindent Lo scopo dell'attaccante è determinare una chiave $k_0$ che permetta di decifrare l'intera sequenza di messaggi cifrati ($\forall i \quad d_{k_0}(y_i) = x_i$). 
 
 \vspace{1em}\noindent
-Nei cifrari a blocchi come \emph{DES}, solitamente, è sufficiente una coppia di 3 plaintext/ciphertext per essere certi che la chiave sia unica. Negli anni le chiavi a 56 bit del cifrario, si sono dimostrate inadeguate contro attacchi simili (nel 1999 \emph{DES} è stato rotto in ben 22 ore).
+Nei cifrari a blocchi come \emph{DES}, solitamente, è sufficiente una coppia di 3 \emph{plaintext}/\emph{ciphertext} per essere certi che la chiave sia unica. Negli anni le chiavi a 56 bit del cifrario, si sono dimostrate inadeguate contro attacchi simili (nel 1999 \emph{DES} è stato rotto in ben 22 ore).
 
 \noindent Nonostante però il cifrario non sia sicuro contro gli attacchi per enumerazione, \emph{DES} è resistente ad attacchi più sofisticati. In un tentativo di rendere lo spazio delle chiavi più grande nasce \emph{3DES}.
 
@@ -176,7 +183,7 @@ e un attacco \textit{known-plaintext} come in \emph{DES}, in cui si è a conosce
 
     Per trovare una coppia $(k_1, k_2)$ che soddisfi (\ref{eq3}), l'algoritmo $\mathcal{A}$:
     \begin{enumerate}
-        \item costruisce una tabella $T$ contentente tutte le coppie $(k_1,z_i)$ con $z_i = e_{k_1}(\bar{x}) \ \forall k_1 \in \mathcal{K}$
+        \item costruisce una tabella $T$ contente tutte le coppie $(k_1,z_i)$ con $z_i = e_{k_1}(\bar{x}) \ \forall k_1 \in \mathcal{K}$
         \item $\forall k_2 \in \mathcal{K}$ calcola $z_j = d_{k_2}(\bar{y})$: se in $T$ appare una coppia $(k_1,z_j)$, restituisce $(k_1,k_2)$ e si ferma.
     \end{enumerate}
     L'attacco è presentato in figura \ref{fig:mitm}, l'output soddisfa $d_{k_2}(\bar{y}) = e_{k_1}(\bar{x})$.
