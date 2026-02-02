@@ -1,9 +1,9 @@
-Le modalità di cifratura viste fino ad ora non permettono di garantire l'\emph{integrità dei dati}, si pensi a un possibile attacco a un cifrario \emph{One-time-pad} a stream, in cui i bit cifrati vengono trasmessi tra le parti, è possibile un attacco in cui un avversario cambia dei bit a scelta. Questo tipo di attacco è chiamato a \emph{bit-flipping} in cui dei bit sono cambiati da 0 a 1, e viceversa, in modo prevedibile. Nei cifrari visti fin'ora non è possibile quindi determinare quando un messaggio sia stato alterato durante la trasmissione.
+Le modalità di cifratura viste fino ad ora non permettono di garantire l'\emph{integrità dei dati}, si pensi a un possibile un cifrario \emph{One-time-pad} a stream, in cui i bit cifrati vengono trasmessi tra le parti, è possibile un attacco in cui un avversario cambia dei bit a scelta. Questo tipo di attacco è chiamato \emph{bit-flipping} in cui dei bit sono cambiati da 0 a 1, e viceversa, in modo prevedibile. Nei cifrari visti fin'ora non è possibile quindi determinare quando un messaggio sia stato alterato durante la trasmissione.
 
-La garanzia che i dati ricevuti siano gli stessi dati inviati dal mittente è chiamata \emph{integrità dei dati}. Attraverso delle funzioni \emph{hash crittografiche} è possibile costruire dei sistemi che siano in grado di generare una ``fingerprint'', o firma, (una stringa strettamente legata ai dati, che in qualche modo identifica i dati originali), si vuole una firma che risulti invalida successivamente a modifiche dei dati. 
+La garanzia che i dati ricevuti siano gli stessi dati inviati dal mittente è chiamata \emph{integrità dei dati}. Attraverso delle funzioni \emph{hash crittografiche} è possibile costruire dei sistemi che siano in grado di generare una ``fingerprint'', o firma, (una stringa strettamente legata ai dati, che in qualche modo identifica i dati originali), tale firma deve risultare invalida successivamente a modifiche dei dati. 
 
 \vspace{1em}
-Sia $h$ una funzione hash e $x$ dei dati di grandezza arbitraria. La firma dei dati è $y = h(x)$, spesso indicata come \textbf{message digest}, solitamente $h(x)$ ha una lunghezza fissata a 160 o 256 bit.
+Sia $h$ una funzione hash e $x$ dei dati di grandezza arbitraria. La firma dei dati è $y = h(x)$, spesso indicata come \textbf{message digest}, solitamente di lunghezza fissata a 160 o 256 bit.
 
 Una volta che le informazioni sono state firmate, calcolando $y = h(x)$, se avvenissero alterazioni, diciamo $x \to \tilde{x}$, le modifiche sarebbero individuabili attraverso la verifica $h(\tilde{x}) \neq y$.
 
@@ -21,13 +21,12 @@ Le funzioni hash non sono però uniche, è utile studiare le \emph{famiglie di f
     Nel caso in cui $\mathcal{X}$ sia finito e $|\mathcal{X}| > |\mathcal{Y}|$ la funzione di hash è chiamata funzione di \emph{compressione}.
 \end{definition}
 
-Una funzione hash senza chiave è una funzione $h: \mathcal{X} \to \mathcal{Y}$, una funzione senza chiave è un caso particolare con $|\mathcal{K}| = 1$, solitamente si usa il termine \emph{message digest} per le funzioni hash con la chiave e il termine \emph{tag} per le funzioni hash senza chiave. 
+Una funzione hash senza chiave è una funzione $h: \mathcal{X} \to \mathcal{Y}$, ovvero un caso particolare in cui $|\mathcal{K}| = 1$, solitamente si usa il termine \emph{message digest} per le funzioni hash con la chiave e il termine \emph{tag} per le funzioni hash senza chiave. 
 
-Introduciamo delle definizioni che saranno utili nel resto della sezione
-Una coppia $(x,y) \in \mathcal{X} \times \mathcal{Y}$ è detta valida per una funzione hash $h$ se $y = h(x)$. Sia $\mathcal{F}^{\mathcal{X}\mathcal{Y}}$ l'insieme di tutte le funzioni hash possibili da $\mathcal{X}$ a $\mathcal{Y}$, generalmente indichiamo $|\mathcal{X}| = N$ e $|\mathcal{Y}| = M$ allora $|\mathcal{F}^{\mathcal{X}\mathcal{Y}}| = M^N$. Un sottoinsieme $\mathcal{F} \subseteq \mathcal{F}^{\mathcal{X}\mathcal{Y}}$ è chiamato \textit{famiglia hash-}$(N,M)$
+Introduciamo delle definizioni che saranno utili nel resto della sezione; una coppia $(x,y) \in \mathcal{X} \times \mathcal{Y}$ è detta valida rispetto a una funzione hash $h$ se $y = h(x)$. Sia $\mathcal{F}^{\mathcal{X}\mathcal{Y}}$ l'insieme di tutte le funzioni hash possibili da $\mathcal{X}$ a $\mathcal{Y}$, generalmente indichiamo $|\mathcal{X}| = N$ e $|\mathcal{Y}| = M$ allora $|\mathcal{F}^{\mathcal{X}\mathcal{Y}}| = M^N$. Un sottoinsieme $\mathcal{F} \subseteq \mathcal{F}^{\mathcal{X}\mathcal{Y}}$ è chiamato \textit{famiglia hash-}$(N,M)$
 
 \subsection{Sicurezza funzioni hash}
-Per una funzione hash $h: \mathcal{X} \to \mathcal{Y}$ senza chiave sia $y = h(x)$, in applicazioni pratiche è desiderabile che $h(x)$ sia l'unico modo per determinare il valore hash di $x$.
+In applicazioni pratiche è desiderabile che, data una funzione $h: \mathcal{X} \to \mathcal{Y}$ senza chiave, $h(x)$ sia l'unico modo per determinare il valore hash di $x$.
 
 Si definiscono tre problemi; per cui se sufficientemente difficili una funzione hash è considerata sicura
 
@@ -38,14 +37,14 @@ Si definiscono tre problemi; per cui se sufficientemente difficili una funzione 
 Nel caso in cui il problema preimmagine sia difficile la funzione $h$ è detta \emph{one-way} o \emph{resistente alla preimmagine}.
 \vspace{1em}
 \begin{definition}[Calcolo Seconda preimmagine]
-    Per una funzione hash $h: \mathcal{X} \to \mathcal{Y}$ e un elemento $x \in \mathcal{X}$, il problema del calcolo della seconda preimmagine consiste nel trovare $x' \in \mathcal{X}$, $x \neq x'$ $h(x) = h(x')$.
+    Per una funzione hash $h: \mathcal{X} \to \mathcal{Y}$ e un elemento $x \in \mathcal{X}$, il problema del calcolo della seconda preimmagine consiste nel trovare $x' \in \mathcal{X}$, $x \neq x'$ tale che $h(x) = h(x')$.
 \end{definition}
 
 \noindent Nel caso di una funzione $h$, risolvere il problema della seconda preimmagine permette di avere la coppia valida $(x',h(x))$, se per $h$ il problema della seconda preimmagine è difficile, la funzione è detta \emph{resistente alla seconda preimmagine}.
 
 \vspace{1em}
 \begin{definition}[Calcolo Collisione]
-    Per una funzione hash $h: \mathcal{X} \to \mathcal{Y}$, il problema del calcolo delle collisione consiste nel trovare una coppia di valori $x,x' \in \mathcal{X}$.tale che $h(x) = h(x')$.
+    Per una funzione hash $h: \mathcal{X} \to \mathcal{Y}$, il problema del calcolo delle collisione consiste nel trovare una coppia di valori $x,x' \in \mathcal{X}$ tale che $h(x) = h(x')$.
 \end{definition}
 
 \noindent
