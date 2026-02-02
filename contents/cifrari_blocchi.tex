@@ -161,9 +161,8 @@ e un attacco \textit{known-plaintext} come in \emph{DES}, in cui si è a conosce
     \item \emph{Fase Backward}: prova tutte le possibili chiavi $k_j \in \mathcal{K}$ per cui $z'_j = d_{k_j}(y)$ 
     \item \emph{Matching}: verifica se $z'_j$ è presente nella tabella: se esiste una corrispondenza $z'_j = z_i$ la coppia $(k_i,k_j)$ è una chiave candidata per la decifratura in \emph{2DES}.
 \end{enumerate}
-\newpage
-\input{figures/mitm.tex}
 
+\input{figures/mitm.tex}
 \begin{theorem}[\emph{2DES} non è più sicuro di \emph{DES}]
     Sia $\emph{2DES} = (M,C,\mathcal{K}^2,\mathcal{E}_2,\mathcal{D}_2)$. Esiste un algoritmo $\mathcal{A}$ che prende in input una sequenza di \emph{plaintext} $\bar{x} = (x_1,\dots,x_Q)$ e una sequenza di corrispondenti \emph{ciphertext} $\bar{y} = (y_1,\dots,y_Q)$, cifrati con la stessa chiave $(k_1,k_2) \in \mathcal{K}^2$. 
     
@@ -194,7 +193,7 @@ e un attacco \textit{known-plaintext} come in \emph{DES}, in cui si è a conosce
 
 \subsection{Advanced Encryption Standard}
 \emph{AES} nasce dalla necessità di avere un cifrario libero globalmente e con una sicurezza migliore di \emph{DES}, che supportasse una lunghezza dei blocchi a 128,192 e 256 bit. Il nome originale dell'algoritmo era \emph{Rijndael} prima di essere selezionato come standard, utilizzato ancora oggi. 
-
+\newpage
 \begin{definition}[Advanced Encryption Standard]
     \emph{AES} è un cifrario iterato, in cui il numero di round dipende dalla lunghezza della chiave:  
     \begin{table}[h]
@@ -231,7 +230,7 @@ e un attacco \textit{known-plaintext} come in \emph{DES}, in cui si è a conosce
 \paragraph{MixColumns} La matrice $4 \times 4$ viene moltiplicata da una matrice fissata invertibile (A), i cui elementi sono interpretati come elementi di $GF(2^8)$ con $x^8+x^4+x^3+x+1$ come polinomio irriducibile. 
 \input{figures/MixColumns.tex}
 
-\noindent Nella matrice A, gli scalari sono interpretati come elementi di $GF(2^8)$ usando la loro rappresentazione binaria ($03$ rapprensenta $x+1$ in $GF(2^8)$).
+\noindent Nella matrice A, gli scalari sono interpretati come elementi di $GF(2^8)$ usando la loro rappresentazione binaria ($03$ rappresenta $x+1$ in $GF(2^8)$).
 
 
 \vspace{0.5cm} \noindent  Nell'ultimo round, AES usa $\bar{\Pi}_{AES}$, che è uguale a $\Pi_{AES}$ senza MixColumns. 
