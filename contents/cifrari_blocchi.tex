@@ -174,7 +174,7 @@ e un attacco \textit{known-plaintext} come in \emph{DES}, in cui si è a conosce
         d_{k_2}(\bar{y}) = e_{k_1}(\bar{x})
     \end{align}
 
-    Per trovare una coppia $(k_1, k_2)$ che soddisfi (\ref{eq3}), l'algoritmo A:
+    Per trovare una coppia $(k_1, k_2)$ che soddisfi (\ref{eq3}), l'algoritmo $\mathcal{A}$:
     \begin{enumerate}
         \item costruisce una tabella $T$ contentente tutte le coppie $(k_1,z_i)$ con $z_i = e_{k_1}(\bar{x}) \ \forall k_1 \in \mathcal{K}$
         \item $\forall k_2 \in \mathcal{K}$ calcola $z_j = d_{k_2}(\bar{y})$: se in $T$ appare una coppia $(k_1,z_j)$, restituisce $(k_1,k_2)$ e si ferma.
@@ -204,7 +204,7 @@ e un attacco \textit{known-plaintext} come in \emph{DES}, in cui si è a conosce
 
 \noindent In $\emph{AES}$ si usa una permutazione fissata $\Pi_{AES}$ biettiva su $\{0,1\}^{128}$ che non dipende dalla chiave. 
 
-\vspace{0.2cm} \noindent L'ultimo step di ogni round è lo XOR tra la chiave del round corrente e l'output di $\Pi_{AES}$, ad eccezione dell'ultimo round dove si usa una permutazione leggermente modificata, $\bar{\Pi}_{AES}$ . 
+\vspace{0.2cm} \noindent L'ultimo step di ogni round è lo \texttt{xor} tra la chiave del round corrente e l'output di $\Pi_{AES}$, ad eccezione dell'ultimo round dove si usa una permutazione leggermente modificata, $\bar{\Pi}_{AES}$ . 
 
 \vspace{0.2cm} \noindent I 128 bit sono organizzati in una matrice $4 \times 4$, in cui ogni cella contiene $8$ bit. 
 
