@@ -1,3 +1,4 @@
+%S.P. sezione 5
 Le modalità di cifratura viste fino ad ora non permettono di garantire l'\emph{integrità dei dati}, si pensi a un possibile un cifrario \emph{One-time-pad} a stream, in cui i bit cifrati vengono trasmessi tra le parti, è possibile un attacco in cui un avversario cambia dei bit a scelta. Questo tipo di attacco è chiamato \emph{bit-flipping} in cui dei bit sono cambiati da 0 a 1, e viceversa, in modo prevedibile. Nei cifrari visti fin'ora non è possibile quindi determinare quando un messaggio sia stato alterato durante la trasmissione.
 
 La garanzia che i dati ricevuti siano gli stessi dati inviati dal mittente è chiamata \emph{integrità dei dati}. Attraverso delle funzioni \emph{hash crittografiche} è possibile costruire dei sistemi che siano in grado di generare una ``fingerprint'', o firma, (una stringa strettamente legata ai dati, che in qualche modo identifica i dati originali), tale firma deve risultare invalida successivamente a modifiche dei dati. 
@@ -51,3 +52,28 @@ Nel caso in cui il problema preimmagine sia difficile la funzione $h$ è detta \
 Risolvere il problema della collisione permette di avere due coppie valide $(x,y), (x',y)$, se per $h$ il problema della collisione è difficile, la funzione è detta \emph{resistente alle collisioni}.
 
 \vspace{1em}
+Passiamo ora a una formalizzazione matematica per definire bene sicurezza e attacchi a funzioni hash, presentando un modello matematico chiamato \emph{Oracolo Casuale}
+
+\begin{definition}[Oracolo Casuale]
+    Un \emph{oracolo} sceglie casualmente una funzione hash $h: \mathcal{X} \to \mathcal{Y} \in \mathcal{F}^{\mathcal{X}\mathcal{Y}}$ di cui solo lui è a conoscenza, per cui l'unico modo per calcolare valori hash per una data $x \in \mathcal{X}$ è attraverso l'oracolo stesso.
+\end{definition}
+
+Il modello sopra descritto rappresenta il comportamento di una funzione hash ideale, per cui è utile al fine di determinare la sicurezza delle funzioni hash.
+
+\begin{theorem}[Proprietà d'indipendenza]
+    Sia $h \in \mathcal{F}^{\mathcal{X}\mathcal{Y}}$ scelta in modo casuale e sia $\mathcal{X}_0 \subseteq \mathcal{X}$ con $|\mathcal{Y}| = M$. Sia calcolato il valore $h(x) \quad \forall x \in \mathcal{X}_0$, si ha che $\Pr[h(x) = y] = \frac{1}{M}$ per ogni $x \in \mathcal{X} - \mathcal{X}_0$ e per ogni $y \in \mathcal{Y}$.   
+\end{theorem}
+
+Sul modello di \emph{oracolo} appena descritto si presentando algoritmi che fanno uso di una componente casuale, per cui non si ha sempre successo, nello specifico si parla di algoritmi di tipo \textbf{Las Vegas}. Tali algoritmi falliscono, o restituiscono un valore con una probabilità $\varepsilon$, in caso di successo si ha la certezza che il risultato sia corretto.
+
+\vspace{1em}\noindent
+Si parla di \emph{probabilità di successo nel caso peggiore}, nel caso in cui un algoritmo restituisca una risposta corretta con probabilità almeno $\varepsilon$ per qualsiasi istanza. La \emph{probabilità di successo nel caso medio} di un algoritmo è la probabilità di ottenere la risposta corretta mediata su tutte le istanze possibili. Usiamo il termine \emph{algoritmo-$(\varepsilon,Q)$} per indicare un algoritmo di tipo Las Vegas, con probabilità media di successo $\varepsilon$ che fa uso di al massimo $Q$ \emph{query} all'oracolo.
+
+\input{algorithms/oracle_preimage.tex}
+
+\begin{theorem}
+    Per ogni $\mathcal{X}_0 \subseteq \mathcal{X}$ con $|\mathcal{X}_0| = Q$ la probabilità di successo nel caso medio dell'algoritmo \ref{alg:preimage} è $1-\left(1-\frac{1}{M}\right)^Q$.
+\end{theorem}
+%TODO: Scrivere
+\begin{proof}
+\end{proof}
