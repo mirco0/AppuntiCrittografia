@@ -218,14 +218,34 @@ Il teorema \ref{teoremaMerkle} mostra che è possibile costruire una funzione ha
     \item Fare uso della matematica per definire delle funzioni di compressione, la cui sicurezza è dimostrata, generalmente queste funzioni sono più lente.
 \end{itemize}
 
-Sia $L = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ un cifrario a blocchi con $\mathcal{X} = \{0,1\}^{n}$. La funzione di compressione di Davies-Mayer $h_{DM}$, associa un elemento in $(\mathcal{X} \times \mathcal{K})$ a un elemento in $\mathcal{X}$ come segue
+Sia $L = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ un cifrario a blocchi con $\mathcal{X} = \{0,1\}^{n}$. La funzione di compressione di Davies-Meyer $h_{DM}$, associa un elemento in $(\mathcal{X} \times \mathcal{K})$ a un elemento in $\mathcal{X}$ come segue
 \[
     h_{DM}:= e_y(x) \oplus x
 \]
 $h_{DM}$ è definita su $(\mathcal{X}\times \mathcal{K},\mathcal{X})$. Questa funzione, nel paradigma di \emph{Merkle Damgard}, ha input $x$ come variabili di incatenazione $x:= t_{i-1}$ e un blocco $y:= m_i \in \mathcal{K}$, il risultato rappresenta invece la variabile $t_i := e_{m_i}(t_{i-1}) \oplus t_{i-1}$. Solitamente i cifrari sono ottimizzati per fare uso di una singola chiave durante tutto il processo, al contrario questo metodo, fa uso di più chiavi, così facendo ottiene una funzione hash relativamente lenta. Per questo motivo si fa uso di cifrari a blocchi creati per un cambio di chiavi rapido.
 
-Si parla ora della resistenza alle collisioni di funzioni hash create con il metodo di Davies-Meyer
+\paragraph{Funzione SHA256}
+SHA256 è una funzione hash di Merkle Damgård che fa uso di una funzione di compressione Davies-Meyer, il cui risultato è una stringa di 256 bit. Nel PB di SHA256 c'è la codifica che misura il numero di bit del messaggio, al contrario del paradigma di Merkle Damgård in cui è presente il numero di blocchi del messaggio. In SHA256
+\[
+    IV := \text{6A09E667 BB67AE85 3C6EF372 A54FF53A 510E527F 9B05688C 1F83D9AB 5BE0CD19}
+\]
+inoltre $h$ è costruita a partire da un cifrario a blocchi conosciuto come $e_{SHA-256}$ e al posto dell'operazione di \texttt{xor} si fa uso della somma modulo $2^{32}$ con 
+\begin{align*}
+    x &= x_{1}||x_{2}||\dots||x_7 \in \{0,1\}^{256} \quad x_i \in \{0,1\}^{32} \ \forall i\\
+    y &= y_{1}||y_{2}||\dots||x_7 \in \{0,1\}^{256} \quad y_i \in \{0,1\}^{32} \ \forall i
+\end{align*}
+Denotiamo con $x \boxplus y$ l'operazione $(x_1  + y_1), (x_2 + y_2), \dots, (x_7 + y_7)$, in cui tutte le somme sono in modulo $2^{32}$ infine 
+\[
+    h(t,m):= e_{SHA-256}(m,t) \boxplus t
+\]
 
-\subsection{Resistenza alle collisioni per Davies-Mayer}
-Non è possibile assicurare la resistenza di una funzione hash attraverso la semplice sicurezza del cifrario utilizzato
-%Pagina 301 B.S.
+\vspace{1em}
+Descriviamo ora brevemente il cifrario a blocchi $e_{SHA-256}$ che opera come nella seguente modalità: 
+prende in input una chiave $k$ a 512 bit, un messaggio $t$ e interpreta entrambi come concatenazione di blocchi da 32 bit
+\begin{align*}
+    k = k_0||\dots||k_15 \in \{0,1\}^{512}\\ 
+    t = t_0||\dots||t_7 \in \{0,1\}^{256}\\
+\end{align*}
+%TODO: SCRIVERE
+e segue l'algoritmo \ref{alg:SHA256} iterando la funzione del round 64 volte, le chiavi del round $W_i$ per $i = 1,\dots,64$ sono definite nella fase di generazione delle chiavi. 
+%TODO: FINIRE
