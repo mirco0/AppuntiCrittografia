@@ -135,28 +135,29 @@ e la probabilità di trovare almeno una collisione è $1 - e^{-\frac{Q(Q-1)}{2M}
 \vspace{0.2cm} \noindent Facendo uso del paradosso del compleanno è possibile prendere quindi un insieme $\mathcal{X}_0 \subseteq \mathcal{X}$ con $|\mathcal{X}_0| = \sqrt{M}$ e tentare un attacco conosciuto come \emph{attacco del compleanno}.
 
 
-\vspace{0.5cm} \noindent Dimostriamo ora come risolvere una collisione sia più `facile' di risolvere Preimmagine e Seconda Preimmagine, attraverso la tecnica della riduzione. 
+\vspace{0.5cm} \noindent Dimostriamo ora come risolvere una collisione sia più ``facile'' di risolvere Preimmagine e Seconda Preimmagine, attraverso la tecnica della riduzione. 
 
 \vspace{0.2cm}
 \input{algorithms/collisione_a_2preimmagine.tex}
 
-\vspace{0.2cm} \noindent Il problema della collisione viene ridotto a SecondaPreimmagine e vale che la proprietà di resistenza della collisione implica la proprietà di resistenza alla SecondaPreimmagine. 
+\vspace{0.2cm} \noindent Il problema della collisione viene ridotto al problema di trovare una seconda preimmagine e vale che la proprietà di resistenza della collisione implica la proprietà di resistenza alla seconda preimmagine. 
 
 \vspace{0.2cm}
 \input{algorithms/collisione_a_preimmagine.tex}
 
-\begin{theorem} Supponiamo $h:\mathcal{X} \to \mathcal{Y}$ con $\mathcal{X}$ e $\mathcal{Y}$ insiemi finiti tale che $|\mathcal{X}|\geq |\mathcal{Y}|$. Supponiamo di avere un algoritmo Oracolo-Preimmagine che con certezza risolve il problema Preimmagine in $Q$ tentativi. Allora, l'algoritmo CollisioneAPreimmagine \ref{alg:CollisioneAPreimmagine} è un algoritmo che in $Q+1$ passi restituisce la soluzione al problema Collisione con probabilità $1/2$. 
+\vspace{0.5cm}
+\begin{theorem} Supponiamo $h:\mathcal{X} \to \mathcal{Y}$ con $\mathcal{X}$ e $\mathcal{Y}$ insiemi finiti tale che $|\mathcal{X}|\geq |\mathcal{Y}|$. Supponiamo di avere un algoritmo \texttt{Oracolo-Preimmagine} che, con certezza, risolve il problema Preimmagine in $Q$ tentativi. Allora, l'algoritmo \texttt{CollisioneAPreimmagine} \ref{alg:CollisioneAPreimmagine} è un algoritmo che in $Q+1$ passi restituisce la soluzione al problema Collisione con probabilità $1/2$. 
 \end{theorem}
 
 \begin{proof}
-    $\forall x \in \mathcal{X}$, definiamo $x \sim x_1$ se $h(x)=h(x_1)$. Si definisce $[x]=\{x_1 \in \mathcal{X} \mid x \sim x_1\}$, ovvero la classe d'equivalenza contenente tutti gli elementi per cui l'hash è la stessa. $\forall [x] \ \exists !  y \in \mathcal{Y} $ tale che $[x]=h^{-1}(y)$. \\ Poiché assumiamo che Oracolo-Preimmagine trova sempre una preimmagine di ogni elemento, allora $h^{-1}(y) \neq \varnothing \ \forall y \in \mathcal{Y}$. Quindi, il $\#[x]=|\mathcal{Y}|$. Sia $\mathcal{C}$ l'insieme di tutte queste classi d'equivalenza. \\ Supponiamo che l'algoritmo CollisioneAPreimmagine scelga a caso un elemento $x \in \mathcal{X}$. Per questa $x$, ci sono $|[x]| \ x_1$ possibili che l'algoritmo OracoloPreimmagine potrebbe ritornare.  Di queste, $|[x]|-1$ sono diverse da $x$ e quindi danno una collisione valida. Quindi, dato $x \in \mathcal{X}$, la probabilità di successo è $\frac{(|[x]|-1)}{|[x]|}$. La probabilità di successo dell'algoritmo CollisioneAPreimmagine è calcolata mediando su tutte le possibili scelte di $x$:
+    $\forall x \in \mathcal{X}$, definiamo $x \sim x_1$ se $h(x)=h(x_1)$. Si definisce $[x]=\{x_1 \in \mathcal{X} \mid x \sim x_1\}$, ovvero la classe d'equivalenza contenente tutti gli elementi per cui l'hash è la stessa. $\forall [x] \ \exists !  y \in \mathcal{Y} $ tale che $[x]=h^{-1}(y)$. \\ Poiché assumiamo che l'algoritmo \texttt{Oracolo-Preimmagine} trova sempre una preimmagine di ogni elemento, allora $h^{-1}(y) \neq \varnothing \ \forall y \in \mathcal{Y}$. Quindi, il numero di classi di equivalenza possibili è $|\mathcal{Y}|$, sia $\mathcal{C}$ l'insieme che le contiene tutte. \\ Supponiamo che l'algoritmo \texttt{CollisioneAPreimmagine} scelga a caso un elemento $x \in \mathcal{X}$. Per l'elemento $x$ scelto, il numero di elementi $x_1$ che l'algoritmo \texttt{OracoloPreimmagine} potrebbe ritornare è $|[x]|$. Di queste, $|[x]|-1$ sono diverse da $x$ e quindi danno una collisione valida. Quindi, dato $x \in \mathcal{X}$, la probabilità di successo è $\frac{|[x]|-1}{|[x]|}$. La probabilità di successo dell'algoritmo \texttt{CollisioneAPreimmagine} è calcolata mediando su tutte le possibili scelte di $x$:
 
     \begin{align*}
         \Pr[\text{successo}] &= \frac{1}{\mathcal{|X|}} \sum_{x \in \mathcal{X}}\frac{|[x]|-1}{|[x]|} \\ 
         &= \frac{1}{|\mathcal{X}|} \sum_{C \in \mathcal{C}} \sum_{x \in C} \frac{|C|-1}{|C|} \\
          &= \frac{1}{\mathcal{|X|}} \sum_{C \in \mathcal{C}} (|C|-1) \\ 
          &= \frac{1}{\mathcal{|X|}} (\sum_{C \in \mathcal{C}} |C| -\sum_{C \in \mathcal{C}} 1) \\ 
-         &= \frac{|\mathcal{X}| - |\mathcal{Y}|}{|\mathcal{X}|} \\ 
+         &= \frac{|\mathcal{X}| - |\mathcal{Y}|}{|\mathcal{X}|} \label{eq:1}\\ 
          & \geq \frac{|\mathcal{X}| - |\mathcal{X}|/2}{|\mathcal{X}|} \\ 
          &= 1/2. 
     \end{align*}
@@ -175,7 +176,7 @@ Quindi, per opportune assunzioni, la proprietà di resistenza alle collisioni im
     \item La funzione hash $h$ è chiamata funzione di compressione di $H$
     \item La costante $IV$ è la \emph{Intial Value} scelta in modo arbitrario
     \item Le variabili $m_1,\dots,m_s$ sono chiamati i blocchi di messaggio
-    \item Le variabili $t_0,\dots,t_s \in \mathcal{Y}$ sono le variabili di concatenazione
+    \item Le variabili $t_0,\dots,t_s \in \mathcal{Y}$ sono le variabili di incatenazione
     \item La stringa PB è il \emph{padding block}, viene aggiunto alla fine dell'ultimo blocco per rendere la lunghezza del messaggio un multiplo di $\ell$, in caso in cui non sia necessario, viene aggiunto un intero blocco contenente il padding block.
 \end{itemize}
 
@@ -190,7 +191,7 @@ in cui $\langle s \rangle$ è una stringa di bit che codifica il numero di blocc
 
 \begin{theorem}
     \label{teoremaMerkle}
-    Sia $L$ una funzione limitata polinomialmente e sia $h$ una funzione hash resistente alle collisioni defiinita su $(\mathcal{K} \times \mathcal{X}, \mathcal{Y})$. Allora, la funzione hash di Merkle-Damgard $H$ derivata da $h$, definita su $(\{0,1\}^{\leq L}, \mathcal{K})$ è resistente alle collisioni. \\ In particolare, per ogni avversario $\mathcal{A}$ capace di trovare una collisione su $H$, esiste un avversario $\mathcal{B}$ capace di trovare una collisione su $h$, formalmente: 
+    Sia $L$ un valore di lunghezza, limitato da un polinomio e sia $h$ una funzione hash resistente alle collisioni definita su $(\mathcal{K} \times \mathcal{X}, \mathcal{Y})$. Allora, la funzione hash di Merkle-Damgard $H$ derivata da $h$, definita su $(\{0,1\}^{\leq L}, \mathcal{K})$ è resistente alle collisioni. \\ In particolare, per ogni avversario $\mathcal{A}$ capace di trovare una collisione su $H$, esiste un avversario $\mathcal{B}$ capace di trovare una collisione su $h$, formalmente: 
     \[
     CR_{\text{adv}}[\mathcal{A}, H]=CR_{\text{adv}}[\mathcal{B}, h].
     \] 
@@ -198,7 +199,7 @@ in cui $\langle s \rangle$ è una stringa di bit che codifica il numero di blocc
 
 
 \begin{proof}
-    L'avversario $\mathcal{B}$, per trovare collisioni, su $h$ opera così: esegue $\mathcal{A}$ per ottenere due messaggi distinti, $M,M' \in \{0,1\}^{\leq L}$ tale che $H(M)=H(M')$. Mostriamo che $\mathcal{B}$ può usare $M,M'$ per trovare una collisione su $h$. Per fare ciò, $\mathcal{B}$ scansiona $M$ e $M'$ iniziando dall'ultimo blocco e procedendo all'indietro. (Per semplificare, assumiamo che ambo i messaggi abbiano già i PB nell'ultimo blocco). \\ Sia $M=m_1m_2\dots m_u$ e $M'=m_1'm_2'\dots m_v'$. Sia $t_0 \dots t_u \in \mathcal{Y}$ i valori di incatenazione per $M$ e $t_0', \dots, t_v' $ quelli per $M'$. L'ultima applicazione di $h$ dà l'output finale e poiché $H(M)=H(M')$, si ha:
+    L'avversario $\mathcal{B}$, per trovare collisioni su $h$, opera così: esegue $\mathcal{A}$ per ottenere due messaggi distinti, $M,M' \in \{0,1\}^{\leq L}$ tale che siano in collisione su $H$, quindi $H(M)=H(M')$. Mostriamo che $\mathcal{B}$ può usare $M,M'$ per trovare una collisione su $h$. Per fare ciò, $\mathcal{B}$ scansiona $M$ e $M'$ iniziando dall'ultimo blocco e procedendo all'indietro. (Per semplificare, assumiamo che ambo i messaggi abbiano già i PB nell'ultimo blocco). \\ Sia $M=m_1m_2\dots m_u$ e $M'=m_1'm_2'\dots m_v'$. Sia $t_0 \dots t_u \in \mathcal{Y}$ i valori di incatenazione per $M$ e $t_0', \dots, t_v' $ quelli per $M'$. L'ultima applicazione di $h$ dà l'output finale e poiché $H(M)=H(M')$, si ha:
     \[
     h(t_{u-1},m_u)=h(t_{v-1}',m_v').
     \]
@@ -224,6 +225,6 @@ Sia $L = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ un cifrario a blocchi con $\
 \[
     h_{DM}:= e_y(x) \oplus x
 \]
-$h_{DM}$ è definita su $(\mathcal{X}\times \mathcal{K},\mathcal{X})$. Questa funzione nel paradigma di \emph{Merkle Damgard} gli input $x$ sono le variabili di concatenazione $x:= t_{i-1}$ e un blocco $y:= m_i \in \mathcal{K}$, il risultato rappresenta invece la variabile $t_i := e_{m_i}(t_{i-1}) \oplus t_{i-1}$. Solitamente i cifrari sono ottimizzati per fare uso di una singola chiave durante tutto il processo, al contrario questo metodo, fa uso di più chiavi, così facendo ottiene una funzione hash relativamente lenta. Per questo motivo si fa uso di cifrari a blocchi creati per un cambio di chiavi rapido.
+$h_{DM}$ è definita su $(\mathcal{X}\times \mathcal{K},\mathcal{X})$. Questa funzione nel paradigma di \emph{Merkle Damgard} gli input $x$ sono le variabili di incatenazione $x:= t_{i-1}$ e un blocco $y:= m_i \in \mathcal{K}$, il risultato rappresenta invece la variabile $t_i := e_{m_i}(t_{i-1}) \oplus t_{i-1}$. Solitamente i cifrari sono ottimizzati per fare uso di una singola chiave durante tutto il processo, al contrario questo metodo, fa uso di più chiavi, così facendo ottiene una funzione hash relativamente lenta. Per questo motivo si fa uso di cifrari a blocchi creati per un cambio di chiavi rapido.
 
 Si parla ora della resistenza alle collisioni di funzioni hash create con il metodo di Davies-Meyer
