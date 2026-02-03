@@ -41,7 +41,12 @@ Nel caso in cui il problema preimmagine sia difficile, la funzione $h$ è detta 
 
 \vspace{1em}
 \begin{definition}[Calcolo Collisione]
+    \label{def:collision}
     Per una funzione hash $h: \mathcal{X} \to \mathcal{Y}$, il problema del calcolo delle collisione consiste nel trovare una coppia di valori $x,x' \in \mathcal{X}$ tale che $h(x) = h(x')$.
+\end{definition}
+
+\begin{definition}[Vantaggio resistenza alle collisioni]
+    In un gioco d'attacco con una funzione hash $h: \mathcal{X} \to \mathcal{Y}$, definiamo il vantaggi di un avversario $\mathcal{A}$ rispetto ad $h$, denotato $CR_{\text{adv}}[\mathcal{A},h]$ come la probabilità dell'avversario di risolvere il problema collisione \ref{def:collision}.
 \end{definition}
 
 \noindent
@@ -53,7 +58,7 @@ Si dà ora una formalizzazione matematica utile per sicurezza e attacchi a funzi
 \paragraph{Oracolo Casuale}
     Un \emph{oracolo} sceglie casualmente una funzione hash $h: \mathcal{X} \to \mathcal{Y} \in \mathcal{F}^{\mathcal{X}\mathcal{Y}}$ di cui solo lui è a conoscenza: per cui, l'unico modo per calcolare valori hash per una data $x \in \mathcal{X}$, è attraverso l'oracolo stesso.
 
-\vspace{0.2cm} \noindent Il modello sopra descritto rappresenta il comportamento di una funzione \textbf{hash ideale}, per cui è utile al fine di determinare la sicurezza delle funzioni hash.
+\vspace{0.2cm} \noindent Il modello sopra descritto rappresenta il comportamento di una funzione hash \textbf{hash ideale}, per cui è utile al fine di determinare la sicurezza delle funzioni hash.
 
 \begin{theorem}[Proprietà d'indipendenza]
     \label{thm:1}
@@ -70,7 +75,7 @@ Si parla di \emph{probabilità di successo nel caso peggiore} se un algoritmo re
 \begin{theorem}
     Per ogni $\mathcal{X}_0 \subseteq \mathcal{X}$ con $|\mathcal{X}_0| = Q$ la probabilità di successo nel caso medio dell'algoritmo \ref{alg:preimage} è $1-\left(1-\frac{1}{M}\right)^Q$.
 \end{theorem}
-\begin{proof} Sia $y \in \mathcal{Y}$ fissato e sia $\mathcal{X}_0=\{x_1, \dots, x_Q\}$. $\forall i=1,\dots,Q$, $E_i$ è l'evento ``$h(x_i) = y$''. Dal \ref{thm:1}, $E_i$ sono eventi indipendenti e $\Pr[E_i]=\frac{1}{M} \ \forall i=1,\dots,Q$. Dunque, $\Pr[{E_i}^c]=1-\frac{1}{M} \ \forall i=1,\dots,Q$, dove ${E_i}^c$ è l'evento ``$h(x_i) \neq y$''. Quindi:
+\begin{proof} Sia $y \in \mathcal{Y}$ fissato e sia $\mathcal{X}_0=\{x_1, \dots, x_Q\}$. $\forall i=1,\dots,Q$, $E_i$ è l'evento ``$h(x_i) = y$''. Dal teorema \ref{thm:1}, $E_i$ sono eventi indipendenti e $\Pr[E_i]=\frac{1}{M} \ \forall i=1,\dots,Q$. Dunque, $\Pr[{E_i}^c]=1-\frac{1}{M} \ \forall i=1,\dots,Q$, dove ${E_i}^c$ è l'evento ``$h(x_i) \neq y$''. Quindi:
     \begin{align*}
         \Pr[E_1 \lor \dots \lor E_Q ] &= 1-\Pr[{E_1}^c \land \dots \land {E_Q}^c]\\
         &=1-\left(1-\frac{1}{M}\right)^Q.
@@ -220,3 +225,7 @@ Sia $L = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ un cifrario a blocchi con $\
 $h_{DM}$ è definita su $(\mathcal{X}\times \mathcal{K},\mathcal{X})$. Questa funzione, nel paradigma di \emph{Merkle Damgard}, ha input $x$ come variabili di incatenazione $x:= t_{i-1}$ e un blocco $y:= m_i \in \mathcal{K}$, il risultato rappresenta invece la variabile $t_i := e_{m_i}(t_{i-1}) \oplus t_{i-1}$. Solitamente i cifrari sono ottimizzati per fare uso di una singola chiave durante tutto il processo, al contrario questo metodo, fa uso di più chiavi, così facendo ottiene una funzione hash relativamente lenta. Per questo motivo si fa uso di cifrari a blocchi creati per un cambio di chiavi rapido.
 
 Si parla ora della resistenza alle collisioni di funzioni hash create con il metodo di Davies-Meyer
+
+\subsection{Resistenza alle collisioni per Davies-Mayer}
+Non è possibile assicurare la resistenza di una funzione hash attraverso la semplice sicurezza del cifrario utilizzato
+%Pagina 301 B.S.
