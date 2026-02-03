@@ -164,11 +164,11 @@ e la probabilità di trovare almeno una collisione è $1 - e^{-\frac{Q(Q-1)}{2M}
     \noindent La sostituzione nella penultima riga è data da $|\mathcal{X}| \geq 2 |\mathcal{Y}|$. \\ Abbiamo quindi costruito un algoritmo Las Vegas con probabilità di successo nel caso medio di almeno $1/2$. 
 \end{proof}
 
-Quindi, opportune certe assunzioni, la proprietà di resistenza alle collisioni implica la proprietà di resistenza alle Preimmagini.
+Quindi, per opportune assunzioni, la proprietà di resistenza alle collisioni implica la proprietà di resistenza alle Preimmagini.
 
-\vspace{1em}
-Passiamo ora alla descrizione del paradigma di \emph{Merkle-Damgård}. Questo paradigma permette di partire da funzioni hash $h: \mathcal{K} \times \mathcal{X} \to \mathcal{Y}$ con $\mathcal{X} = \{0,1\}^{\ell}$ e $\mathcal{K} = \mathcal{Y} = \{0,1\}^n$ con $\ell$ relativamente piccola. Partendo da una funzione $h$, come sopra e definendo una funzione $H$ definita su $(\{0,1\}^{\leq L}, \mathcal{K})$ funziona come segue
+\vspace{1em} \noindent Passiamo ora alla descrizione del paradigma di \emph{Merkle-Damgård}. Questo paradigma permette di partire da funzioni hash $h: \mathcal{K} \times \mathcal{X} \to \mathcal{Y}$ con $\mathcal{X} = \{0,1\}^{\ell}$ e $\mathcal{K} = \mathcal{Y} = \{0,1\}^n$ con $\ell$ relativamente piccola. Partendo da una funzione $h$, come sopra e definendo una funzione $H$ definita su $(\{0,1\}^{\leq L}, \mathcal{K})$ funziona come segue:
 
+\vspace{0.2cm}
 \input{algorithms/markle_dam.tex}
 
 \begin{itemize}
@@ -179,15 +179,33 @@ Passiamo ora alla descrizione del paradigma di \emph{Merkle-Damgård}. Questo pa
     \item La stringa PB è il \emph{padding block}, viene aggiunto alla fine dell'ultimo blocco per rendere la lunghezza del messaggio un multiplo di $\ell$, in caso in cui non sia necessario, viene aggiunto un intero blocco contenente il padding block.
 \end{itemize}
 
-Il padding block è una porzione di testo speciale formata nel seguente modo
+\vspace{0.5cm} \noindent Il padding block è una porzione di testo speciale formata nel seguente modo:
 \begin{center}
     PB $:= \boxed{ 100\dots 00 \, || \, \langle s \rangle }$
 \end{center}
 \input{algorithms/markle_dam.tex}
 
 \begin{theorem}
+    \label{teoremaMerkle}
     Sia $L$ una funzione limitata polinomialmente e sia $h$ una funzione hash resistente alle collisioni defiinita su $(\mathcal{K} \times \mathcal{X}, \mathcal{Y})$. Allora, la funzione hash di Merkle-Damgard $H$ derivata da $h$, definita su $(\{0,1\}^{\leq L}, \mathcal{K})$ è resistente alle collisioni. \\ In particolare, per ogni avversario $\mathcal{A}$ capace di trovare una collisione su $H$, esiste un avversario $\mathcal{B}$ capace di trovare una collisione su $h$, formalmente: 
     \[
-    CR_{\text{adv}}[\mathcal{A}, H]=CR_{\text{adv}}[\mathcal{B}, h]
+    CR_{\text{adv}}[\mathcal{A}, H]=CR_{\text{adv}}[\mathcal{B}, h].
     \] 
 \end{theorem}
+
+
+\begin{proof}
+    L'avversario $\mathcal{B}$, per trovare collisioni, su $h$ opera così: esegue $\mathcal{A}$ per ottenere due messaggi distinti, $M,M' \in \{0,1\}^{\leq L}$ tale che $H(M)=H(M')$. Mostriamo che $\mathcal{B}$ può usare $M,M'$ per trovare una collisione su $h$. Per fare ciò, $\mathcal{B}$ scansiona $M$ e $M'$ iniziando dall'ultimo blocco e procedendo all'indietro. (Per semplificare, assumiamo che ambo i messaggi abbiano già i PB nell'ultimo blocco). \\ Sia $M=m_1m_2\dots m_u$ e $M'=m_1'm_2'\dots m_v'$. Sia $t_0 \dots t_u \in \mathcal{Y}$ i valori di incatenazione per $M$ e $t_0', \dots, t_v' $ quelli per $M'$. L'ultima applicazione di $h$ dà l'output finale e poiché $H(M)=H(M')$, si ha:
+    \[
+    h(t_{u-1},m_u)=h(t_{v-1}',m_v').
+    \]
+
+\noindent Se $t_{u-1} \neq t_{v-1}'$ oppure $m_u \neq m_v'$, allora la coppia $(t_{u-1},m_u)$ e $(t_{v-1}',m_v')$ è una collisione su $h$. $\mathcal{B}$ ritorna questa collisione e termina. \\ Nel caso in cui $t_{u-1} = t_{v-1}'$ e $m_u \neq m_v'$, deduciamo che $u=v$ ed $M, M'$ devono contenere lo stesso numero di blocchi. A questo punto sappiamo che $u=v, m_u=m_v', t_{u-1}=t_{u-1}'$. Si considera quindi l'ultimo blocco. Poiché $t_{u-1}=t_{u-1}'$, sappiamo che 
+\[
+    h(t_{u-2},m_{u-1})=h(t_{u-2}',m_{u-1}').
+\]
+
+\noindent Come prima, si distinguono i due casi: il processo continua allo stesso modo, fino al primo blocco, finché non si trova una collisione. A questo punto, si ha $m_i=m_i'$ per $i=1, \dots, u$. Ma questo implica che $M=M'$ contraddicendo il fatto che $M$ e $M'$ siano una collisione per $H$. Quindi, poiché $M \neq M'$, il processo di scansione deve produrre una collisione su $h$. Si conclude che $\mathcal{B}$ rompe la collisione di $h$ come richiesto. \\ In sostanza, se $\mathcal{A}$ trova una collisione su $H$, allora $\mathcal{B}$ trova una collisione su $h$, e quindi   \[
+    CR_{\text{adv}}[\mathcal{A}, H]=CR_{\text{adv}}[\mathcal{B}, h]. 
+    \]
+\end{proof}
