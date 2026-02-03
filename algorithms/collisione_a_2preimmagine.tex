@@ -1,0 +1,16 @@
+\begin{algorithm}[H]
+
+    \SetAlgoVlined
+    \SetAlgoLined
+    \label{alg:CollisioneASecondaPr}
+
+    % \KwIn{Parametri $h, Q$}
+    % \KwOut{Coppia $(x,x')$ o errore}
+    
+    \caption{Collisione-A-SecondaPreimmagine()}
+    scegli $x \in \mathcal{X}$ a caso in modo uniforme \;
+    \If{Oracolo-2Preimmagine$(x)=x'$}{
+        \Return{$(x,x')$}\;
+    }
+    \Return{errore}\;
+\end{algorithm}
