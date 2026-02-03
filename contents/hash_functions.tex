@@ -183,6 +183,9 @@ Quindi, per opportune assunzioni, la proprietà di resistenza alle collisioni im
 \begin{center}
     PB $:= \boxed{ 100\dots 00 \, || \, \langle s \rangle }$
 \end{center}
+
+in cui $\langle s \rangle$ è una stringa di bit che codifica il numero di blocchi utilizzato in $M$.
+
 \input{algorithms/markle_dam.tex}
 
 \begin{theorem}
@@ -209,3 +212,18 @@ Quindi, per opportune assunzioni, la proprietà di resistenza alle collisioni im
     CR_{\text{adv}}[\mathcal{A}, H]=CR_{\text{adv}}[\mathcal{B}, h]. 
     \]
 \end{proof}
+
+\subsection{Costruzione di una funzione di compressione}
+Il teorema \ref{teoremaMerkle} mostra che è possibile costruire una funzione hash, resistente alle collisioni, per messaggi lunghi facendo uso di una funzione hash $h$ resistente alle collisioni per messaggi corti. Per fare ciò si può
+\begin{itemize}
+    \item partire da cifrari a blocchi, per scegliere una funzione di compressione $h$, il metodo più usato è chiamato \emph{Davies Meyer} (la famiglia SHA ne fa uso).
+    \item fare uso della matematica per definire delle funzioni di compressione, la cui sicurezza è dimostrata, generalmente queste funzioni sono più lente.
+\end{itemize}
+
+Sia $L = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ un cifrario a blocchi con $\mathcal{X} = \{0,1\}^{n}$. La funzione di compressione di Davies-Mayer $h_{DM}$, mappa un elemento in $\mathcal{X} \times \mathcal{K}$ in elementi di $\mathcal{X}$ come segue
+\[
+    h_{DM}:= e_y(x) \oplus x
+\]
+$h_{DM}$ è definita su $(\mathcal{X}\times \mathcal{K},\mathcal{X})$. Questa funzione nel paradigma di \emph{Merkle Damgard} gli input $x$ sono le variabili di concatenazione $x:= t_{i-1}$ e un blocco $y:= m_i \in \mathcal{K}$, il risultato rappresenta invece la variabile $t_i := e_{m_i}(t_{i-1}) \oplus t_{i-1}$. Solitamente i cifrari sono ottimizzati per fare uso di una singola chiave durante tutto il processo, al contrario questo metodo, fa uso di più chiavi, così facendo ottiene una funzione hash relativamente lenta. Per questo motivo si fa uso di cifrari a blocchi creati per un cambio di chiavi rapido.
+
+Si parla ora della resistenza alle collisioni di funzioni hash create con il metodo di Davies-Meyer
