@@ -77,3 +77,58 @@ Si parla di \emph{probabilità di successo nel caso peggiore}, nel caso in cui u
 %TODO: Scrivere
 \begin{proof}
 \end{proof}
+
+\input{algorithms/oracle_second_preimage.tex}
+\begin{theorem}
+    Per ogni $\mathcal{X}_0 \subseteq \mathcal{X}-\{x\}$ con $|\mathcal{X}_0| = Q-1$ la probabilità di successo dell'algoritmo \ref{alg:second_preimage} è  $1-\left(1-\frac{1}{M}\right)^{Q-1}$.
+\end{theorem}
+
+\input{algorithms/oracle_collision.tex}
+\begin{theorem}
+    Per ogni $\mathcal{X}_0 \subseteq$ con $|\mathcal{X}_0| = Q$, la probabilità di successo dell'algoritmo \ref{alg:collision} è 
+    \[
+        1 - \prod_{i=1}^{Q-1}\left(1-\frac{i}{M}\right).
+    \]
+\end{theorem}
+
+\begin{proof}
+    Sia $\mathcal{X}_0 = \{x_1,\dots,x_Q\}$, per $i = 1,\dots,Q$ si definisce l'evento $E_i$ per cui l'hash dell'$i$-esimo non è stata vista prima ovvero
+    \[
+        E_i := h(x_i) \notin \{h(x_1),\dots,h(x_{i-1})\}
+    \]
+    banalmente $\Pr[E_1] = 1$, per induzione si ottiene
+    \[
+        \Pr[E_i | E_1 \land \dots \land E_{i-1}] = \frac{M - i + 1}{M}
+    \] e procedendo
+    \begin{align*}    
+        \Pr[E_1 \land E_2 \dots \land E_Q] &= \left( \frac{M-1}{M} \right)\left( \frac{M-2}{M} \right) \cdots \left( \frac{M-Q+1}{M} \right)\\
+        &= \left(1-\frac{1}{M}\right)\left(1-\frac{2}{M}\right) \cdots \left(1 - \frac{Q-1}{M}\right)
+    \end{align*}
+    
+    cioè la probabilità di non ottenere nessuna collisione per $Q$ tentativi, siamo interessati alla probabilità inversa per cui si ha $1 - \prod_{i=1}^{Q-1}\left(1-\frac{i}{M}\right)$.
+
+\end{proof}
+
+Il teorema precedente fa uso di un risultato che possiamo collegare al \textit{paradosso del compleanno}, che dimostra che in una stanza di 23 persone c'è una probabilità di almeno $50\%$ in cui due persone condividano il compleanno. È possibile associare il problema delle collisioni tra hash al \textit{paradosso del compleanno} con $M = 365$ il numero di hash possibili, $Q = 23$ il numero di tentativi necessari per ottenere (con buona probabilità) almeno una collisione.
+
+Cerchiamo di capire che relazione possiamo trovare tra numero di hash possibili e numero di tentativi necessari ($M$ e $Q$) che ci permetta di trovare una collisione con una probabilità $\varepsilon$ soddisfacente.
+
+Con il teorema precedente si ottiene che la probabilità di non avere collisioni è $\prod_{i=1}^{Q-1}\left(1-\frac{i}{M}\right)$, è possibile approssimare $1- x \approx e^{-x}$ attraverso la serie di Taylor di $e^{x}$ centrata in 0.
+
+Con la nuova stima si ottiene 
+\begin{align*}
+    &\prod_{i=1}^{Q-1}\left(1-\frac{i}{M}\right) \approx \prod_{i=1}^{Q-1}\left(1- e^{-\frac{i}{M}}\right)\\
+    &= e^{-\sum_{i=1}^{Q-1}\frac{i}{M}} = e^{-\frac{Q(Q-1)}{2M}}
+\end{align*}
+e la probabilità di trovare almeno una collisione $1 - e^{-\frac{Q(Q-1)}{2M}}$, ponendo una probabilità $\varepsilon$ e risolvendo per $Q$ 
+
+\begin{align*}
+    e^{-\frac{Q(Q-1)}{2M}} &\approx 1 - \varepsilon\\
+    -\frac{Q(Q-1)}{2M} &\approx \ln(1-\varepsilon)\\
+    Q^2 - Q &\approx 2M \ln\left(\frac{1}{1-\varepsilon}\right)\\
+    Q &\approx \sqrt{2M \ln\left(\frac{1}{1-\varepsilon}\right)}
+\end{align*}
+
+se si pone $\varepsilon = \frac{1}{2}$ il numero di tentativi necessari è $Q \approx 1.17\sqrt{M}$.
+
+Facendo uso del paradosso del compleanno è possibile prendere quindi un insieme $\mathcal{X}_0 \subseteq \mathcal{X}$ con $|\mathcal{X}_0| = \sqrt{M}$ e tentare un attacco conosciuto come \emph{attacco del compleanno}.

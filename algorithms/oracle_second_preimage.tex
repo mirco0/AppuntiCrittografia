@@ -1,0 +1,16 @@
+\begin{figure}[ht]
+    \begin{algorithm}[H]
+        \label{alg:second_preimage}
+        
+        \DontPrintSemicolon
+        \TitleOfAlgo{Trova Seconda Preimmagine($h,x,Q$)}
+        $y \gets h(x)$\;
+        scegli $\mathcal{X}_0 \subseteq \mathcal{X}-\{x\}$ tale che $|\mathcal{X}_0| = Q$\;
+        \ForEach{$x_0 \in \mathcal{X}_0$}{
+            \If{$h(x_0) = y$}{
+                \Return{$x_0$}\;
+            }
+        }
+        \Return{Fail}\;
+    \end{algorithm}
+\end{figure}
