@@ -161,7 +161,13 @@ e la probabilità di trovare almeno una collisione è $1 - e^{-\frac{Q(Q-1)}{2M}
          &= 1/2. 
     \end{align*}
 
-    \noindent La sostituzione nella penultima riga è data da $|\mathcal{X}| \geq 2 |\mathcal{Y}|$. \\ Abbiamo quindi costruito un algoritmo Las Vegas con probabilità di sucesso nel caso medio di almeno $1/2$. 
+    \noindent La sostituzione nella penultima riga è data da $|\mathcal{X}| \geq 2 |\mathcal{Y}|$. \\ Abbiamo quindi costruito un algoritmo Las Vegas con probabilità di successo nel caso medio di almeno $1/2$. 
 \end{proof}
 
-\noindent Quindi, sotto certe assunzioni, la proprietà di resistenza alle collisioni implica la proprietà di resistenza alle Preimmagini.  
+Quindi, opportune certe assunzioni, la proprietà di resistenza alle collisioni implica la proprietà di resistenza alle Preimmagini.
+
+\vspace{1em}
+Passiamo ora alla descrizione del paradigma di \emph{Merkle-Damgård}. Questo paradigma permette di partire da funzioni hash $h: \mathcal{K} \times \mathcal{X} \to \mathcal{Y}$ con $\mathcal{X} = \{0,1\}^{\ell}$ e $\mathcal{K} = \mathcal{Y} = \{0,1\}^n$ con $\ell$ relativamente piccola. Partendo da una funzione $h$, come sopra e definendo una funzione $H$ definita su $(\{0,1\}^{\leq L}, \mathcal{K})$ funziona come segue
+
+
+\input{algorithms/markle_dam.tex}
