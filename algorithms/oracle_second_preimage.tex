@@ -1,13 +1,15 @@
+\vspace{1em}
 \begin{algorithm}[H]
     \SetAlgoVlined
     \SetAlgoLined
+    
+    \caption{Trova Seconda Preimmagine($h,x,Q$)}
     \label{alg:second_preimage}
     
     \KwIn{Parametri $h, x, Q$}
     \KwOut{Elemento $y$ o errore}
 
 
-    \caption{Trova Seconda Preimmagine($h,x,Q$)}
     $y \gets h(x)$\;
     scegli $\mathcal{X}_0 \subseteq \mathcal{X}-\{x\}$ tale che $|\mathcal{X}_0| = Q - 1$\;
     \ForEach{$x_0 \in \mathcal{X}_0$}{
@@ -17,3 +19,4 @@
     }
     \Return{errore}\;
 \end{algorithm}
+\vspace{2em}

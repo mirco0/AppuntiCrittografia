@@ -1,13 +1,13 @@
+\vspace{1em}
 \begin{algorithm}[H]
     \SetAlgoVlined
     \SetAlgoLined
-    \label{alg:markle}
+    \caption{Merkle Damgard($h,x,Q$)}
+    \label{alg:merkle}
     
     \KwIn{Parametri $M \in \{0,1\}^{\leq L}$}
     \KwOut{\emph{tag} $\in \mathcal{Y}$}
 
-
-    \caption{Merkle Damgard($h,x,Q$)}
     $\hat{M} \gets M || PB$\;
     partiziona $\hat{M}$ in blocchi lunghi $\ell$ consecutivi tale che\;
     $\hat{M} = m_1 || m_2 || \dots || m_s \quad \forall i = 1,\dots, s \ m_i \in \{0,1\}^{\ell}$\;
@@ -18,3 +18,4 @@
     }
     \Return{$t_s$}\;
 \end{algorithm}
+\vspace{1em}

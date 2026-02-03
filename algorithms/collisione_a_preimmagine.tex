@@ -1,16 +1,14 @@
+\vspace{1em}
 \begin{algorithm}[H]
 
     \SetAlgoVlined
     \SetAlgoLined
-    \label{alg:CollisioneAPreimmagine}
-
-    % \KwIn{Parametri $h, Q$}
-    % \KwOut{Coppia $(x,x')$ o errore}
-    
     \caption{Collisione-A-Preimmagine()}
+    \label{alg:collision_preimage}
     scegli $x \in \mathcal{X}$ a caso in modo uniforme \;
     \If{Oracolo-Preimmagine$(y)=x' \land x' \neq x$}{
         \Return{$(x,x')$}\;
     }
     \Return{errore}\;
 \end{algorithm}
+\vspace{2em}

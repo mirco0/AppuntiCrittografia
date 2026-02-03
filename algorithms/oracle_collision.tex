@@ -1,13 +1,14 @@
+\vspace{1em}
 \begin{algorithm}[H]
 
     \SetAlgoVlined
     \SetAlgoLined
+    \caption{Trova Collisione($h,Q$)}
     \label{alg:collision}
 
     \KwIn{Parametri $h, Q$}
     \KwOut{Coppia $(x,x')$ o errore}
     
-    \caption{Trova Collisione($h,Q$)}
     scegli $\mathcal{X}_0 \subseteq \mathcal{X}$ tale che $|\mathcal{X}| = Q$\;
     \ForEach{$x \in \mathcal{X}_0$}{
         $y_x \gets h(x)$\;
@@ -17,3 +18,5 @@
     }
     \Return{errore}\;
 \end{algorithm}
+\vspace{2em}
+
