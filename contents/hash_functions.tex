@@ -1,15 +1,11 @@
 %S.P. sezione 5
-Le modalità di cifratura viste fino ad ora non permettono di garantire l'\emph{integrità dei dati}, si pensi a un possibile un cifrario \emph{One-time-pad} a stream, in cui i bit cifrati vengono trasmessi tra le parti, è possibile un attacco in cui un avversario cambia dei bit a scelta. Questo tipo di attacco è chiamato \emph{bit-flipping} in cui dei bit sono cambiati da 0 a 1, e viceversa, in modo prevedibile. Nei cifrari visti fin'ora non è possibile quindi determinare quando un messaggio sia stato alterato durante la trasmissione.
+Le modalità di cifratura viste finora non permettono di garantire l'\emph{integrità dei dati}: si pensi a un possibile un cifrario \emph{One-time-pad} a stream, in cui i bit cifrati vengono trasmessi tra le parti, è possibile un attacco in cui un avversario cambia dei bit a scelta. (Questo tipo di attacco è chiamato \emph{bit-flipping} in cui dei bit sono cambiati da 0 a 1, e viceversa, in modo prevedibile). Nei cifrari visti finora non è possibile quindi determinare quando un messaggio sia stato alterato durante la trasmissione.
 
-La garanzia che i dati ricevuti siano gli stessi dati inviati dal mittente è chiamata \emph{integrità dei dati}. Attraverso delle funzioni \emph{hash crittografiche} è possibile costruire dei sistemi che siano in grado di generare una ``fingerprint'', o firma, (una stringa strettamente legata ai dati, che in qualche modo identifica i dati originali), tale firma deve risultare invalida successivamente a modifiche dei dati. 
+\vspace{0.2cm} \noindent La garanzia che i dati ricevuti siano gli stessi dati inviati dal mittente è chiamata \emph{integrità dei dati}. Attraverso delle funzioni \emph{hash crittografiche} è possibile costruire dei sistemi che siano in grado di generare una ``fingerprint'', o firma, (una stringa strettamente legata ai dati, che in qualche modo identifica i dati originali); \\ tale firma deve risultare invalida dopo che sono state effettuate modifiche dei dati. 
 
-\vspace{1em}
-Sia $h$ una funzione hash e $x$ dei dati di grandezza arbitraria. La firma dei dati è $y = h(x)$, spesso indicata come \textbf{message digest}, solitamente di lunghezza fissata a 160 o 256 bit.
+\vspace{1em} \noindent Sia $h$ una funzione hash e $x$ dei dati di grandezza arbitraria. La firma dei dati è $y = h(x)$, spesso indicata come \textbf{message digest}, solitamente di lunghezza fissata a 160 o 256 bit. \\ Una volta che le informazioni sono state firmate, calcolando $y = h(x)$, se avvenissero alterazioni, $x \to \tilde{x}$, le modifiche sarebbero individuabili attraverso la verifica $h(\tilde{x}) \neq y$.
 
-Una volta che le informazioni sono state firmate, calcolando $y = h(x)$, se avvenissero alterazioni, diciamo $x \to \tilde{x}$, le modifiche sarebbero individuabili attraverso la verifica $h(\tilde{x}) \neq y$.
-
-\vspace{2em}
-Le funzioni hash non sono però uniche, è utile studiare le \emph{famiglie di funzioni hash con chiave}
+\vspace{2em} \noindent Le funzioni hash non sono però uniche, è utile studiare le \emph{famiglie di funzioni hash con chiave}
 \begin{definition}[Famiglia Hash]
     Una famiglia di funzioni hash è una quadrupla $(\mathcal{X},\mathcal{Y},\mathcal{K},\mathcal{H})$ che rispetta le seguenti condizioni:
     
@@ -22,26 +18,26 @@ Le funzioni hash non sono però uniche, è utile studiare le \emph{famiglie di f
     Nel caso in cui $\mathcal{X}$ sia finito e $|\mathcal{X}| > |\mathcal{Y}|$ la funzione di hash è chiamata funzione di \emph{compressione}.
 \end{definition}
 
-Una funzione hash senza chiave è una funzione $h: \mathcal{X} \to \mathcal{Y}$, ovvero un caso particolare in cui $|\mathcal{K}| = 1$, solitamente si usa il termine \emph{message digest} per le funzioni hash con la chiave e il termine \emph{tag} per le funzioni hash senza chiave. 
+\noindent Una funzione hash senza chiave è una funzione $h: \mathcal{X} \to \mathcal{Y}$, ovvero un caso particolare in cui $|\mathcal{K}| = 1$. \\ Solitamente si usa il termine \emph{message digest} per le funzioni hash \textbf{senza} chiave e il termine \emph{tag} per le funzioni hash con chiave. 
 
-Introduciamo delle definizioni che saranno utili nel resto della sezione; una coppia $(x,y) \in \mathcal{X} \times \mathcal{Y}$ è detta valida rispetto a una funzione hash $h$ se $y = h(x)$. Sia $\mathcal{F}^{\mathcal{X}\mathcal{Y}}$ l'insieme di tutte le funzioni hash possibili da $\mathcal{X}$ a $\mathcal{Y}$, generalmente indichiamo $|\mathcal{X}| = N$ e $|\mathcal{Y}| = M$ allora $|\mathcal{F}^{\mathcal{X}\mathcal{Y}}| = M^N$. Un sottoinsieme $\mathcal{F} \subseteq \mathcal{F}^{\mathcal{X}\mathcal{Y}}$ è chiamato \textit{famiglia hash-}$(N,M)$
+\vspace{0.2cm} \noindent Alcune definizioni utili: \\ una coppia $(x,y) \in \mathcal{X} \times \mathcal{Y}$ è detta \textbf{valida} rispetto a una funzione hash $h$ se $y = h(x)$. Sia $\mathcal{F}^{\mathcal{X}\mathcal{Y}}$ l'insieme di tutte le funzioni hash possibili da $\mathcal{X}$ a $\mathcal{Y}$: generalmente indichiamo $|\mathcal{X}| = N$ e $|\mathcal{Y}| = M$ allora $|\mathcal{F}^{\mathcal{X}\mathcal{Y}}| = M^N$. \\ Un sottoinsieme $\mathcal{F} \subseteq \mathcal{F}^{\mathcal{X}\mathcal{Y}}$ è chiamato \textit{famiglia hash-}$(N,M)$. 
 
 \subsection{Sicurezza funzioni hash}
 In applicazioni pratiche è desiderabile che, data una funzione $h: \mathcal{X} \to \mathcal{Y}$ senza chiave, $h(x)$ sia l'unico modo per determinare il valore hash di $x$.
 
-Si definiscono tre problemi; per cui se sufficientemente difficili una funzione hash è considerata sicura
+\noindent Si definiscono tre problemi, che, se sufficientemente difficili, rendono una funzione hash sicura. 
 
 \begin{definition}[Calcolo Preimmagine]
     Per una funzione hash $h: \mathcal{X} \to \mathcal{Y}$ e un elemento $y \in \mathcal{Y}$, il problema del calcolo della preimmagine consiste nel trovare $x \in \mathcal{X}$ tale che $y = h(x)$.
 \end{definition}
 \noindent
-Nel caso in cui il problema preimmagine sia difficile la funzione $h$ è detta \emph{one-way} o \emph{resistente alla preimmagine}.
+Nel caso in cui il problema preimmagine sia difficile, la funzione $h$ è detta \emph{one-way} o \emph{resistente alla preimmagine}.
 \vspace{1em}
 \begin{definition}[Calcolo Seconda preimmagine]
     Per una funzione hash $h: \mathcal{X} \to \mathcal{Y}$ e un elemento $x \in \mathcal{X}$, il problema del calcolo della seconda preimmagine consiste nel trovare $x' \in \mathcal{X}$, $x \neq x'$ tale che $h(x) = h(x')$.
 \end{definition}
 
-\noindent Nel caso di una funzione $h$, risolvere il problema della seconda preimmagine permette di avere la coppia valida $(x',h(x))$, se per $h$ il problema della seconda preimmagine è difficile, la funzione è detta \emph{resistente alla seconda preimmagine}.
+\noindent Nel caso di una funzione $h$, risolvere il problema della seconda preimmagine permette di avere la coppia valida $(x',h(x))$. \\ Se per $h$ il problema della seconda preimmagine è difficile, la funzione è detta \emph{resistente alla seconda preimmagine}.
 
 \vspace{1em}
 \begin{definition}[Calcolo Collisione]
@@ -49,33 +45,31 @@ Nel caso in cui il problema preimmagine sia difficile la funzione $h$ è detta \
 \end{definition}
 
 \noindent
-Risolvere il problema della collisione permette di avere due coppie valide $(x,y), (x',y)$, se per $h$ il problema della collisione è difficile, la funzione è detta \emph{resistente alle collisioni}.
+Risolvere il problema della collisione permette di avere due coppie valide $(x,y), (x',y)$. \\ Se per $h$ il problema della collisione è difficile, la funzione è detta \emph{resistente alle collisioni}.
 
 \vspace{1em}
-Passiamo ora a una formalizzazione matematica per definire bene sicurezza e attacchi a funzioni hash, presentando un modello matematico chiamato \emph{Oracolo Casuale}
+Si dà ora una formalizzazione matematica utile per sicurezza e attacchi a funzioni hash, presentando un modello matematico chiamato \emph{Oracolo Casuale}
 
-\begin{definition}[Oracolo Casuale]
-    Un \emph{oracolo} sceglie casualmente una funzione hash $h: \mathcal{X} \to \mathcal{Y} \in \mathcal{F}^{\mathcal{X}\mathcal{Y}}$ di cui solo lui è a conoscenza, per cui l'unico modo per calcolare valori hash per una data $x \in \mathcal{X}$ è attraverso l'oracolo stesso.
-\end{definition}
+\paragraph{Oracolo Casuale}
+    Un \emph{oracolo} sceglie casualmente una funzione hash $h: \mathcal{X} \to \mathcal{Y} \in \mathcal{F}^{\mathcal{X}\mathcal{Y}}$ di cui solo lui è a conoscenza: per cui, l'unico modo per calcolare valori hash per una data $x \in \mathcal{X}$, è attraverso l'oracolo stesso.
 
-Il modello sopra descritto rappresenta il comportamento di una funzione hash ideale, per cui è utile al fine di determinare la sicurezza delle funzioni hash.
+\vspace{0.2cm} \noindent Il modello sopra descritto rappresenta il comportamento di una funzione \textbf{hash ideale}, per cui è utile al fine di determinare la sicurezza delle funzioni hash.
 
 \begin{theorem}[Proprietà d'indipendenza]
-    Sia $h \in \mathcal{F}^{\mathcal{X}\mathcal{Y}}$ scelta in modo casuale e sia $\mathcal{X}_0 \subseteq \mathcal{X}$ con $|\mathcal{Y}| = M$. Sia calcolato il valore $h(x) \quad \forall x \in \mathcal{X}_0$, si ha che $\Pr[h(x) = y] = \frac{1}{M}$ per ogni $x \in \mathcal{X} - \mathcal{X}_0$ e per ogni $y \in \mathcal{Y}$.   
+    Sia $h \in \mathcal{F}^{\mathcal{X}\mathcal{Y}}$ scelta in modo casuale e sia $\mathcal{X}_0 \subseteq \mathcal{X}$ con $|\mathcal{Y}| = M$. Sia calcolato il valore $h(x) \quad \forall x \in \mathcal{X}_0$, si ha che $\Pr[h(x) = y] = \frac{1}{M} \ \forall x \in \mathcal{X} - \mathcal{X}_0$ e $ \forall y \in \mathcal{Y}$.   
 \end{theorem}
 
-Sul modello di \emph{oracolo} appena descritto si presentando algoritmi che fanno uso di una componente casuale, per cui non si ha sempre successo, nello specifico si parla di algoritmi di tipo \textbf{Las Vegas}. Tali algoritmi falliscono, o restituiscono un valore con una probabilità $\varepsilon$, in caso di successo si ha la certezza che il risultato sia corretto.
+Sul modello di \emph{oracolo} appena descritto si presentanoo algoritmi che fanno uso di una componente casuale, per cui non si ha sempre successo: nello specifico si parla di algoritmi di tipo \textbf{Las Vegas}. Tali algoritmi falliscono, o restituiscono un valore con una probabilità $\varepsilon$; in caso di successo si ha la certezza che il risultato sia corretto.
 
 \vspace{1em}\noindent
-Si parla di \emph{probabilità di successo nel caso peggiore}, nel caso in cui un algoritmo restituisca una risposta corretta con probabilità almeno $\varepsilon$ per qualsiasi istanza. La \emph{probabilità di successo nel caso medio} di un algoritmo è la probabilità di ottenere la risposta corretta mediata su tutte le istanze possibili. Usiamo il termine \emph{algoritmo-$(\varepsilon,Q)$} per indicare un algoritmo di tipo Las Vegas, con probabilità media di successo $\varepsilon$ che fa uso di al massimo $Q$ \emph{query} all'oracolo.
+Si parla di \emph{probabilità di successo nel caso peggiore}, se un algoritmo restituisca una risposta corretta con probabilità almeno $\varepsilon$ per qualsiasi istanza. \\ La \emph{probabilità di successo nel caso medio} di un algoritmo è la probabilità di ottenere la risposta corretta, mediata su tutte le istanze possibili. Usiamo il termine \emph{algoritmo-$(\varepsilon,Q)$} per indicare un algoritmo di tipo Las Vegas, con probabilità media di successo $\varepsilon$ che pone al massimo $Q$ \emph{query} all'oracolo.
 
 \input{algorithms/oracle_preimage.tex}
 
 \begin{theorem}
     Per ogni $\mathcal{X}_0 \subseteq \mathcal{X}$ con $|\mathcal{X}_0| = Q$ la probabilità di successo nel caso medio dell'algoritmo \ref{alg:preimage} è $1-\left(1-\frac{1}{M}\right)^Q$.
 \end{theorem}
-%TODO: Scrivere
-\begin{proof}
+\begin{proof} 
 \end{proof}
 
 \input{algorithms/oracle_second_preimage.tex}
