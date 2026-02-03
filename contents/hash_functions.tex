@@ -169,5 +169,17 @@ Quindi, opportune certe assunzioni, la proprietà di resistenza alle collisioni 
 \vspace{1em}
 Passiamo ora alla descrizione del paradigma di \emph{Merkle-Damgård}. Questo paradigma permette di partire da funzioni hash $h: \mathcal{K} \times \mathcal{X} \to \mathcal{Y}$ con $\mathcal{X} = \{0,1\}^{\ell}$ e $\mathcal{K} = \mathcal{Y} = \{0,1\}^n$ con $\ell$ relativamente piccola. Partendo da una funzione $h$, come sopra e definendo una funzione $H$ definita su $(\{0,1\}^{\leq L}, \mathcal{K})$ funziona come segue
 
-
 \input{algorithms/markle_dam.tex}
+
+\begin{itemize}
+    \item La funzione hash $h$ è chiamata funzione di compressione di $H$
+    \item La costante $IV$ è la \emph{Intial Value} scelta in modo arbitrario
+    \item Le variabili $m_1,\dots,m_s$ sono chiamati i blocchi di messaggio
+    \item Le variabili $t_0,\dots,t_s \in \mathcal{Y}$ sono le variabili di concatenazione
+    \item La stringa PB è il \emph{padding block}, viene aggiunto alla fine dell'ultimo blocco per rendere la lunghezza del messaggio un multiplo di $\ell$, in caso in cui non sia necessario, viene aggiunto un intero blocco contenente il padding block.
+\end{itemize}
+
+Il padding block è una porzione di testo speciale formata nel seguente modo
+\begin{center}
+    PB $:= \boxed{ 100\dots 00 \, || \, \langle s \rangle }$
+\end{center}
