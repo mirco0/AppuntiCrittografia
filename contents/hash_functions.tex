@@ -56,6 +56,7 @@ Si dà ora una formalizzazione matematica utile per sicurezza e attacchi a funzi
 \vspace{0.2cm} \noindent Il modello sopra descritto rappresenta il comportamento di una funzione \textbf{hash ideale}, per cui è utile al fine di determinare la sicurezza delle funzioni hash.
 
 \begin{theorem}[Proprietà d'indipendenza]
+    \label{teorema:1}
     Sia $h \in \mathcal{F}^{\mathcal{X}\mathcal{Y}}$ scelta in modo casuale e sia $\mathcal{X}_0 \subseteq \mathcal{X}$ con $|\mathcal{Y}| = M$. Sia calcolato il valore $h(x) \quad \forall x \in \mathcal{X}_0$, si ha che $\Pr[h(x) = y] = \frac{1}{M} \ \forall x \in \mathcal{X} - \mathcal{X}_0$ e $ \forall y \in \mathcal{Y}$.   
 \end{theorem}
 
@@ -69,7 +70,13 @@ Si parla di \emph{probabilità di successo nel caso peggiore}, se un algoritmo r
 \begin{theorem}
     Per ogni $\mathcal{X}_0 \subseteq \mathcal{X}$ con $|\mathcal{X}_0| = Q$ la probabilità di successo nel caso medio dell'algoritmo \ref{alg:preimage} è $1-\left(1-\frac{1}{M}\right)^Q$.
 \end{theorem}
-\begin{proof} 
+\begin{proof} Sia $y \in \mathcal{Y}$ fissato e sia $\mathcal{X}_0=\{x_1, \dots, x_Q\}$. $\forall i=1,\dots,Q$, $E_i$ è l'evento ``$h(x_i) = y$''. Dal \ref{teorema:1}, $E_i$ sono eventi indipendenti e $\Pr[E_i]=\frac{1}{M} \ \forall i=1,\dots,Q$. Dunque, $\Pr[{E_i}^c]=1-\frac{1}{M} \ \forall i=1,\dots,Q$, dove ${E_i}^c$ è l'evento ``$h(x_i) \neq y$''. Quindi:
+    \begin{align*}
+        \Pr[E_1 \lor \dots \lor E_Q ] &= 1-\Pr[{E_1}^c \land \dots \land {E_Q}^c]\\
+        &=1-\left(1-\frac{1}{M}\right)^Q.
+    \end{align*} 
+    \noindent (La probabilità che almeno un evento $E_i$ accada è la negazione della probabilità che nessun evento accada). \\ 
+La probabilità di successo, $\forall y$ fissata, è costante. Quindi, la probabilità di successo mediata su tutte le $y$ è uguale.  
 \end{proof}
 
 \input{algorithms/oracle_second_preimage.tex}
@@ -103,7 +110,7 @@ Si parla di \emph{probabilità di successo nel caso peggiore}, se un algoritmo r
 
 \end{proof}
 
-Il teorema precedente fa uso di un risultato che possiamo collegare al \textit{paradosso del compleanno}, che dimostra che in una stanza di 23 persone c'è una probabilità di almeno $50\%$ in cui due persone condividano il compleanno. È possibile associare il problema delle collisioni tra hash al \textit{paradosso del compleanno} con $M = 365$ il numero di hash possibili, $Q = 23$ il numero di tentativi necessari per ottenere (con buona probabilità) almeno una collisione.
+Il teorema precedente fa uso di un risultato che possiamo collegare al \textit{paradosso del compleanno}, che dimostra che in una stanza di 23 persone c'è una probabilità di almeno $50\%$ che due persone condividano il compleanno. È possibile associare il problema delle collisioni tra hash al \textit{paradosso del compleanno} con $M = 365$, il numero di hash possibili, $Q = 23$ il numero di tentativi necessari per ottenere (con buona probabilità) almeno una collisione.
 
 Cerchiamo di capire che relazione possiamo trovare tra numero di hash possibili e numero di tentativi necessari ($M$ e $Q$) che ci permetta di trovare una collisione con una probabilità $\varepsilon$ soddisfacente.
 
