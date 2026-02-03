@@ -183,3 +183,11 @@ Il padding block è una porzione di testo speciale formata nel seguente modo
 \begin{center}
     PB $:= \boxed{ 100\dots 00 \, || \, \langle s \rangle }$
 \end{center}
+\input{algorithms/markle_dam.tex}
+
+\begin{theorem}
+    Sia $L$ una funzione limitata polinomialmente e sia $h$ una funzione hash resistente alle collisioni defiinita su $(\mathcal{K} \times \mathcal{X}, \mathcal{Y})$. Allora, la funzione hash di Merkle-Damgard $H$ derivata da $h$, definita su $(\{0,1\}^{\leq L}, \mathcal{K})$ è resistente alle collisioni. \\ In particolare, per ogni avversario $\mathcal{A}$ capace di trovare una collisione su $H$, esiste un avversario $\mathcal{B}$ capace di trovare una collisione su $h$, formalmente: 
+    \[
+    CR_{\text{adv}}[\mathcal{A}, H]=CR_{\text{adv}}[\mathcal{B}, h]
+    \] 
+\end{theorem}
