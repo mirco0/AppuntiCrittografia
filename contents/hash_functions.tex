@@ -380,6 +380,7 @@ La tecnica del \emph{MAC} annidato fa uso di due funzioni hash con chiave, siano
 ora $(g \circ h)_{(K,L)}(x) = h_L(g_K(x))$ per ogni $x \in \mathcal{X}$. Banalmente questo tipo di \emph{MAC} è la composizione di due funzioni hash, nella quale viene calcolata l'hash del messaggio $y = g_K(x)$ e successivamente si applica la seconda hash $z = h_K(y)$. 
 
 
+%Boneh-Shoup 8.7
 \paragraph{HMAC}Per costruire un MAC sicuro che funzioni su messaggi lunghi: \\
 Sia $H$ un hash di tipo Merkle-Damgard costruita da un'hash di compressione $h: \{0,1\}^n \times \{0,1\}^l \to \{0,1\}^n$.  \\ Alcuni approcci semplici: 
 
