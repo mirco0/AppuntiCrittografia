@@ -289,13 +289,15 @@ y_i=x_i \oplus e_K(T_i) \ \forall i \geq 1.
 \paragraph{Padding Oracle Attack su CBC}
 È un attacco che sfrutta il fatto che il plaintext sia ``paddato'' cosicché la sua lunghezza sia un multiplo della dimensione del blocco. \\ Usiamo un cifrario a blocchi con blocchi di $128$ bit= $16$ byte. \\ Sarà l'ultimo blocco a essere ``paddato'' .  
 
-\vspace{0.2cm} \noindent Lo schema di padding descritto è $\text{PKCS}\#7$, che usa notazione hex, funziona così: \\ 
-$15$ byte di dati sono ``paddati'' col byte $01$; \\
-$14$ byte di dati sono ``paddati'' con 2 byte $02$; \\
-$13$ byte di dati sono ``paddati'' col 3 byte $03$; \\
-$\dots$ \\ 
-$1$ byte di dati sono ``paddati'' con 15 byte $0F$. \\ Se il blocco è già pieno, si aggiung eun blocco intero di padding $10$. 
+\vspace{0.2cm} \noindent Lo schema di padding descritto è $\text{PKCS}\#7$, che usa notazione hex, funziona così: 
+\begin{itemize}
+    \item $15$ byte di dati è aggiunto un padding di un byte $01$; \\
+    \item $14$ byte di dati è aggiunto un padding di 2 byte $02$; \\
+    \item $13$ byte di dati è aggiunto un padding di 3 byte $03$; \\
+\end{itemize}
+e così via, per $1$ byte di dati ci sono 15 byte $0F$.
 
+Se il blocco è già pieno, si aggiung eun blocco intero di padding $10$. 
 
 \vspace{0.2cm} \noindent Supponiamo avere una sequenza di blocchi di ciphertext $y_0, \dots, y_n$, con $y_0=$IV. Si verifica quindi che l'ultimo blocco sia stato ``paddato'' correttamente. Se sì, il padding viene scartato, altrimenti verrà generato un errore. 
 
@@ -360,8 +362,8 @@ Ovviamente questi esempi di \emph{MAC} non sono sicuri, per cui si definisce la 
 \begin{definition}[Contraffazione]
     Un avversario $\mathcal{A}$ avente a disposizione una sequenza di $Q$ coppie \textit{messaggio}, \textit{tag} $(x_1,y_1),\dots,(x_Q,y_Q)$, tutte valide per una funzione hash con chiave $h_K$. Se $\mathcal{A}$ è capace di creare un tag per un messaggio $x_{Q+1}$ mai visto, allora la coppia $(x_{Q+1},h_K{x_{Q+1}})$ è detta contraffatta.
     
-    \vspace{1em}
-    Nel caso in cui $\mathcal{A}$ sia in grado di creare una nuova coppia valida con probabilità almeno $\varepsilon$, $\mathcal{A}$ è detto \emph{falsario-}$(\varepsilon,Q)$. 
+    \vspace{1em}\noindent
+    Nel caso in cui $\mathcal{A}$ sia in grado di creare una nuova coppia valida, con probabilità almeno $\varepsilon$, $\mathcal{A}$ è detto \emph{falsario-}$(\varepsilon,Q)$. 
 \end{definition}
 
 Un possibile falsario $\mathcal{A}$ ha due possibili modalità, \emph{chosen-message attack} e \emph{known-message attack}. Nel primo caso $\mathcal{A}$ ha la possibilità di scegliere le coppie valide, massimizzando così la probabilità di successo, nel secondo caso $\mathcal{A}$ è semplicemente a conoscenza una sequenza di coppie valide. Esistono due tipi di attacchi per enumerazione
@@ -369,3 +371,10 @@ Un possibile falsario $\mathcal{A}$ ha due possibili modalità, \emph{chosen-mes
     \item \emph{key guessing} in cui si enumerano le chiavi, la probabilità di successo è $\frac{1}{\mathcal{|K|}}$
     \item \emph{tag guessing} in cui si enumerano i tag, la probabilità di successo è $\frac{1}{\mathcal{|Y|}}$.
 \end{itemize}
+
+\paragraph{MAC Annidati}
+La tecnica del \emph{MAC} annidato fa uso di due funzioni hash con chiave, siano $(\mathcal{X},\mathcal{Y},\mathcal{K},\mathcal{G})$ e $(\mathcal{Y},\mathcal{Z},\mathcal{L},\mathcal{H})$ due famiglie di funzioni hash, di cui la composizione è $(\mathcal{X},\mathcal{Y},\mathcal{M},\mathcal{G} \circ  \mathcal{H})$, con $\mathcal{M} = \mathcal{K} \times \mathcal{L}$, $|\mathcal{Y}| > |\mathcal{Z}|$ e  
+\[
+    \mathcal{G} \circ \mathcal{H} = \{g \circ h \mid g \in \mathcal{G}, h \in \mathcal{H}\}
+\]
+ora $(g \circ h)_{(K,L)}(x) = h_L(g_K(x))$ per ogni $x \in \mathcal{X}$. Banalmente questo tipo di \emph{MAC} è la composizione di due funzioni hash, nella quale viene calcolata l'hash del messaggio $y = g_K(x)$ e successivamente si applica la seconda hash $z = h_K(y)$. 
