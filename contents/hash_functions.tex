@@ -291,9 +291,9 @@ y_i=x_i \oplus e_K(T_i) \ \forall i \geq 1.
 
 \vspace{0.2cm} \noindent Lo schema di padding descritto è $\text{PKCS}\#7$, che usa notazione hex, funziona così: 
 \begin{itemize}
-    \item $15$ byte di dati è aggiunto un padding di un byte $01$; \\
-    \item $14$ byte di dati è aggiunto un padding di 2 byte $02$; \\
-    \item $13$ byte di dati è aggiunto un padding di 3 byte $03$; \\
+    \item $15$ byte di dati è aggiunto un padding di un byte $01$;
+    \item $14$ byte di dati è aggiunto un padding di 2 byte $02$;
+    \item $13$ byte di dati è aggiunto un padding di 3 byte $03$;
 \end{itemize}
 e così via, per $1$ byte di dati ci sono 15 byte $0F$.
 
@@ -373,12 +373,40 @@ Un possibile falsario $\mathcal{A}$ ha due possibili modalità, \emph{chosen-mes
 \end{itemize}
 
 \paragraph{MAC Annidati}
-La tecnica del \emph{MAC} annidato fa uso di due funzioni hash con chiave, siano $(\mathcal{X},\mathcal{Y},\mathcal{K},\mathcal{G})$ e $(\mathcal{Y},\mathcal{Z},\mathcal{L},\mathcal{H})$ due famiglie di funzioni hash, di cui la composizione è $(\mathcal{X},\mathcal{Y},\mathcal{M},\mathcal{G} \circ  \mathcal{H})$, con $\mathcal{M} = \mathcal{K} \times \mathcal{L}$, $|\mathcal{Y}| > |\mathcal{Z}|$ e  
+La tecnica del \emph{MAC} annidato, anche chiamato \emph{big MAC}, fa uso di due funzioni hash con chiave, siano $(\mathcal{X},\mathcal{Y},\mathcal{K},\mathcal{G})$ e $(\mathcal{Y},\mathcal{Z},\mathcal{L},\mathcal{H})$ due famiglie di funzioni hash, di cui la composizione è $(\mathcal{X},\mathcal{Y},\mathcal{M},\mathcal{G} \circ  \mathcal{H})$, con $\mathcal{M} = \mathcal{K} \times \mathcal{L}$, $|\mathcal{Y}| > |\mathcal{Z}|$ e  
 \[
     \mathcal{G} \circ \mathcal{H} = \{g \circ h \mid g \in \mathcal{G}, h \in \mathcal{H}\}
 \]
 ora $(g \circ h)_{(K,L)}(x) = h_L(g_K(x))$ per ogni $x \in \mathcal{X}$. Banalmente questo tipo di \emph{MAC} è la composizione di due funzioni hash, nella quale viene calcolata l'hash del messaggio $y = g_K(x)$ e successivamente si applica la seconda hash $z = h_K(y)$. 
 
+\vspace{1em}
+Per studiare la sicurezza di un \emph{MAC} annidato si studiano le proprietà delle famiglie da cui è creato, $(\mathcal{Y},\mathcal{Z},\mathcal{L},\mathcal{H})$ chiamata \emph{little MAC} e $(\mathcal{X},\mathcal{Y},\mathcal{K},\mathcal{G})$:
+\begin{enumerate}
+    \item $(\mathcal{Y},\mathcal{Z},\mathcal{L},\mathcal{H})$ da un \emph{MAC} sicuro, per una chiave fissata
+    \item $(\mathcal{X},\mathcal{Y},\mathcal{K},\mathcal{G})$ è resistente alle collisioni, per una chiave fissata
+\end{enumerate}
+
+\noindent Si prendono in considerazione tre avversari, o meglio falsari:
+\begin{itemize}
+    \item Un falsario $\mathcal{A}$ per \emph{little MAC} 
+    \item Un avversario $\mathcal{B}$ capace di trovare collisioni per la famiglia $(\mathcal{X},\mathcal{Y},\mathcal{K},\mathcal{G})$
+    \item Un falsario $\mathcal{C}$ per \emph{big MAC}
+\end{itemize}
+
+%Da controllare
+\begin{definition}[Attacco a little Mac]
+    L'avversario $\mathcal{A}$ ha la possibilità di eseguire un \emph{chosen-plaintext-attack}(??), può quindi calcolare l'hash dei valori $y$ a scelta, con $h_L$, lo scopo dell'avversario è trovare una coppia valida $(y',z = h_L(y'))$ tale che $y'$ è un valore mai visto.
+\end{definition}
+
+\begin{definition}[Attacco a chiave sconosciuta]
+    L'avversario $\mathcal{B}$ ha la possibilità di scegliere valori $x$ e calcolarne le corrispondenti hash $g_K(x)$, lo scopo dell'avversario è di trovare una coppia di elementi $x,x''$ con $x \neq x''$ tale che $g_K(x) \neq g_K(x'')$.
+\end{definition}
+
+\begin{definition}[Attacco a big MAC]
+    L'avversario $\mathcal{C}$ ha la possibilità di scegliere valori $x$ e calcolarne le corrispondenti hash $h_L(g_K(x))$, lo scopo dell'avversario è di trovare una valida $(x',z = h_L(g_K(x)))$ tale che $x'$ è un valore mai visto.
+\end{definition}
+
+Assumendo che non esista un attacco a chiave sconosciuta $(\varepsilon,Q+1)$ per una hash casuale $g_K \in \mathcal{G}$ (per una $K$ sconosciuta l'attacco è più difficile di un solito attacco a \emph{collision resistance}). Inoltre si assume anche che non esista un attacco $(\varepsilon_2, Q)$ a \emph{little MAC} per una funzione scelta in modo casuale $h_L \in \mathcal{H}$, infine supponiamo che esista un'attacco $(\varepsilon,Q)$ a \emph{big MAC} per una funzione $(g \circ h)_{(K,L)}(x) = h_L(g_K(x)) \in \mathcal{G} \circ \mathcal{H}$ allora in $Q$ tentativi $(x_1,\dots,x_Q)$ l'attacco trova con probabilità $\varepsilon$ una coppia valida $(x,z)$ 
 
 %Boneh-Shoup 8.7
 \paragraph{HMAC}Per costruire un MAC sicuro che funzioni su messaggi lunghi: \\
