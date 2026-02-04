@@ -179,7 +179,7 @@ Quindi, per opportune assunzioni, la proprietà di resistenza alle collisioni im
 \end{itemize}
 Il padding block è una porzione di testo speciale formata nel seguente modo:
 \begin{center}
-    PB $:= \boxed{ 100\dots 00 \, || \, \langle s \rangle }$
+    PB $:= \boxed{ 100\dots 00 \conc \langle s \rangle }$
 \end{center}
 in cui $\langle s \rangle$ è una stringa di bit che codifica il numero di blocchi utilizzato in $M$.
 
@@ -231,8 +231,8 @@ SHA256 è una funzione hash di Merkle Damgård che fa uso di una funzione di com
 \]
 inoltre $h$ è costruita a partire da un cifrario a blocchi conosciuto come $e_{SHA-256}$ e al posto dell'operazione di \texttt{xor} si fa uso della somma modulo $2^{32}$ con 
 \begin{align*}
-    x &= x_{1}||x_{2}||\dots||x_7 \in \{0,1\}^{256} \quad x_i \in \{0,1\}^{32} \ \forall i\\
-    y &= y_{1}||y_{2}||\dots||x_7 \in \{0,1\}^{256} \quad y_i \in \{0,1\}^{32} \ \forall i
+    x &= x_{1} \conc x_{2} \conc \dots \conc x_7 \in \{0,1\}^{256} \quad x_i \in \{0,1\}^{32} \ \forall i\\
+    y &= y_{1} \conc y_{2} \conc \dots \conc x_7 \in \{0,1\}^{256} \quad y_i \in \{0,1\}^{32} \ \forall i
 \end{align*}
 Denotiamo con $x \boxplus y$ l'operazione $(x_1  + y_1), (x_2 + y_2), \dots, (x_7 + y_7)$, in cui tutte le somme sono in modulo $2^{32}$ infine 
 \[
@@ -243,11 +243,13 @@ Denotiamo con $x \boxplus y$ l'operazione $(x_1  + y_1), (x_2 + y_2), \dots, (x_
 Descriviamo ora brevemente il cifrario a blocchi $e_{SHA-256}$ che opera come nella seguente modalità: 
 prende in input una chiave $k$ a 512 bit, un messaggio $t$ e interpreta entrambi come concatenazione di blocchi da 32 bit
 \begin{align*}
-    k = k_0||\dots||k_15 \in \{0,1\}^{512}\\ 
-    t = t_0||\dots||t_7 \in \{0,1\}^{256}\\
+    k = k_0 \conc \dots \conc k_{15} \in \{0,1\}^{512}\\ 
+    t = t_0 \conc \dots \conc t_{7} \in \{0,1\}^{256}\\
 \end{align*}
 %TODO: SCRIVERE
-% e segue l'algoritmo \ref{alg:SHA256} iterando la funzione del round 64 volte, le chiavi del round $W_i$ per $i = 1,\dots,64$ sono definite nella fase di generazione delle chiavi. 
+% e segue l'algoritmo \ref{alg:SHA256} in cui i valori di input $t,k$ sono rispettivamente il \textit{plaintext} e chiave. Il cifrario itera la funzione del round 64 volte, le chiavi del round $W_i$ per $i = 1,\dots,64$ sono definite nella fase di generazione delle chiavi. 
+
+\input{algorithms/sha.tex}
 %TODO: FINIRE   
 
 
@@ -295,7 +297,6 @@ $\dots$ \\
 $1$ byte di dati sono ``paddati'' con 15 byte $0F$. \\ Se il blocco è già pieno, si aggiung eun blocco intero di padding $10$. 
 
 
-
 \vspace{0.2cm} \noindent Supponiamo avere una sequenza di blocchi di ciphertext $y_0, \dots, y_n$, con $y_0=$IV. Si verifica quindi che l'ultimo blocco sia stato ``paddato'' correttamente. Se sì, il padding viene scartato, altrimenti verrà generato un errore. 
 
 \vspace{0.2cm} \noindent Un \textit{padding oracle attack} si riferisce a un modello di attacco in cui l'avversario può sottoporre il ciphertext a un ``oracolo''. \\ Matematicamente, l'oracolo è una funzione $O(y_0, y_1, \dots, y_n)$  che ritorna \textit{True} se il plaintext è correttamente paddato, \textit{False} altrimenti. \\ Sia $y_1$ il primo blocco del ciphertext ($y_0$ è l'IV). Ricaviamo il rispettivo plaintext $x_1$ calcolando: 
@@ -309,7 +310,62 @@ x_1=d_K(y_1) \oplus y_0.
 
 \vspace{0.2cm} \noindent Il processo può ripetersi, fino a calcolare tutti i $16$ byte di $x_1$.  \\ Il numero di chiamate all'oracolo è al massimo $16 \times 256=4096$. 
 
-\vspace{0.2cm} \noindent L’attaccante può quindi recuperare il plaintext del messaggio cifrato.
+\vspace{0.2cm} \noindent L'attaccante può quindi recuperare il plaintext del messaggio cifrato.
 
 \vspace{0.2cm} \noindent Perché funziona? Poiché CBC combina XOR col blocco precedente, modificando il ciphertext precedente si controlla il plaintext del blocco successivo, pur non conoscendo la chiave. 
 %da finire 
+
+
+
+Si passa ora ai \textit{Message Authentication Codes}, che permettono di firmare dei messaggi per verificarne l'attendibilità
+
+\subsection{MAC Message Authentication Code}
+
+I \emph{MAC} sono funzioni hash con chiave che soddisfano determinate proprietà di sicurezza, generalmente è possibile creare un \emph{MAC} aggiungendo a una funzione hash $h$ (senza  chiave) una chiave. L'operazione deve essere fatta con cautela per prevenire degli attacchi.
+
+\begin{example}[Length extension attack]
+    Si suppone di derivare la funzione hash $h_K$ con chiave $K$, di lunghezza $m$, da una funzione hash iterata $H$, a sua volta, derivata da una funzione di compressione $h: \{0,1\}^{t+m} \to \{0,1\}^{m}$. Il \textit{MAC} viene calcolato impostando la chiave nel valore \emph{IV}.   
+
+    Si mostra come un attaccante possa creare un tag valido, con le sole informazioni $x$, un messaggio e $h_K(x)$, il tag corrispondente. Sia $x'$ una stringa arbitraria di lunghezza $t$, considerando il messaggio $x \conc x'$, il tag corrispondente può essere calcolato come:
+    \[
+        h_K(x\conc x') = \textbf{compress}(h_K(x) \conc x')
+    \]
+    l'avversario fa uso di sole informazioni note, e calcola il tag corretto senza fare uso della chiave $K$.
+\end{example}
+Anche nel caso in cui il messaggio abbia dei bit di \textit{padding} un attacco è possibile
+\begin{example}
+    Sia $y = x \conc \textbf{pad}(x)$ con $|y| = rt$, per una $r$ opportuna. Sia inoltre una $w$ arbitraria di lunghezza $t$:
+    \[
+        x' = x \conc \textbf{pad}(x) \conc w.
+    \]
+    Nella fase di pre-processing si calcola $y'$ di cui la lunghezza è $r't$ per valore $r'>r$ opportuno
+    \[
+        y' = x' \conc \textbf{pad}(x') = x \conc \textbf{pad}(x) \conc w \conc \textbf{pad}(x')
+    \]
+
+    Considerando il calcolo di $h_K(x')$ (possibile dall'esempio precedente) è chiaro che $z_r = h_K(x)$ per cui un avversario è capace di calcolare il \textit{MAC} blocchi aggiunti in questo modo:
+
+    \begin{align*}
+        z_{r+1} &= \textbf{compress}(h_K(x) \conc y_{r+1})\\
+        z_{r+2} &= \textbf{compress}(z_{r+1} \conc y_{r+2})\\
+        &\vdots \qquad \vdots \qquad \vdots \\
+        z_{r'} &= \textbf{compress}(z_{r'-1} \conc y_{r'}).
+    \end{align*}
+    Anche in questo esempio un avversario è capace di calcolare il \emph{MAC} corretto senza conoscere la chiave.
+\end{example}
+
+\vspace{1em}
+Ovviamente questi esempi di \emph{MAC} non sono sicuri, per cui si definisce la sicurezza di un \emph{MAC}.
+
+\begin{definition}[Contraffazione]
+    Un avversario $\mathcal{A}$ avente a disposizione una sequenza di $Q$ coppie \textit{messaggio}, \textit{tag} $(x_1,y_1),\dots,(x_Q,y_Q)$, tutte valide per una funzione hash con chiave $h_K$. Se $\mathcal{A}$ è capace di creare un tag per un messaggio $x_{Q+1}$ mai visto, allora la coppia $(x_{Q+1},h_K{x_{Q+1}})$ è detta contraffatta.
+    
+    \vspace{1em}
+    Nel caso in cui $\mathcal{A}$ sia in grado di creare una nuova coppia valida con probabilità almeno $\varepsilon$, $\mathcal{A}$ è detto \emph{falsario-}$(\varepsilon,Q)$. 
+\end{definition}
+
+Un possibile falsario $\mathcal{A}$ ha due possibili modalità, \emph{chosen-message attack} e \emph{known-message attack}. Nel primo caso $\mathcal{A}$ ha la possibilità di scegliere le coppie valide, massimizzando così la probabilità di successo, nel secondo caso $\mathcal{A}$ è semplicemente a conoscenza una sequenza di coppie valide. Esistono due tipi di attacchi per enumerazione
+\begin{itemize}
+    \item \emph{key guessing} in cui si enumerano le chiavi, la probabilità di successo è $\frac{1}{\mathcal{|K|}}$
+    \item \emph{tag guessing} in cui si enumerano i tag, la probabilità di successo è $\frac{1}{\mathcal{|Y|}}$.
+\end{itemize}
