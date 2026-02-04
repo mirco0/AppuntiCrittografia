@@ -378,3 +378,17 @@ La tecnica del \emph{MAC} annidato fa uso di due funzioni hash con chiave, siano
     \mathcal{G} \circ \mathcal{H} = \{g \circ h \mid g \in \mathcal{G}, h \in \mathcal{H}\}
 \]
 ora $(g \circ h)_{(K,L)}(x) = h_L(g_K(x))$ per ogni $x \in \mathcal{X}$. Banalmente questo tipo di \emph{MAC} è la composizione di due funzioni hash, nella quale viene calcolata l'hash del messaggio $y = g_K(x)$ e successivamente si applica la seconda hash $z = h_K(y)$. 
+
+
+\paragraph{HMAC}Per costruire un MAC sicuro che funzioni su messaggi lunghi: \\
+Sia $H$ un hash di tipo Merkle-Damgard costruita da un'hash di compressione $h: \{0,1\}^n \times \{0,1\}^l \to \{0,1\}^n$.  \\ Alcuni approcci semplici: 
+
+\paragraph{Prepend the key} $F_{\text{pre}}(k,M):= H(k || M)$, ovvero anteporre la chiave. È completamente insicuro a causa dell'attaco di estensione: dato $F_{\text{pre}}(k,M)$ si può facilmente calcolare $F_{\text{pre}}(k,M || PB || M')$ per qualsiasi $M'$. 
+
+\paragraph{Append the key} $F_{\text{post}}(k,M):= H(M || k)$. Questo è molto simile alla costruzione hash-then-MAC e si basa sulla resistenza alle collisioni di $h$. Ma è vulnerabile ad attacchi offline di ricerca delle collisioni: trovate $2$ stringhe diverse, $M_0, M_1$, di lunghezza $m$, tali che $h_{\text{post}}(k,M_0)=h_{\text{post}}(k,M_1)$, si ha che $F_{\text{post}}(k,M_0)=F_{\text{post}}(k,M_1)$.
+
+\paragraph{Envelope method} $F_{\text{env}}(k,M):= H(k || M || k)$. Sotto certe ipotesi di pseudocasualità su $h$, si può dimostrare essere una PRF sicura.   
+
+
+\paragraph{Two-key nest}$F_{\text{nest}}((k_1,k_2),M):= H(k_2 || H(k_1 || M))$. Sotto certe ipotesi di pseudocasualità su $h$, si può dimostrare essere anche questa una PRF sicura. L'annidamento a $2$ chiavi è correlato ad HMAC. 
+
