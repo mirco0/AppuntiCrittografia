@@ -8,9 +8,9 @@
     \KwIn{Parametri $M \in \{0,1\}^{\leq L}$}
     \KwOut{\emph{tag} $\in \mathcal{Y}$}
 
-    $\hat{M} \gets M || PB$\;
+    $\hat{M} \gets M  \conc  PB$\;
     partiziona $\hat{M}$ in blocchi lunghi $\ell$ consecutivi tale che\;
-    $\hat{M} = m_1 || m_2 || \dots || m_s \quad \forall i = 1,\dots, s \ m_i \in \{0,1\}^{\ell}$\;
+    $\hat{M} = m_1  \conc  m_2  \conc  \dots  \conc  m_s \quad \forall i = 1,\dots, s \ m_i \in \{0,1\}^{\ell}$\;
     $t_0 \gets IV \in \mathcal{Y}$\;
 
     \ForEach{$i = 1$ \KwTo $s$}{
