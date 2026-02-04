@@ -274,7 +274,7 @@ x_i=d_K(y_i) \oplus {y_{i-1}}.
 
 \noindent Se un blocco di plaintext $x_i$ cambia, allora $y_i$ e tutti i successivi blocchi cambiano. È quindi utile per l'autenticazione, più precisamente per produrre un MAC
 
-\paragraph{CTR} Si sceglie un counter, \textit{ctr}, che è una sottostringa di lunghezza $m$. Si costruisce una sequenza come segue: 
+\paragraph{CTR} (Modalità analoga ad uno stream cipher) Si sceglie un counter, \textit{ctr}, che è una sottostringa di lunghezza $m$. Si costruisce una sequenza come segue: 
 \[
 T_i=ctr+i-1 \pmod 2^m \ \forall i\geq 1.
 \]
@@ -284,7 +284,7 @@ T_i=ctr+i-1 \pmod 2^m \ \forall i\geq 1.
 y_i=x_i \oplus e_K(T_i) \ \forall i \geq 1. 
 \]
 
-La keystream in CTR si ottiene cifrando la sequenza di \textit{ctr} usando la chiave $K$. \\ La keystream può essere costruita indipendentemente dal plaintext. Inoltre, la generazione della keystream può essere implementata in modo più efficiente, in parallelo, rispetto a OFB, poiché gli elementi della keystream sono indipendenti tra di loro e quindi non si calcolano le keystream in funzione delle precedenti.
+\noindent La keystream in CTR si ottiene cifrando la sequenza di \textit{ctr} usando la chiave $K$. \\ La keystream può essere costruita indipendentemente dal plaintext. Inoltre, la generazione della keystream può essere implementata in modo più efficiente, in parallelo, rispetto a OFB, poiché gli elementi della keystream sono indipendenti tra di loro e quindi non si calcolano le keystream in funzione delle precedenti.
 
 \paragraph{Padding Oracle Attack su CBC}
 È un attacco che sfrutta il fatto che il plaintext sia ``paddato'' cosicché la sua lunghezza sia un multiplo della dimensione del blocco. \\ Usiamo un cifrario a blocchi con blocchi di $128$ bit= $16$ byte. \\ Sarà l'ultimo blocco a essere ``paddato'' .  
