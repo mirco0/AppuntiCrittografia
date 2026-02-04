@@ -360,7 +360,7 @@ Anche nel caso in cui il messaggio abbia dei bit di \textit{padding} un attacco 
 Ovviamente questi esempi di \emph{MAC} non sono sicuri, per cui si definisce la sicurezza di un \emph{MAC}.
 
 \begin{definition}[Contraffazione]
-    Un avversario $\mathcal{A}$ avente a disposizione una sequenza di $Q$ coppie \textit{messaggio}, \textit{tag} $(x_1,y_1),\dots,(x_Q,y_Q)$, tutte valide per una funzione hash con chiave $h_K$. Se $\mathcal{A}$ è capace di creare un tag per un messaggio $x_{Q+1}$ mai visto, allora la coppia $(x_{Q+1},h_K{x_{Q+1}})$ è detta contraffatta.
+    Un avversario $\mathcal{A}$ avente a disposizione una sequenza di $Q$ coppie \textit{messaggio}, \textit{tag} $(x_1,y_1),\dots,(x_Q,y_Q)$, tutte valide per una funzione hash con chiave $h_K$. Se $\mathcal{A}$ è capace di creare un tag per un messaggio $x_{Q+1}$ mai visto, allora la coppia $(x_{Q+1},h_K(x_{Q+1}))$ è detta contraffatta.
     
     \vspace{1em}\noindent
     Nel caso in cui $\mathcal{A}$ sia in grado di creare una nuova coppia valida, con probabilità almeno $\varepsilon$, $\mathcal{A}$ è detto \emph{falsario-}$(\varepsilon,Q)$. 
@@ -406,18 +406,21 @@ Per studiare la sicurezza di un \emph{MAC} annidato si studiano le proprietà de
     L'avversario $\mathcal{C}$ ha la possibilità di scegliere valori $x$ e calcolarne le corrispondenti hash $h_L(g_K(x))$, lo scopo dell'avversario è di trovare una valida $(x',z = h_L(g_K(x)))$ tale che $x'$ è un valore mai visto.
 \end{definition}
 
-Assumendo che non esista un attacco a chiave sconosciuta $(\varepsilon,Q+1)$ per una hash casuale $g_K \in \mathcal{G}$ (per una $K$ sconosciuta l'attacco è più difficile di un solito attacco a \emph{collision resistance}). Inoltre si assume anche che non esista un attacco $(\varepsilon_2, Q)$ a \emph{little MAC} per una funzione scelta in modo casuale $h_L \in \mathcal{H}$, infine supponiamo che esista un'attacco $(\varepsilon,Q)$ a \emph{big MAC} per una funzione $(g \circ h)_{(K,L)}(x) = h_L(g_K(x)) \in \mathcal{G} \circ \mathcal{H}$ allora in $Q$ tentativi $(x_1,\dots,x_Q)$ l'attacco trova con probabilità $\varepsilon$ una coppia valida $(x,z)$ 
+Assumendo che non esista un attacco a chiave sconosciuta $(\varepsilon,Q+1)$ per una hash casuale $g_K \in \mathcal{G}$ (per una $K$ sconosciuta l'attacco è più difficile di un solito attacco a \emph{collision resistance}). Inoltre si assume anche che non esista un attacco $(\varepsilon_2, Q)$ a \emph{little MAC} per una funzione scelta in modo casuale $h_L \in \mathcal{H}$, infine supponiamo che esista un'attacco $(\varepsilon,Q)$ a \emph{big MAC} per una funzione $(g \circ h)_{(K,L)}(x) = h_L(g_K(x)) \in \mathcal{G} \circ \mathcal{H}$ allora in $Q$ tentativi $(x_1,\dots,x_Q)$ l'attacco trova con probabilità $\varepsilon$ una coppia valida $(x,z)$
+
+%TODO: FINIRE
+\textcolor{red}{Da finire di scrivere}
 
 %Boneh-Shoup 8.7
-\paragraph{HMAC}Per costruire un MAC sicuro che funzioni su messaggi lunghi: \\
+\paragraph{HMAC}Per costruire un \emph{MAC} sicuro che funzioni su messaggi lunghi: \\
 Sia $H$ un hash di tipo Merkle-Damgard costruita da un'hash di compressione $h: \{0,1\}^n \times \{0,1\}^l \to \{0,1\}^n$.  \\ Alcuni approcci semplici: 
 
-\paragraph{Prepend the key} $F_{\text{pre}}(k,M):= H(k || M)$, ovvero anteporre la chiave. È completamente insicuro a causa dell'attaco di estensione: dato $F_{\text{pre}}(k,M)$ si può facilmente calcolare $F_{\text{pre}}(k,M || PB || M')$ per qualsiasi $M'$. 
+\paragraph{Prepend the key} $F_{\text{pre}}(k,M):= H(k \conc M)$, ovvero anteporre la chiave. È completamente insicuro a causa dell'attaco di estensione: dato $F_{\text{pre}}(k,M)$ si può facilmente calcolare $F_{\text{pre}}(k,M \conc PB \conc M')$ per qualsiasi $M'$. 
 
-\paragraph{Append the key} $F_{\text{post}}(k,M):= H(M || k)$. Questo è molto simile alla costruzione hash-then-MAC e si basa sulla resistenza alle collisioni di $h$. Ma è vulnerabile ad attacchi offline di ricerca delle collisioni: trovate $2$ stringhe diverse, $M_0, M_1$, di lunghezza $m$, tali che $h_{\text{post}}(k,M_0)=h_{\text{post}}(k,M_1)$, si ha che $F_{\text{post}}(k,M_0)=F_{\text{post}}(k,M_1)$.
+\paragraph{Append the key} $F_{\text{post}}(k,M):= H(M \conc k)$. Questo è molto simile alla costruzione hash-then-MAC e si basa sulla resistenza alle collisioni di $h$. Ma è vulnerabile ad attacchi offline di ricerca delle collisioni: trovate $2$ stringhe diverse, $M_0, M_1$, di lunghezza $m$, tali che $h_{\text{post}}(k,M_0)=h_{\text{post}}(k,M_1)$, si ha che $F_{\text{post}}(k,M_0)=F_{\text{post}}(k,M_1)$.
 
-\paragraph{Envelope method} $F_{\text{env}}(k,M):= H(k || M || k)$. Sotto certe ipotesi di pseudocasualità su $h$, si può dimostrare essere una PRF sicura.   
+\paragraph{Envelope method} $F_{\text{env}}(k,M):= H(k \conc M \conc k)$. Sotto certe ipotesi di pseudocasualità su $h$, si può dimostrare essere una PRF sicura.   
 
 
-\paragraph{Two-key nest}$F_{\text{nest}}((k_1,k_2),M):= H(k_2 || H(k_1 || M))$. Sotto certe ipotesi di pseudocasualità su $h$, si può dimostrare essere anche questa una PRF sicura. L'annidamento a $2$ chiavi è correlato ad HMAC. 
+\paragraph{Two-key nest}$F_{\text{nest}}((k_1,k_2),M):= H(k_2 \conc H(k_1 \conc M))$. Sotto certe ipotesi di pseudocasualità su $h$, si può dimostrare essere anche questa una PRF sicura. L'annidamento a $2$ chiavi è correlato ad HMAC. 
 
