@@ -415,7 +415,7 @@ Assumendo che non esista un attacco a chiave sconosciuta $(\varepsilon,Q+1)$ per
 \paragraph{HMAC}Per costruire un \emph{MAC} sicuro che funzioni su messaggi lunghi: \\
 Sia $H$ un hash di tipo Merkle-Damgard costruita da un'hash di compressione $h: \{0,1\}^n \times \{0,1\}^l \to \{0,1\}^n$.  \\ Alcuni approcci semplici: 
 
-\paragraph{Prepend the key} $F_{\text{pre}}(k,M):= H(k \conc M)$, ovvero anteporre la chiave. È completamente insicuro a causa dell'attaco di estensione: dato $F_{\text{pre}}(k,M)$ si può facilmente calcolare $F_{\text{pre}}(k,M \conc PB \conc M')$ per qualsiasi $M'$. 
+\paragraph{Prepend the key} $F_{\text{pre}}(k,M):= H(k \conc M)$, ovvero anteporre la chiave. È completamente insicuro a causa dell'attacco di estensione: dato $F_{\text{pre}}(k,M)$ si può facilmente calcolare $F_{\text{pre}}(k,M \conc PB \conc M')$ per qualsiasi $M'$. 
 
 \paragraph{Append the key} $F_{\text{post}}(k,M):= H(M \conc k)$. Questo è molto simile alla costruzione hash-then-MAC e si basa sulla resistenza alle collisioni di $h$. Ma è vulnerabile ad attacchi offline di ricerca delle collisioni: trovate $2$ stringhe diverse, $M_0, M_1$, di lunghezza $m$, tali che $h_{\text{post}}(k,M_0)=h_{\text{post}}(k,M_1)$, si ha che $F_{\text{post}}(k,M_0)=F_{\text{post}}(k,M_1)$.
 
@@ -424,3 +424,19 @@ Sia $H$ un hash di tipo Merkle-Damgard costruita da un'hash di compressione $h: 
 
 \paragraph{Two-key nest}$F_{\text{nest}}((k_1,k_2),M):= H(k_2 \conc H(k_1 \conc M))$. Sotto certe ipotesi di pseudocasualità su $h$, si può dimostrare essere anche questa una PRF sicura. L'annidamento a $2$ chiavi è correlato ad HMAC. 
 
+\paragraph{\emph{HMAC}} è un \emph{Two-Key Nest} in cui le chiavi 
+$k_1,k_2$ sono dipendenti tra loro, derivate da una singola chiave $k$. \\ \emph{HMAC} è orientato ai byte, e i blocchi per la funzione hash di \emph{Merkle-Damgard} sono di $B$ byte, anziché $l$. \\ Per derivare $k_1, k_2$, prima si rende $k$ lunga esattamente $K$ byte:
+\begin{itemize}
+    \item Se la lunghezza di $k \leq B$, si completa con byte di valore zero;
+    \item Altrimenti, la si sostituisce con $H(k)$ e la si completa con byte di valore zero.   
+\end{itemize}
+\noindent Si calcolano poi: 
+\[
+k_1 \gets k \oplus \text{ipad} \ \text{e} \ k_2 \gets k \oplus \text{opad},
+\] \\ dove \textit{ipad} e \textit{opad} sono stringhe costanti di $B$ byte: \\  \textit{ipad}$=$ il byte $0x36$ ripetuto $B$ volte (``i''=\textit{inner});\\ \textit{opad}$=$ il byte $0x5C$ ripetuto $B$ volte (``o''=\textit{outer}). 
+
+\vspace{0.2cm} \noindent \emph{HMAC} implementato usando una funzione hash $H$ è indicata con \emph{HMAC-H}: le più comuni sono \emph{HMAC-SHA1} e \emph{HMAC-SHA256}. 
+
+\paragraph{Sicurezza di \emph{HMAC}} Poiché le chiavi $k_1'$ e $k_2'$ sono correlate, il loro XOR è uguale a \emph{ipad} $\oplus$ \emph{opad}, la dimostrazione di sicurezza per \emph{Two-Key Nest} non è più applicabile. Si fa quindi un'ipotesi più forte su $h$: è necessario assumere che $h^{\text{top}}$ rimanga una PRF anche sotto un attacco di chiavi correlate. Se $h$ è una funzione di compressione di Davies-Meyer, allora questa ipotesi può essere giustificata nel modello di cifrario ideale. 
+
+%forse fare prima paragrafo 8.7.1 per h top; fare par 8.7.3
