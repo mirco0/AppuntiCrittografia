@@ -342,14 +342,20 @@ Per studiare la sicurezza di un \emph{MAC} annidato si studiano le proprietà de
     L'avversario $\mathcal{C}$ ha la possibilità di scegliere valori $x$ e calcolarne le corrispondenti hash $h_L(g_K(x))$, lo scopo dell'avversario è di trovare una valida $(x',z = h_L(g_K(x)))$ tale che $x'$ è un valore mai visto.
 \end{definition}
 
-Assumendo che non esista un attacco a chiave sconosciuta $(\varepsilon_1,Q+1)$ per una hash casuale $g_K \in \mathcal{G}$ (per una $K$ sconosciuta l'attacco è più difficile di un solito attacco a \emph{collision resistance}). Inoltre si assume anche che non esista un attacco $(\varepsilon_2, Q)$ a \emph{little MAC} per una funzione scelta in modo casuale $h_L \in \mathcal{H}$, infine supponiamo che esista un attacco $(\varepsilon,Q)$ a \emph{big MAC} per una funzione $(g \circ h)_{(K,L)}(x) = h_L(g_K(xs)) \in \mathcal{G} \circ \mathcal{H}$ allora in $Q$ tentativi $x_1,\dots,x_Q$ di cui si ottengono i valori hash $z_1,\dots,z_Q$ l'attacco trova, con probabilità $\varepsilon$, una coppia valida $(x,z)$. Supponiamo ora di prendere la sequenza $x_1,\dots,x_Q$ e $x$ e calcolarne l'hash attraverso la funzione $g_K$, si ottengono $y_1 = g_K(x_1),\dots,y_Q = g_K(x_Q)\ y = g_K(x)$, se $y = y_i$ per qualche $i = 1,\dots,Q$ allora $x,x_i$ generano una collisione
-
-Se $y \notin \{y_1,\dots,y_Q\}$ la coppia $(y,z)$ è valida per \textit{little MAC}, si ha una contraffazione ottenuta dalle $Q$ hash del \textit{little MAC}. Dalla supposizione in cui $\mathcal{B}$ abbia successo con probabilità al massimo $\varepsilon_1$ e l'avversario $\mathcal{A}$ abbia successo con probabilità almeno $\varepsilon$ allora la probabilità che $(x,z)$ sia una coppia valida e $y \notin \{y_1,\dots,y_Q\}$ è almeno $\varepsilon - \varepsilon_1$. La probabilità di successo di un qualsiasi \textit{little MAC} è al massimo $\varepsilon_2$ e la probabilità di successo dell'attacco sopra descritto è almeno $\varepsilon - \varepsilon_1$, ne segue che $\varepsilon \leq \varepsilon_1 + \varepsilon_2$.
-
 \begin{theorem}
     Sia $(\mathcal{X},\mathcal{Y},\mathcal{M},\mathcal{G} \circ  \mathcal{H})$ un MAC annidato, supponendo che non esista un algoritmo-$(\varepsilon_1,Q+1)$ \textit{collision attack} per una funzione hash $g_K \in \mathcal{G}$ casuale, e non esista un algoritmo-$(\varepsilon_2,Q)$ falsario per una funzione hash $h_L \in \mathcal{H}$ casuale. Se esiste un algoritmo-$(\varepsilon,Q)$ falsario per il MAC annidato allora. $\varepsilon \leq \varepsilon_1 + \varepsilon_2$.
 \end{theorem}
 
+\begin{proof}
+    
+    Assumendo che non esista un attacco a chiave sconosciuta $(\varepsilon_1,Q+1)$ per una hash casuale $g_K \in \mathcal{G}$ (per una $K$ sconosciuta l'attacco è più difficile di un solito attacco a \emph{collision resistance}). Inoltre si assume anche che non esista un attacco $(\varepsilon_2, Q)$ a \emph{little MAC} per una funzione scelta in modo casuale $h_L \in \mathcal{H}$, infine supponiamo che esista un attacco $(\varepsilon,Q)$ a \emph{big MAC} per una funzione $(g \circ h)_{(K,L)}(x) = h_L(g_K(xs)) \in \mathcal{G} \circ \mathcal{H}$ allora in $Q$ tentativi $x_1,\dots,x_Q$ di cui si ottengono i valori hash $z_1,\dots,z_Q$ l'attacco trova, con probabilità $\varepsilon$, una coppia valida $(x,z)$. 
+
+    \noindent
+    Supponiamo ora di prendere la sequenza $x_1,\dots,x_Q$ e $x$ e calcolarne l'hash attraverso la funzione $g_K$, si ottengono $y_1 = g_K(x_1),\dots,y_Q = g_K(x_Q)\ y = g_K(x)$, se $y = y_i$ per qualche $i = 1,\dots,Q$ allora $x,x_i$ generano una collisione
+    
+    \vspace{1em}
+    Se $y \notin \{y_1,\dots,y_Q\}$ la coppia $(y,z)$ è valida per \textit{little MAC}, si ha una contraffazione ottenuta dalle $Q$ hash del \textit{little MAC}. Dalla supposizione in cui $\mathcal{B}$ abbia successo con probabilità al massimo $\varepsilon_1$ e l'avversario $\mathcal{A}$ abbia successo con probabilità almeno $\varepsilon$ allora la probabilità che $(x,z)$ sia una coppia valida e $y \notin \{y_1,\dots,y_Q\}$ è almeno $\varepsilon - \varepsilon_1$. La probabilità di successo di un qualsiasi \textit{little MAC} è al massimo $\varepsilon_2$ e la probabilità di successo dell'attacco sopra descritto è almeno $\varepsilon - \varepsilon_1$, ne segue che $\varepsilon \leq \varepsilon_1 + \varepsilon_2$.
+\end{proof}
 
 %Boneh-Shoup 8.7
 \paragraph{HMAC}Per costruire un \emph{MAC} sicuro che funzioni su messaggi lunghi: \\
@@ -373,7 +379,11 @@ $k_1,k_2$ sono dipendenti tra loro, derivate da una singola chiave $k$. \\ \emph
 \noindent Si calcolano poi: 
 \[
 k_1 \gets k \oplus \text{ipad} \ \text{e} \ k_2 \gets k \oplus \text{opad},
-\] \\ dove \textit{ipad} e \textit{opad} sono stringhe costanti di $B$ byte: \\  \textit{ipad}$=$ il byte \texttt{0x36} ripetuto $B$ volte (``i''=\textit{inner});\\ \textit{opad}$=$ il byte \texttt{0x5C} ripetuto $B$ volte (``o''=\textit{outer}). 
+\] \\ dove \textit{ipad} e \textit{opad} sono stringhe costanti di $B$ byte: 
+\begin{itemize}
+    \item con \textit{ipad} si indica il padding interno dato dal byte \texttt{0x36} ripetuto $B$ volte (``i''=\textit{inner});
+    \item con \textit{opad} si indica il padding esterno dato dal byte \texttt{0x5C} ripetuto $B$ volte (``o''=\textit{outer}). 
+\end{itemize} 
 
 \vspace{0.2cm} \noindent \emph{HMAC} implementato usando una funzione hash $H$ è indicata con \emph{HMAC-H}: le più comuni sono \emph{HMAC-SHA1} e \emph{HMAC-SHA256}. 
 
