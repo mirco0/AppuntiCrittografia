@@ -166,7 +166,10 @@ e la probabilità di trovare almeno una collisione è $1 - e^{-\frac{Q(Q-1)}{2M}
 
 Quindi, per opportune assunzioni, la proprietà di resistenza alle collisioni implica la proprietà di resistenza alle Preimmagini.
 
-\vspace{1em} \noindent Passiamo ora alla descrizione del paradigma di \emph{Merkle-Damgård}. Questo paradigma permette di partire da funzioni hash $h: \mathcal{K} \times \mathcal{X} \to \mathcal{Y}$ con $\mathcal{X} = \{0,1\}^{\ell}$ e $\mathcal{K} = \mathcal{Y} = \{0,1\}^n$ con $\ell$ relativamente piccola. Partendo da una funzione $h$, come sopra, e definendo una funzione $H$ definita su $(\{0,1\}^{\leq L}, \mathcal{K})$ funziona come segue:
+\vspace{1em} \noindent Passiamo ora alla descrizione del paradigma di \emph{Merkle-Damgård}. 
+
+\subsection{Merkle-Damgård}
+Il paradigma Merkle Damgård permette di partire da funzioni hash $h: \mathcal{K} \times \mathcal{X} \to \mathcal{Y}$ con $\mathcal{X} = \{0,1\}^{\ell}$ e $\mathcal{K} = \mathcal{Y} = \{0,1\}^n$ con $\ell$ relativamente piccola. Partendo da una funzione $h$, come sopra, e definendo una funzione $H$ definita su $(\{0,1\}^{\leq L}, \mathcal{K})$ funziona come segue:
 
 \input{algorithms/merkle_dam.tex}
 
