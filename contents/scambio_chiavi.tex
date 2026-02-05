@@ -1,0 +1,26 @@
+\subsection{Problema del Logaritmo discreto}
+Il problema del logaritmo discreto è alla base di molti sistemi di cifratura e protocolli di crittografia.
+
+
+\begin{definition}[Logaritmo Discreto]
+    Per un gruppo moltiplicativo $(G,\cdot)$ e un elemento $\alpha \in G$ di ordine $n$ e sia $\beta \in \langle \alpha \rangle$ trovare un intero $a$ tale che $0 \leq a \leq n-1$ e
+    \[
+        \alpha^{a} = \beta
+    \]
+    ovvero ($a = log_{\alpha}(\beta)$).
+\end{definition}
+
+\vspace{1em}p 
+La sua particolare utilità è fondata dalla difficoltà di invertire l'operazione di esponenziazione.
+
+\subsection{Crittosistema di ElGamal}
+Il sistema crittografico di ElGamal è basato sul problema del logartimo discreto nel gruppo $(\mathbb{Z}_p^*,\cdot)$.
+
+\begin{definition}[El Gamal]
+    Sia $p$ un numero primo tale che il logaritmo discreto nel gruppo $(\mathbb{Z}_p^*,\cdot)$ è intrattabile, sia $\alpha \in \mathbb{Z}_p^*$ un elemento primitivo.
+    Il crittosistema ha $\mathcal{M} = \mathbb{Z}_p^*,\  \mathcal{C} = (\mathbb{Z}_p^* \times \mathbb{Z}_p^*)$, infine $\mathcal{K}$ è definito come segue
+    \[
+        \mathcal{K} = \{ (p,\alpha,a,\beta) \mid \beta \equiv \alpha^a \pmod p\}
+    \]
+    le variabili $p,\alpha,\beta$ formano la chiave pubblica e $a$ rappresenta la chiave privata
+\end{definition}
