@@ -1,0 +1,29 @@
+\vspace{1em}
+\begin{algorithm}[H]
+    \SetAlgoVlined
+    \SetAlgoLined
+    
+    \caption{Rho Algoritmo Discreto($G,n,\alpha,\beta$)}
+    \label{alg:pollard_rho}
+    
+    \KwIn{Parametri $G,n,\alpha,\beta$}
+    \KwOut{Logaritmo Discreto}
+
+    definisci una partizione $G = S_1 \cup S_2 \cup S_3$\;
+    $(x,a,b) \gets f(1,0,0)$\;
+    $(x',a',b') \gets f(x,a,b)$\;
+
+    \While{$x \neq x'$}{
+        $(x,a,b) \gets f(x,a,b)$\;
+        $(x',a',b') \gets f(x',a',b')$\;
+        $(x',a',b') \gets f(x',a',b')$\;
+    }
+
+    \uIf{$ \gcd(b'-b,n) \neq 1$}{
+        \Return{Errore}\;
+    }
+    \Else{
+        \Return{$(a-a')(b'-b)^{-1} \mod n$}\;
+    }
+\end{algorithm}
+\vspace{2em}

@@ -80,7 +80,36 @@ Sia $S_1 \cup S_2 \cup S_3$ una partizione di $G$ con $|S_1| \approx |S_2| \appr
     \end{cases}
 \end{equation*}
 
+ogni tripla $(x,a,b)$ deve essere tale che $x = \alpha^a\beta^b$, ovviamente la tripla $(1,0,0)$ ha la proprietà, si osserva che se $(x,a,b)$ è valida allora anche $f(x,a,b)$ è valida, si definisce 
 
+\begin{equation*}
+    (x_i,a_i,b_i) = 
+    \begin{cases}
+        (1,0,0) &\text{ se } i = 0\\
+        f(x_{i-1},a_{i-1},b_{i-1}) &\text{ se } i \geq 0
+    \end{cases}
+\end{equation*}
+si confrontano le triple, finché $(x_{2i},a_{2i},b_{2i})$ e $(x_i,a_i,b_i)$ finché $x_i = x_{2i}$, quando accade
+\[
+    \alpha^{a_{2i}}\beta^{b_{2i}} = \alpha^{a_i}\beta^{b_i}.
+\]
+Sia $c = \log_\alpha(\beta)$  allora
+\[
+    \alpha^{a_{2i} + cb_{2i}} = \alpha^{a_i}+\beta^{cb_i}
+\]
+dal momento che $\langle \alpha \rangle$ ha ordine $n$ ne segue che 
+\begin{align*}    
+    a_{2i} + cb_{2i} \equiv a_i + cb_i \pmod n \\
+    c(b_{2i} - b_i) \equiv a_i - a_{2i} \pmod n
+\end{align*}
+
+se $\gcd(b_{2i} - b_i,n) = 1$ (quindi esiste un'inversa moltiplicativa) allora
+\[
+    c = (a_i - a_{2i})(b_{2i}-b_i)^{-1} \pmod n .
+\]
+\input{algorithms/pollard_rho_sub.tex}
+
+\input{algorithms/pollard_rho.tex}
 %Studiando Algoritmo RHO di Pollard
 
 %Studiando Algoritmo RHO Fattorizzazione

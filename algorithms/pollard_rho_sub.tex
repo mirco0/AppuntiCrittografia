@@ -1,0 +1,19 @@
+\vspace{1em}
+\begin{algorithm}[H]
+    \SetAlgoVlined
+    \SetAlgoLined
+    
+    \caption{$f(x,a,b)$}
+    \label{alg:pollard_rho_sub}
+    
+    \uIf{$x \in S_1$}{
+        $f \gets (\beta x,a,(b+1) \mod n)$\;
+    } \uElseIf{$x \in S_2$}{
+        $f \gets (x^2,2a \mod n, 2b \mod n)$\;
+    }\Else{
+        $f \gets (\alpha x, (a+1) \mod n, b)$\;
+    }
+    \Return{f}
+
+\end{algorithm}
+\vspace{2em}
