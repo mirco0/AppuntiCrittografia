@@ -177,4 +177,26 @@ per ogni $j = 1,\dots, C$, e in modo equivalente
 \[
     x_j \equiv a_{1j}\log_{\alpha}(p_1) + \dots + a_{bj}\log_{\alpha}(p_b) \pmod {p-1}.
 \]
-Date le $C$ congruenze dei valori $\log_{\alpha}p_i$ per ogni $i = 1,\dots,b$, si cerca una soluzione 
+Date le $C$ congruenze dei valori $\log_{\alpha}p_i$ per ogni $i = 1,\dots,b$, si cerca un' unica soluzione modulo $p-1$, se la soluzione è unica è possibile calcolare i logaritmi degli elementi della base. Le congruenze possono essere ottenute prendendo un valore casuale $x$ e calcolando $\alpha^{x} \mod p$ e determinando se $\alpha^x \mod p$ ha tutti i fattori in B. 
+
+\vspace{1em}
+Nella fase due si ha un algoritmo Las Vegas. Si prende un intero a caso $s$ tale che $1 \leq s \leq p-2$ e si calcola
+\[
+    \gamma = \beta \alpha^s \mod p
+\]
+si cerca di fattorizzare $\gamma$ con i primi della base B, se è possibile si ottiene una congruenza della forma 
+\[
+    \beta \alpha^s \equiv {p_1}^{c_1} {p_2}^{c_2} \cdots {p_b}^{c_b} \pmod p
+\]
+che può essere scritta in modo equivalente come 
+\[
+    \log_{\alpha}(\beta) + s \equiv c_1 \log_{\alpha}(p_1)+ \dots + {c_b}\log_{\alpha}(p_b) \pmod p-1
+\]
+ora è possibile risolvere per $\log_{\alpha}(\beta)$. La complessità temporale della fase 1 è 
+\[
+    O\left(e^{1 + O(1)) \sqrt{\ln( p )\ln( \ln( p))}}\right)
+\]
+mentre la complessità temprale per la fase 2 è 
+\[
+    O\left(e^{1/2 + O(1)) \sqrt{\ln( p )\ln( \ln( p))}}\right).
+\]
