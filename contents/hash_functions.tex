@@ -260,11 +260,45 @@ Si passa ora ai \textit{Message Authentication Codes}, che permettono di firmare
 
 I \emph{MAC} sono funzioni hash con chiave che soddisfano determinate proprietà di sicurezza, generalmente è possibile creare un \emph{MAC} aggiungendo a una funzione hash $h$ (senza  chiave) una chiave. L'operazione deve essere fatta con cautela per prevenire degli attacchi.
 
+\hrule
+
+%6.1 B.S.
+\begin{definition}
+    Un sistema \emph{MAC} \emph{I}$=$(\emph{S},\emph{V}) è una coppia di algoritmi efficienti, \textit{S} e \textit{V}, definito su $(K,M,T)$. \textit{S} è l'algoritmo di firma e \textit{V} quello di verifica. \textit{S} genera i tag e \textit{V} è usato per verificare i tag. 
+    \begin{itemize}
+        \item \textit{S} è un algoritmo probabilistico tale che $y \gets S(k,x)$, dove $k$ è la chiave, $m$ il messaggio, e $t$ il tag. 
+        \item \textit{V} è un algoritmo deterministico per $r \gets V(k,m,t)$, in cui l'output $r$ è \textit{accetta} o \textit{rifiuta}. 
+        \item Si richiede che i tag generati da \textit{S} sono sempre accettati da \textit{V}, ovvero il \emph{MAC} deve soddisfare la proprietà di correttezza: 
+        \[
+        \forall k, \forall  m \ \Pr[V(k,m,S(k,m))=\text{accetta}]=1.
+        \]
+    \end{itemize}
+    \noindent Ogni volta che \textit{V} ritorna \textit{accetta} per qualche coppia $(m,t)$, diciamo che $t$ è un tag valido. \\ Naturalmente, vogliamo sistemi MAC dove i tag siano il più corti possibili. Uno di questi, è un sistema \emph{MAC} deterministico, che ha la proprietà di avere un unico tag $t$ per $m$ su $k$. 
+\end{definition}
+
+\paragraph{Sicurezza per un \emph{MAC}} Supponiamo che un avversario sta attaccando un sistema \emph{MAC} \emph{I}=(\emph{S},\emph{V}) con un \textbf{chosen message attack}. Sia $k$ una chiave scelta a caso, sconosciuta all'attaccante. Chiamiamo le coppie $(m,t)$ che l'avversario ottiene, coppie firmate. Chiediamo all'attaccante di escogitare una contraffazione \emph{MAC} esistenziale. Cioè l'attaccante deve solo inventare una nuova coppia $(m,t)$, diversa da tutte le altre firmate. L'attaccante sceglie $m$ arbitrariamente. \\ Un sistema \emph{MAC} è sicuro se un avversario che è in grado di fare un \textit{chosen message attack} non può creare una contraffazione.  
+
+\vspace{0.2cm} \noindent Più precisamente, diamo la definizione di sicurezza di \emph{MAC} usando un gioco d'attacco tra uno sfidante e un avversario \emph{A}. 
+
+\paragraph{Gioco d'attacco: Sicurezza \emph{MAC}} Per un dato sistema \emph{MAC} \emph{I}=(\emph{S},\emph{V}), definito su $(K,M,T)$, e un dato avversario \emph{A}, il gioco d'attacco funziona così:
+\begin{itemize}
+    \item Lo sfidante sceglie $k \in \emph{K}$ a caso
+    \item \emph{A} interroga lo sfindate diverse volte. $\forall i=1, \dots$ la $i-$esima query di firma è un messaggio $m_i \in \emph{M}$. Dato $m_i$, calcola un tag $t_i \gets S(k,m)$ e manda $t_i$ ad \emph{A}.
+    \item  Alla fine \emph{A} produce una coppia? $(m,t) \in \emph{M} \times \emph{T}$ non ancora firmata, ovvero $(m,t) \not\in \{(m_1,t_1),\dots\}$. 
+\end{itemize}
+\noindent \emph{A} vince il gioco se $(m,t)$ è una coppia valida su $k$. $MAC_{\text{adv}}[\emph{A},\emph{I} ]$ è il vantaggio di \emph{A}, ovvero la probabilità che \emph{A} vince il gioco. 
+
+\vspace{0.2cm} \noindent Un sistema \textit{MAC} è sicuro se per tutti gli avversari efficienti \emph{A}, il valore $MAC_{\text{adv}}$ è trascurabile. 
+
+
+
+
+\hrule
 \begin{example}[Length extension attack]
     \label{atk:extension}
     Si suppone di derivare la funzione hash $h_K$ con chiave $K$, di lunghezza $m$, da una funzione hash iterata $H$, a sua volta, derivata da una funzione di compressione $h: \{0,1\}^{t+m} \to \{0,1\}^{m}$. Il \textit{MAC} viene calcolato impostando la chiave nel valore \emph{IV}.   
 
-    Si mostra come un attaccante possa creare un tag valido, con le sole informazioni $x$, un messaggio e $h_K(x)$, il tag corrispondente. Sia $x'$ una stringa arbitraria di lunghezza $t$, considerando il messaggio $x \conc x'$, il tag corrispondente può essere calcolato come:
+    \noindent Si mostra come un attaccante possa creare un tag valido, con le sole informazioni $x$, un messaggio e $h_K(x)$, il tag corrispondente. Sia $x'$ una stringa arbitraria di lunghezza $t$, considerando il messaggio $x \conc x'$, il tag corrispondente può essere calcolato come:
     \[
         h_K(x\conc x') = \textbf{compress}(h_K(x) \conc x')
     \]
@@ -390,3 +424,5 @@ k_1 \gets k \oplus \text{ipad} \ \text{e} \ k_2 \gets k \oplus \text{opad},
 \paragraph{Sicurezza di \emph{HMAC}} Poiché le chiavi $k_1'$ e $k_2'$ sono correlate, il loro \texttt{xor} è uguale a \emph{ipad} $\oplus$ \emph{opad}, la dimostrazione di sicurezza per \emph{Two-Key Nest} non è più applicabile. Si fa quindi un'ipotesi più forte su $h$: è necessario assumere che $h^{\text{top}}$ rimanga una PRF anche sotto un attacco di chiavi correlate. Se $h$ è una funzione di compressione di Davies-Meyer, allora questa ipotesi può essere giustificata nel modello di cifrario ideale. 
 
 %forse fare prima paragrafo 8.7.1 per h top; fare par 8.7.3
+
+
