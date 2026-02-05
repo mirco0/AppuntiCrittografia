@@ -7,20 +7,38 @@ Il problema del logaritmo discreto è alla base di molti sistemi di cifratura e 
     \[
         \alpha^{a} = \beta
     \]
-    ovvero ($a = log_{\alpha}(\beta)$).
+    ovvero ($a = \log_{\alpha}(\beta)$).
 \end{definition}
 
 \vspace{1em}p 
-La sua particolare utilità è fondata dalla difficoltà di invertire l'operazione di esponenziazione.
+La sua particolare utilità è fondata dalla difficoltà di invertire l'operazione di elevamento a potenza.
 
 \subsection{Crittosistema di ElGamal}
-Il sistema crittografico di ElGamal è basato sul problema del logartimo discreto nel gruppo $(\mathbb{Z}_p^*,\cdot)$.
+Il sistema crittografico di ElGamal è basato sul problema del logaritmo discreto nel gruppo $({\mathbb{Z}_p}^*,\cdot)$.
 
-\begin{definition}[El Gamal]
-    Sia $p$ un numero primo tale che il logaritmo discreto nel gruppo $(\mathbb{Z}_p^*,\cdot)$ è intrattabile, sia $\alpha \in \mathbb{Z}_p^*$ un elemento primitivo.
-    Il crittosistema ha $\mathcal{M} = \mathbb{Z}_p^*,\  \mathcal{C} = (\mathbb{Z}_p^* \times \mathbb{Z}_p^*)$, infine $\mathcal{K}$ è definito come segue
+\begin{definition}[ElGamal]
+    Sia $p$ un numero primo tale che il logaritmo discreto nel gruppo $({\mathbb{Z}_p}^*,\cdot)$ è intrattabile, sia $\alpha \in {\mathbb{Z}_p}^*$ un elemento primitivo.
+    Il crittosistema ha $\mathcal{M} = {\mathbb{Z}_p}^*,\  \mathcal{C} = ({\mathbb{Z}_p}^* \times {\mathbb{Z}_p}^*)$, infine $\mathcal{K}$ è definito come segue
     \[
         \mathcal{K} = \{ (p,\alpha,a,\beta) \mid \beta \equiv \alpha^a \pmod p\}
     \]
-    le variabili $p,\alpha,\beta$ formano la chiave pubblica e $a$ rappresenta la chiave privata
+    le variabili $p,\alpha,\beta$ formano la chiave pubblica e $a$ rappresenta la chiave privata.
+    Per $K = (p,\alpha,a,\beta)$ e per un numero $k \in \mathbb{Z}_{p-1}$ casuale si definisce la cifratura
+    \[
+        e_K(x,k) = (y_1,y_2)
+    \]  in cui 
+    \begin{align*}
+        &y_1 = {\alpha}^k \mod p\\
+        &y_2 = x\beta^k \mod p.
+    \end{align*}
+    Per $y_1,y_2 \in {\mathbb{Z}_p}^*$ si definisce la decifratura
+    \[
+        d_K(y_1,y_2) = y_2({y_1}^a)^{-1} \mod p.
+    \] 
 \end{definition}
+
+\noindent
+In pratica, nel crittosistema di ElGamal, il \emph{plaintext} $x$ viene mascherato attraverso la moltiplicazione per $\beta^k$, $y_2 = x\beta^k$. Il valore $\alpha^k$ è trasmesso insieme al \emph{ciphertext} e chi è a conoscenza della chiave $a$ è capace di ricavare il valore $\beta^k$. Infine è possibile togliere la maschera al \emph{ciphertext} per ottenere $x$.
+
+\vspace{1em}
+Ovviamente il sistema è sicuro finché il valore di $a$ è sconosciuto, $a$ può essere calcolato con $a = \log_{\alpha}(\beta)$, proprio il problema del logaritmo discreto. Finché non esiste un algoritmo efficiente (polinomiale) capace di risolvere il problema del logaritmo discreto, il sistema è ritenuto sicuro, (per essere sicuri contro attacchi per enumerazione, è comunque consigliabile utilizzare $p$ primo di almeno 2048 bit).
