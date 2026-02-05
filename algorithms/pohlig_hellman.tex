@@ -1,0 +1,21 @@
+\vspace{1em}
+\begin{algorithm}[H]
+    \SetAlgoVlined
+    \SetAlgoLined
+    
+    \caption{$\mathit{Pohlig-Hellman(G,n,\alpha,\beta,q,c)}$}
+    \label{alg:pohlig_hellman}
+    $j \gets 0$\;
+    $\beta_j \gets \beta$\;
+
+    \While{$j \leq c-1$}{
+        $\delta \gets \beta_j^{n/q^{j+1}}$\;
+        trova $i$ tale che $\delta = \alpha^{in/q}$\;
+        $a_j \gets i$\;
+        $\beta_{j+1} \gets \beta_j\alpha^{-a_jq^j}$\;
+        $j \gets j + 1$
+    }
+    \Return{$(a_0,\dots,a_{c-1})$}
+
+\end{algorithm}
+\vspace{2em}

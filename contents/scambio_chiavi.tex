@@ -107,28 +107,40 @@ se $\gcd(b_{2i} - b_i,n) = 1$ (quindi esiste un'inversa moltiplicativa) allora
 \[
     c = (a_i - a_{2i})(b_{2i}-b_i)^{-1} \pmod n .
 \]
+
+Si mostra un'esecuzione dell'algoritmo, si noti come si controlla che $1 \notin S_2$, poiché, in caso contrario, si otterrebbe continuamente la tripla $x_i = (1,0,0)$.
+
+Nel seguente algoritmo si calcola la funzione $f$:
+
 \input{algorithms/pollard_rho_sub.tex}
 
 \input{algorithms/pollard_rho.tex}
-%Studiando Algoritmo RHO di Pollard
+Nell'algoritmo si assume, che $\alpha \in G$ abbia ordine $n$ e $\beta \in \langle \alpha \rangle$.
+Nel caso in cui $\gcd(b'-b,b) > 1$ l'algoritmo \ref{alg:pollard_rho} termina con \emph{Errore}. Se $\gcd(b'-b,n) = d$ ovviamente \[
+    c(b'-b) \equiv a- a' \pmod n 
+\] 
+ha esattamente $d$ soluzioni, di cui una corretta.
+Come l'algoritmo \ref{alg:rho}, questo algoritmo, sotto certe assunzioni riguardo la funzione casuale $f$, ci si aspetta di calcolare il logaritmo discreto di un gruppo ciclico di ordine $n$ in $O(\sqrt{n})$ iterazioni.
 
 %Studiando Algoritmo RHO Fattorizzazione
 
-\paragraph{Algoritmo di Pohlig-Hellman} Supponiamo che $n= \prod_{i=1}^{k}p_i^{c_i}$ con $p_i$ primi distinti. Il valore $a=log_{\alpha}\beta$ è determinato $\pmod n$. Osserviamo che se possiamo calcolare $a \pmod p_i^{c_i} \ \forall i=1,\dots,k$, possiamo calcolare $a \pmod n$ dal Teorema Cinese dei Resti.  \\ Sia $q$ un primo, 
+\paragraph{Algoritmo di Pohlig-Hellman} Supponiamo che \[
+    n= \prod_{i=1}^{k}p_i^{c_i}
+\]
+ con $p_i$ primi distinti. Il valore $a=log_{\alpha}(\beta)$ è determinato modulo $n$. Osserviamo che se possiamo calcolare $a \mod{ {p_i}^{c_i}} \ \forall i=1,\dots,k$, allora possiamo calcolare $a \mod n$ dal Teorema Cinese dei Resti.  \\ Sia $q$ un primo
 \[
-n \equiv \pmod q^c \ \text{e} \ n \not \equiv \pmod q^{c+1}.
+    n \equiv 0\pmod {q^c} \quad \text{e} \quad n \not \equiv 0 \pmod {q^{c+1}}.
 \]
 
 \noindent Mostriamo ora come calcolare il valore 
 \[
-x=a \pmod q^c \, \ \text{con} \  x=0,\dots, q^c-1.
+x=a \pmod {q^c} \, \ \text{con} \quad  x=0,\dots, q^c-1
 \]
-\noindent Possiamo scrivere $x$ come: 
+possiamo scrivere $x$ come: 
 \[ 
-\sum_{i=0}^{c-1} a_iq^i \ \text{con} \ a_i=1, \dots, q-1.
+\sum_{i=0}^{c-1} a_iq^i \quad \text{con} \ a_i=1, \dots, q-1.
 \]
-
-\noindent Possiamo anche esprimere $a$ come 
+possiamo anche esprimere $a$ come 
 \[
 a=x+sq^c 
 \] per qualche intero $s$. Quindi, si ha: 
@@ -136,11 +148,16 @@ a=x+sq^c
 a=\sum_{i=0}^{c-1}a_iq^i+sq^c.
 \]
 
-\noindent Il primo step è calcolare $a_0$. 
+\noindent Il primo passo è calcolare $a_0$. 
 \noindent La principale osservazione usata è: 
-\[
-\beta^{n/q}=a^{\alpha_0n/q}. \label{osservazione}
-\]
+\begin{equation}
+    \beta^{n/q}=a^{\alpha_0n/q}. \label{osservazione}
+\end{equation}
+
 
 \noindent Dimostriamo \ref{osservazione} come segue:
+
+%Scritto algoritmo 
+%\input{algorithms/pohlig_hellman.tex} 
+
 %da fare
