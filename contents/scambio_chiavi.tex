@@ -127,7 +127,7 @@ Come l'algoritmo \ref{alg:rho}, questo algoritmo, sotto certe assunzioni riguard
 \paragraph{Algoritmo di Pohlig-Hellman} Supponiamo che \[
     n= \prod_{i=1}^{k}p_i^{c_i}
 \]
- con $p_i$ primi distinti. Il valore $a=log_{\alpha}(\beta)$ è determinato modulo $n$. Osserviamo che se possiamo calcolare $a \mod{ {p_i}^{c_i}} \ \forall i=1,\dots,k$, allora possiamo calcolare $a \mod n$ dal Teorema Cinese dei Resti.  \\ Sia $q$ un primo
+ con $p_i$ primi distinti. Il valore $a=\log_{\alpha}(\beta)$ è determinato modulo $n$. Osserviamo che se possiamo calcolare $a \mod{ {p_i}^{c_i}} \ \forall i=1,\dots,k$, allora possiamo calcolare $a \mod n$ dal Teorema Cinese del resto.  \\ Sia $q$ un primo
 \[
     n \equiv 0\pmod {q^c} \quad \text{e} \quad n \not \equiv 0 \pmod {q^{c+1}}.
 \]
@@ -161,3 +161,20 @@ a=\sum_{i=0}^{c-1}a_iq^i+sq^c.
 %\input{algorithms/pohlig_hellman.tex} 
 
 %da fare
+
+\paragraph{Metodo Index Calculus}
+Gli algoritmi precedenti possono essere applicati a qualsiasi gruppo, il metodo dell'index calculus è applicato ai gruppi ${\mathbb{Z}_p}^*$ con $p$ primo e $\alpha$ è una primitiva modulo $p$, poiché specifico, l'algoritmo è generalmente più veloce. L'algoritmo è simile ad algoritmi di fattorizzazione, fa uso di una base di piccoli fattori primi $B = \{p_1,\dots,p_b\}$ chiamata \textbf{base di fattori} e opera come segue:
+
+\begin{itemize}
+    \item vengono calcolati i logaritmi discreti dei fattori nella base B
+    \item viene calcolato il logaritmo discreto di $\beta$ facendo uso dei logaritmi nella base
+\end{itemize}
+Si descrivono più nel dettaglio le fasi. Sia $C$ un intero tale che $C > b$, nella fase 1 si costruiscono $C$ congruenze modulo $p$ della forma
+\[
+    \alpha^{x_j} \equiv {p_1}^{a_{1j}} {p_2}^{a_{2j}}\dots,{p_b}^{a_{bj}} \pmod p
+\]
+per ogni $j = 1,\dots, C$, e in modo equivalente
+\[
+    x_j \equiv a_{1j}\log_{\alpha}(p_1) + \dots + a_{bj}\log_{\alpha}(p_b) \pmod {p-1}.
+\]
+Date le $C$ congruenze dei valori $\log_{\alpha}p_i$ per ogni $i = 1,\dots,b$, si cerca una soluzione 
