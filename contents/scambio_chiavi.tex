@@ -85,4 +85,33 @@ Sia $S_1 \cup S_2 \cup S_3$ una partizione di $G$ con $|S_1| \approx |S_2| \appr
 
 %Studiando Algoritmo RHO Fattorizzazione
 
-\paragraph{Algoritmo di Pohlig-Hellman} 
+\paragraph{Algoritmo di Pohlig-Hellman} Supponiamo che $n= \prod_{i=1}^{k}p_i^{c_i}$ con $p_i$ primi distinti. Il valore $a=log_{\alpha}\beta$ è determinato $\pmod n$. Osserviamo che se possiamo calcolare $a \pmod p_i^{c_i} \ \forall i=1,\dots,k$, possiamo calcolare $a \pmod n$ dal Teorema Cinese dei Resti.  \\ Sia $q$ un primo, 
+\[
+n \equiv \pmod q^c \ \text{e} \ n \not \equiv \pmod q^{c+1}.
+\]
+
+\noindent Mostriamo ora come calcolare il valore 
+\[
+x=a \pmod q^c \, \ \text{con} \  x=0,\dots, q^c-1.
+\]
+\noindent Possiamo scrivere $x$ come: 
+\[ 
+\sum_{i=0}^{c-1} a_iq^i \ \text{con} \ a_i=1, \dots, q-1.
+\]
+
+\noindent Possiamo anche esprimere $a$ come 
+\[
+a=x+sq^c 
+\] per qualche intero $s$. Quindi, si ha: 
+\[
+a=\sum_{i=0}^{c-1}a_iq^i+sq^c.
+\]
+
+\noindent Il primo step è calcolare $a_0$. 
+\noindent La principale osservazione usata è: 
+\[
+\beta^{n/q}=a^{\alpha_0n/q}. \label{osservazione}
+\]
+
+\noindent Dimostriamo \ref{osservazione} come segue:
+%da fare
