@@ -1,0 +1,29 @@
+\vspace{1em}
+\begin{algorithm}[H]
+    \SetAlgoVlined
+    \SetAlgoLined
+    
+    \caption{Shanks($G,n,\alpha,\beta$)}
+    \label{alg:shanks}
+    
+    \KwIn{Parametri $G,n,\alpha,\beta$}
+    \KwOut{Logaritmo Discreto}
+
+    $m \gets \lceil \sqrt{n} \rceil$\;
+
+    \ForEach{$j=0$ \KwTo  $m-1$}{
+        calcola $a^{mj}$\;
+    }
+
+    $L_1 =$ la lista ordinata delle $m$ coppie $(j,\alpha^{mj})$ rispetto al secondo elemento\; 
+
+    \ForEach{$i=0$ \KwTo  $m-1$}{
+        calcola $\beta\alpha^{-i}$\;
+    }
+
+    $L_2 =$ la lista ordinata delle $m$ coppie $(i,\beta\alpha^{-1})$ rispetto al secondo elemento\; 
+    trova una coppia $(j,y) \in L_1$ e una coppia $(i,y) \in L_2$\;
+
+    \Return{$(mj + i)\mod n$} \;
+\end{algorithm}
+\vspace{2em}

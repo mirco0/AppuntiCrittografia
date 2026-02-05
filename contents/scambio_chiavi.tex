@@ -3,15 +3,15 @@ Il problema del logaritmo discreto è alla base di molti sistemi di cifratura e 
 
 
 \begin{definition}[Logaritmo Discreto]
-    Per un gruppo moltiplicativo $(G,\cdot)$ e un elemento $\alpha \in G$ di ordine $n$ e sia $\beta \in \langle \alpha \rangle$ trovare un intero $a$ tale che $0 \leq a \leq n-1$ e
+    Per un gruppo moltiplicativo $(G,\cdot)$ con un elemento $\alpha \in G$ di ordine $n$ e sia $\beta \in \langle \alpha \rangle$, trovare un intero $a$ tale che $0 \leq a \leq n-1$ per cui 
     \[
         \alpha^{a} = \beta
     \]
     ovvero ($a = \log_{\alpha}(\beta)$).
 \end{definition}
 
-\vspace{1em}p 
-La sua particolare utilità è fondata dalla difficoltà di invertire l'operazione di elevamento a potenza.
+\vspace{1em}
+La particolare utilità del problema è fondata dalla difficoltà di invertire l'operazione di elevamento a potenza nel gruppo.
 
 \subsection{Crittosistema di ElGamal}
 Il sistema crittografico di ElGamal è basato sul problema del logaritmo discreto nel gruppo $({\mathbb{Z}_p}^*,\cdot)$.
@@ -41,4 +41,23 @@ Il sistema crittografico di ElGamal è basato sul problema del logaritmo discret
 In pratica, nel crittosistema di ElGamal, il \emph{plaintext} $x$ viene mascherato attraverso la moltiplicazione per $\beta^k$, $y_2 = x\beta^k$. Il valore $\alpha^k$ è trasmesso insieme al \emph{ciphertext} e chi è a conoscenza della chiave $a$ è capace di ricavare il valore $\beta^k$. Infine è possibile togliere la maschera al \emph{ciphertext} per ottenere $x$.
 
 \vspace{1em}
-Ovviamente il sistema è sicuro finché il valore di $a$ è sconosciuto, $a$ può essere calcolato con $a = \log_{\alpha}(\beta)$, proprio il problema del logaritmo discreto. Finché non esiste un algoritmo efficiente (polinomiale) capace di risolvere il problema del logaritmo discreto, il sistema è ritenuto sicuro, (per essere sicuri contro attacchi per enumerazione, è comunque consigliabile utilizzare $p$ primo di almeno 2048 bit).
+Ovviamente il sistema è sicuro finché il valore di $a$ è sconosciuto, $a$ può essere calcolato con $a = \log_{\alpha}(\beta)$, proprio il problema del logaritmo discreto. Finché non esiste un algoritmo efficiente (polinomiale), capace di risolvere il problema del logaritmo discreto, il sistema è ritenuto sicuro, (per essere sicuri contro attacchi per enumerazione, è comunque consigliabile utilizzare $p$ primo di almeno 2048 bit).
+
+
+\subsection{Algoritmi per il logaritmo discreto}
+È facile notare che il problema del logaritmo discreto può essere risolto con una banale enumerazione, verificando gli $n$ possibili valori, se assumiamo che un un prodotto nel gruppo richieda tempo costante $O(1)$. Banalmente si calcola ($\alpha^{j} = \alpha^{j-1}\cdot \alpha$) per ogni $j = 2,\dots,n$. Passando ad un algoritmo meno banale, l'algoritmo di \emph{Shanks}, anche conosciuto come \emph{Baby-steps Giant-steps}.
+
+\input{algorithms/shanks.tex}
+
+\paragraph{Algoritmo di Shanks}
+\noindent
+Si giustifica la correttezza dell'algoritmo, vengono create due liste $L_1,L_2$ entrambe di lunghezza $\sqrt{n}$, una collisione è trovata quando $(j,y) \in L_1 \ (i,y) \in L_2$
+\begin{align*}
+    a^{mj} = y &= \beta\alpha^{-1}\\
+    a^{mj+i} &= \beta
+\end{align*}
+
+%Spiegazione sul perché una collisione viene trovata
+
+%
+L'algoritmo può essere implementato per impiegare $O(m\log(m))$ tempo e memoria. L'operazione più costosa è proprio l'ordinamento. 
