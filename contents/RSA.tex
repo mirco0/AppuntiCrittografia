@@ -1,0 +1,17 @@
+\paragraph{Piccolo teorema di Fermat} Se $p$ è primo, allora, $\forall a$, 
+\[
+a^p \equiv a \pmod p.
+\]
+Equivalentemente, se $p$ è primo e $a$ è coprimo con $p$, ovvero $\gcd (a,p)=1$, allora 
+\[a^{p-1} \equiv 1 \pmod p.
+\] 
+
+\paragraph{Generalizzazioni}
+\begin{itemize}
+    \item se $p$ è primo e $n,m >0$ con $m \equiv n \pmod {p-1}$, allora, $\forall a$, $a^m \equiv a^n \pmod p$.
+    \item $\forall$ modulo $n, \forall a$, coprimo con $n$: $a^{\phi(n)} \equiv 1 \pmod n$, con $\phi(n)$ funzione di Eulero. (Teorema di Eulero) (Se $n=p$, con $p$ primo, $\phi(p)=p-1$; Se $n$ non è primo, $\phi(n)=n\prod_{p|n}(1-1/p)$, dove tutti i $p_i$ sono i primi, divisori di $n$) ($\phi(ab)=\phi(a)\phi(b)$). 
+\end{itemize}
+
+
+
+% (Tale teorema è alla base del test di primalità.) 
