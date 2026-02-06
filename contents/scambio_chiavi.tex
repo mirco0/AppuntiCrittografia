@@ -1,3 +1,8 @@
+Si presentano dei protocolli del tipo \textit{Key Agreement Scheme} (KAS), uno utilizzato in TLS, e lo schema più diffuso chiamato \textit{Diffie-Hellman}, in entrambi avviene uno scambio di chiavi senza la partecipazione attiva di una \textit{Trusted Authority} (TA), le due parti che comunicano per la prima volta possono fare uso di una chiave pubblica.
+
+\paragraph{TLS Transport Layer Security} Sia \textbf{A} un \textit{client} e \textbf{B} un \textit{server}, generalmente per poter comunicare deve essere definita una chiave di sessione tra le due parti, attraverso un KAS. Il più comune funziona seguendo il seguente schema
+
+
 \subsection{Problema del Logaritmo discreto}
 Il problema del logaritmo discreto è alla base di molti sistemi di cifratura e protocolli di crittografia.
 
@@ -200,3 +205,4 @@ mentre la complessità temprale per la fase 2 è
 \[
     O\left(e^{1/2 + O(1)) \sqrt{\ln( p )\ln( \ln( p))}}\right).
 \]
+
