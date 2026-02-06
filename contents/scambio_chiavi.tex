@@ -94,11 +94,15 @@ Si giustifica la correttezza dell'algoritmo, vengono create due liste $L_1,L_2$ 
     a^{mj} = y &= \beta\alpha^{-1}\\
     a^{mj+i} &= \beta
 \end{align*}
-
-%Spiegazione sul perché una collisione viene trovata
-%TODO: Da scrivere (sono 2 righe sul perché una collisione esiste se \beta \in \langle \alpha \rangle)
-
-L'algoritmo può essere implementato per impiegare $O(m\log(m))$ tempo e memoria. L'operazione più costosa è proprio l'ordinamento. 
+Al contrario se $\beta \in \langle a \rangle$ si ha $0 \leq \log_{\alpha}(\beta) \leq n-1$ e dividendo $\log_{\alpha}(\beta)$ per me è possibile scrivere 
+\[
+    \log_{\alpha}(\beta) = mj +i,
+\]
+con $0 \leq j$ e $i \leq m-1$ inoltre $j \leq m-1$
+\[
+    \log_{\alpha}(\beta) \leq n - 1 \leq m^2 - 1 = m(m-1) + m -1.
+\]
+Per cui una collisione sarà sempre trovata. L'algoritmo può essere implementato per impiegare $O(m\log(m))$ tempo e memoria. L'operazione più costosa è proprio l'ordinamento. 
 
 \paragraph{Algoritmo Rho di Pollard}
 Sia $(G, \cdot )$ un gruppo moltiplicativo, con un elemento $\alpha \in G$ di ordine $n$. Sia $\beta$ il valore di cui si è interessati a trovare il logaritmo ($\log_{\alpha}(\beta)$).
