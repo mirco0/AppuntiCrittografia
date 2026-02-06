@@ -124,7 +124,7 @@ ogni tripla $(x,a,b)$ deve essere tale che $x = \alpha^a\beta^b$, ovviamente la 
     (x_i,a_i,b_i) = 
     \begin{cases}
         (1,0,0) &\text{ se } i = 0\\
-        f(x_{i-1},a_{i-1},b_{i-1}) &\text{ se } i \geq 0
+        f(x_{i-1},a_{i-1},b_{i-1}) &\text{ se } i \geq 0        
     \end{cases}
 \end{equation*}
 si confrontano le triple, finché $(x_{2i},a_{2i},b_{2i})$ e $(x_i,a_i,b_i)$ finché $x_i = x_{2i}$, quando accade
@@ -174,31 +174,60 @@ Come l'algoritmo \ref{alg:rho}, questo algoritmo, sotto certe assunzioni riguard
 \[
 x=a \pmod {q^c} \, \ \text{con} \quad  x=0,\dots, q^c-1
 \]
-possiamo scrivere $x$ come: 
+possiamo scrivere $x$ come rappresentazione in base $q^c$: 
 \[ 
-\sum_{i=0}^{c-1} a_iq^i \quad \text{con} \ a_i=1, \dots, q-1.
+x= \sum_{i=0}^{c-1} a_iq^i \quad \text{con} \ a_i=1, \dots, q-1.
 \]
-possiamo anche esprimere $a$ come 
+Possiamo anche scrivere $a$ come 
 \[
 a=x+sq^c 
 \] per qualche intero $s$. Quindi, si ha: 
 \[
-a=\sum_{i=0}^{c-1}a_iq^i+sq^c.
+a=\sum_{i=0}^{c-1}a_iq^i+   \underbrace{sq^c}_{\substack{\text{Multiplo di }q^c\\
+= 0}
+}. 
 \]
 
 \noindent Il primo passo è calcolare $a_0$. 
 \noindent La principale osservazione usata è: 
-\begin{equation}
-    \beta^{n/q}=a^{\alpha_0n/q}. \label{osservazione}
-\end{equation}
+\begin{align}
+    a=\log_{\alpha}\beta &\iff \alpha^a=\beta  \\
+    \beta^{n/q}&=\alpha^{a_0n/q}. \label{osservazione}
+\end{align}
 
 
 \noindent Dimostriamo \ref{osservazione} come segue:
+\begin{align*}
+    \beta^{n/q}=& \alpha^{an/q} \\
+    =& \alpha^{(a_0+\underbrace{a_1q+\dots+Sq^c}_{Kq})n/q}\\
+    =& \alpha^{(a_0+Kq)n/q} \\
+    =& \alpha^{a_0n/q+Kn} \qquad Kn \equiv 0 \pmod n\\
+    =& \alpha^{a_0n/q}.
+\end{align*}
+Per calcolare $a_0$ definiamo: $\gamma=\alpha^{n/q}, \gamma^2=\alpha^{2n/q}, \dots, \gamma^i=\alpha^{in/q}=\beta^{n/q}$, per $i=a_0$. \\ Se in $q^c$ $c=1$ allora si ottiene il sistema:
+\[
+\begin{cases}
+    a \equiv a_0 \mod q    
+\end{cases}
+\]
+altrimenti per $c > 1$ si ha un sistema del tipo
+\[
+\begin{cases}
+    a \equiv a_0 \mod q   \\  
+    a \equiv a_1 \mod q^2 \\  
+    \quad \vdots\\
+    a \equiv a_{c-1} \mod q^{c}\\
+\end{cases}
+\]
+Per determinare tutte le $a_i$, per $i=1,\dots,c-1$, definiamo $\beta_0=\beta$ e : 
+\[
+\beta_j=\beta\alpha^{-\left(a_0+a_1q+ \dots + a_{j-1}{q^{j-1}}\right)},
+\]per $j=1,\dots,c-1$. Come prima, si ottiene: 
+\[  {\beta_j}^{n/q^{j+1}} = \alpha ^{a_j n/q}.
+\]
+Quindi, dato $\beta_j$, è facile calcolare $\alpha_j$. Poiché $\beta_{j+1}=\beta_j \alpha^{-a_jq^j}$, possiamo calcolare $a_0,\beta_1,a_1, \dots, \beta_{c-1}, a_{c-1}$.
 
-%Scritto algoritmo 
-%\input{algorithms/pohlig_hellman.tex} 
-
-%da fare
+\input{algorithms/pohlig_hellman.tex} 
 
 \paragraph{Metodo Index Calculus}
 Gli algoritmi precedenti possono essere applicati a qualsiasi gruppo, il metodo dell'index calculus è applicato ai gruppi ${\mathbb{Z}_p}^*$ con $p$ primo e $\alpha$ è una primitiva modulo $p$, poiché specifico, l'algoritmo è generalmente più veloce. L'algoritmo è simile ad algoritmi di fattorizzazione, fa uso di una base di piccoli fattori primi $B = \{p_1,\dots,p_b\}$ chiamata \textbf{base di fattori} e opera come segue:
