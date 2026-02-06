@@ -1,17 +1,35 @@
 \paragraph{Piccolo teorema di Fermat} Se $p$ è primo, allora, $\forall a$, 
 \[
-a^p \equiv a \pmod p.
-\]
-Equivalentemente, se $p$ è primo e $a$ è coprimo con $p$, ovvero $\gcd (a,p)=1$, allora 
-\[a^{p-1} \equiv 1 \pmod p.
-\] 
+    a^p \equiv a \pmod p.
+    \]
+    Equivalentemente, se $p$ è primo e $a$ è coprimo con $p$, ovvero $\gcd (a,p)=1$, allora 
+    \[a^{p-1} \equiv 1 \pmod p.
+    \] 
+    
+    % (Tale teorema è alla base del test di primalità.) 
+
+\begin{proof} (Dimostrazione come corollario del teorema di Lagrange sui gruppi)\\
+    Essendo $p$ primo, gli interi da $1$ a $p-1$, quindi escluso lo zero, formano un gruppo moltiplicativo $G \pmod p$, ovvero $(\mathbb{Z}_p^*, \cdot)$, avente come elemento identità il numero $1$. \\ L'ordine del gruppo ($\#$ elementi) è pari a $n-1$. \\ L'ordine di un elemento qualsiasi nel gruppo, $a \in G$, è il più piccolo esponente $i$ tale che $a^i$ sia l'identità. \\ Ma, dal teorema di Lagrange sui gruppi, l'ordine dell'elemento deve dividere l'ordine del gruppo. \\ Ciò significa che $a^{p-1} \equiv 1 \pmod p$ e che l'esponente deve essere un multiplo di $p-1$. Quindi, elevando qualsiasi elemento del gruppo a $p-1$, si ottiene sempre $1 \pmod p$. 
+\end{proof}
 
 \paragraph{Generalizzazioni}
 \begin{itemize}
     \item se $p$ è primo e $n,m >0$ con $m \equiv n \pmod {p-1}$, allora, $\forall a$, $a^m \equiv a^n \pmod p$.
-    \item $\forall$ modulo $n, \forall a$, coprimo con $n$: $a^{\phi(n)} \equiv 1 \pmod n$, con $\phi(n)$ funzione di Eulero. (Teorema di Eulero) (Se $n=p$, con $p$ primo, $\phi(p)=p-1$; Se $n$ non è primo, $\phi(n)=n\prod_{p|n}(1-1/p)$, dove tutti i $p_i$ sono i primi, divisori di $n$) ($\phi(ab)=\phi(a)\phi(b)$). 
+    \item \textbf{Teorema di Eulero} $\forall$ modulo $n$, e $ \forall a$, coprimo con $n$: $a^{\phi(n)} \equiv 1 \pmod n$.
 \end{itemize}
 
+\paragraph{Corollario} Se $a \in \mathbb{Z}_n^*$, allora $a^{\phi(n)} \equiv 1 \pmod n$. \label{Corollario1}
 
+\begin{proof}
+    $\mathbb{Z}_n^*$ è un gruppo moltiplicativo di ordine $n$.
+\end{proof}
 
-% (Tale teorema è alla base del test di primalità.) 
+\paragraph{Corollario (Fermat)} Sia $p$ primo e $a \in \mathbb{Z}_p$. Allora $a^p \equiv a \pmod p$. 
+
+\begin{proof}
+    Se $p$ è primo, allora $\phi(p)=p-1$. Quindi:
+    \begin{itemize}
+        \item per $b \not \equiv 0 \pmod p$, il risultato deriva da \ref{Corollario1}
+        \item per $b \equiv 0 \pmod p$, poiché $0^p \equiv 0 \pmod p$, è vero.
+    \end{itemize}
+\end{proof}
