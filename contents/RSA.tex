@@ -201,7 +201,7 @@ I valori $n$ e $b$ costituiscono la chiave pubblica, $p,q, a$ formano la chiave 
             \item La chiave pubblica è $(n,b)$ e la chiave privata è $(p,q,a)$.  
     \end{enumerate}
 
-    Affinché il crittosistema RSA sia sicuro, è necessario scegliere $n=pq$ tanto grande, da rendere computazionalmente impossibile la sua fattorizzazione. Attualmente, si consiglia di scegliere $p,q$ a $1024$ bit, cosicché $n$ ne abbia $2048$. 
+    Affinché il crittosistema RSA sia sicuro, è necessario scegliere $n=pq$ tanto grande, da rendere computazionalmente impossibile la sua fattorizzazione. Attualmente, si consiglia di scegliere $p,q$ a $1024$ bit, cosicché $n$ ne abbia $2048$. Trovare numeri primi grandi non è un compito banale, per ora supponiamo di averne già alcuni a disposizione.
     
     \vspace{1em}\noindent 
     Supponiamo che $x$ e $y$ siano due interi con, rispettivamente, $k$ ed $\ell$ bit, con $k \geq \ell$:
@@ -232,9 +232,15 @@ I valori $n$ e $b$ costituiscono la chiave pubblica, $p,q, a$ formano la chiave 
             $m_0-m_1$ & $O(k)$\\
             $m_0 \cdot m_1$ & $O(k^2)$\\
             ${m_1}^{-1}$ & $O(k^3)$\\
-            $m_1^c$ & $O(k^2 \log c )$\\
+            ${m_1}^c$ & $O(k^2 \log c )$\\
             \hline
         \end{tabular}
     \caption{Tabella che confronta le complessità tra operazioni tra interi e tra elementi dell'anello $\mathbb{Z}_n$}.
     \label{tab:1}
     \end{table}
+
+Le complessità non sono minime, ma rappresentano un'idea generale. Si spiegano più precisamente alcuni risultati sopra elencati, $\gcd(x,y)$ può essere calcolato con l'algoritmo euclideo, di cui il numero di iterazioni è $O(k)$, ognuna con una divisione del costo di $O(k^2)$; il calcolo dell'inversa moltiplicativa ${m_1}^{-1}$ fa uso dell'algoritmo~euclideo~esteso pertanto la complessità rimane identica. Il calcolo della potenza modulare ${m_1}^c$, può essere fatto con un algoritmo chiamato \textit{square and multiply}, presentato di seguito.
+
+\input{algorithms/square_and_multiply.tex}
+
+È da specificare che, per semplicità, l'algoritmo \ref{alg:square_multiply} ha il parametro $c$ espresso in notazione binaria $c = \sum_{i=0}^{\ell - 1}c_i 2^i $.
