@@ -50,7 +50,7 @@ Per evitare che Alice e Bob si mettano d'accordo in anticipo su una chiave comun
 
 \subsection{Algoritmo Euclideo, Identità di Bézout e Teorema cinese del resto}
 \subsubsection{Algoritmo Euclideo}
-Si presenta ora l'algoritmo euclideo utilizzato per calcolare il valore $\gcd(a,b)$ per due dati interi. Si inizia impostando $r_0 = a$ e $r_1 = b$:
+Si presenta ora l'algoritmo euclideo utilizzato per calcolare il valore $\gcd(a,b)$ per due dati interi, $a,b$. Si inizia impostando $r_0 = a$ e $r_1 = b$:
 \[
     \begin{aligned}
         r_0 &= q_1 r_1 + r_2, \qquad 0 < r_2 < r_1\\
@@ -173,3 +173,32 @@ con $N_i = \frac{N}{n_i} e y_i = N_i^{-1}$.
     Poiché è sempre vero per $0\leq j \leq r$, $\rho$ è una soluzione al sistema di congruenze, modulo $N$. $\chi$ è quindi una funzione iniettiva, poiché ha un dominio di cardinalità $N$ in un codominio di cardinalità $N$. $\chi$ è una biezione e vale che $\chi^{-1} = \rho$.
     %da capire meglio
 \end{proof}
+
+\subsection{Crittosistema RSA} Sia $n=pq$, con $p,q$ primi. Sia $\mathcal{M}=\mathcal{C}=\mathbb{Z}_n$ e definiamo $\mathcal{K}=\{(n,p,q,a,b) : ab \equiv 1 \mod \phi(n)\}$. \\ Per $\mathcal{K}=(n,p,q,a,b)$, definiamo: 
+\[
+e_K(x)=x^b \pmod n \ \text{e} \ d_K(y)=y^a \pmod n \ \text{con} \ (x,y \in \mathbb{Z}_n). 
+\]
+I valori $n$ e $b$ costituiscono la chiave pubblica, $p,q, a$ formano la chiave privata. 
+
+
+\vspace{0.2cm} \noindent Verifichiamo ora che cifratura e decifratura sono operazioni inverse. \\ Poiché $ab \equiv 1 \mod \phi(n)$, si ha che $ab =  t \phi(n)+1$ per qualche $t \geq 1$. \\ Supponiamo che $x \in \mathbb{Z}_n^*$, allora abbiamo: 
+
+\begin{align*}
+    (x^b)^a &\equiv x^{t\phi(n)+1} \pmod n \\
+    &\equiv (x^{\phi(n)t})x \pmod n \\
+    &\equiv (1^t)x \pmod n \\
+    &\equiv x \pmod n 
+\end{align*} come richiesto. 
+
+
+
+\paragraph{Generazione dei parametri RSA} 
+    \begin{enumerate}
+            \item Siano $p,q$ due primi grandi diversi. 
+            \item $n \gets pq$ e $\phi(n) \gets (p-1)(q-1)$
+            \item Sceglii $b$ a caso $b(1<b<\phi(n))$ tale che $\gcd(b,\phi(n))=1$
+            \item $a \gets b^{-1} \pmod \phi(n)$
+            \item La chiave pubblica è $(n,b)$ e la chiave privata è $(p,q,a)$.  
+    \end{enumerate}
+
+    Affinché il crittosistema RSA sia sicuro, è necessario scegliere $n=pq$ tanto grande, da rendere computazionalmente impossibile la sua fattorizzazione. Attualmente, si consiglia di scegliere $p,q$ a $1024$ bit, cosicché $n$ ne abbia $2048$. \\ Supponiamo che $x$ e $y$,siano due interi con, rispettivamente, $k$ ed $l$ bit, con $k \geq l$.  Il $\gcd(x,y)$ può essere calcolato in $O(k^3)$. 
