@@ -35,15 +35,15 @@
 \end{proof}
 
 \subsection{Introduzione alla Crittografia Asimmetrica}
-Per evitare che Alice e Bob si mettano d'accordo in anticipo su una chiave comune, con il riscio di comunicare su un canale insicuro, nasce l'idea di crittografia a chiave pubblica. Alice usa una chiave pubblica $e_K$, conosciuta a chiunque per la cifratura, mentre Bob decifra con la sua chiave privata $d_K$, posseduta solo da lui. 
+Per evitare che Alice e Bob si mettano d'accordo in anticipo su una chiave comune, con il rischio di comunicare su un canale insicuro, nasce l'idea di crittografia a chiave pubblica. Alice usa una chiave pubblica $e_K$, conosciuta a chiunque per la cifratura, mentre Bob decifra con la sua chiave privata $d_K$, posseduta solo da lui. 
 
-\vspace{0.2cm} \noindent Un'osservazione è che tale tipo di crittografia non può mai fornire una sicurezza incondizionata, perché un avversario, osservando il ciphertext $y$, può cifrarlo usando $e_k$ finché non trova l'unica $x$ tale che $y=e_K(x)$.\\ Quindi decifrare dovrebbe essere difficile, tranne che per Bob.
+\vspace{0.2cm} \noindent Un'osservazione è che tale tipo di crittografia non può mai fornire una sicurezza incondizionata, perché un avversario, osservando il \emph{ciphertext} $y$, può cifrarlo usando $e_k$ finché non trova l'unica $x$ tale che $y=e_K(x)$.\\ Quindi decifrare dovrebbe essere difficile, tranne che per Bob.
 
 \vspace{0.2cm} \noindent Potremmo prendere funzioni facili da calcolare, ma difficili da invertire come funzioni ``one-way'' iniettive, ma non è sufficiente, perché Bob dovrebbe decifrare in modo efficiente. È necessario quindi che Bob possieda una ``trapdoor'', una conoscenza segreta aggiuntiva, ovvero $K$, che gli permetta di invertire facilmente $e_K$. \\ È utile specificare una famiglia di funzioni ``one-way trapdoor'' $\mathcal{F}$; una funzione $f \in \mathcal{F}$ viene scelta casualmente ed usata per la cifratura pubblica; l'inversa $f^{-1}$ è la privata. 
 
 %fatto paragrafo 6.1
 
-\subsection{Algoritmo Euclideo, Identità di Bezout e Teorema cinese del resto}
+\subsection{Algoritmo Euclideo, Identità di Bézout e Teorema cinese del resto}
 Si presenta ora l'algoritmo euclideo utilizzato per calcolare il valore $\gcd(a,b)$ per due dati interi. Si inizia impostando $r_0 = a$ e $r_1 = b$:
 \[
     \begin{aligned}
@@ -54,7 +54,7 @@ Si presenta ora l'algoritmo euclideo utilizzato per calcolare il valore $\gcd(a,
         r_{m-1} &= q_m r_m
     \end{aligned}
 \]
-Si presenta di seguito l'algoritmo iterato in cui si divide $r_{i-1}$ per $r_{i}$ per ogni $i=1,\dots,m$, dall'algoritmo è chiaro che:
+di seguito l'algoritmo iterato divide $r_{i-1}$ per $r_{i}$ per ogni $i=1,\dots,m$, è chiaro che:
 \[
 \gcd(r_0,r_1) = \gcd(r_1,r_2) = \ldots = \gcd(r_{m-1},r_m) = r_m
 \] 
