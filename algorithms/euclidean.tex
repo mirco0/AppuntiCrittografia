@@ -1,0 +1,19 @@
+\vspace{1em}
+\begin{algorithm}[H]
+    \SetAlgoVlined
+    \SetAlgoLined
+    \caption{Algoritmo Euclideo($a,b$)}
+    \label{alg:euclideo}
+
+    $r_0 \gets a$\;
+    $r_1 \gets b$\;
+    $m \gets 1$\;
+    
+    \While{$r_m \neq 0$}{
+        $q_m \gets \lfloor \frac{r_m -1}{r_m} \rfloor$\;
+        $q_{m+1} \gets r_m -1 - q r_m$\;
+        $m \gets  m + 1 $\;
+    }
+    \Return{$(q_1,\dots,q_m;r_m)$}\;
+\end{algorithm}
+\vspace{1em}

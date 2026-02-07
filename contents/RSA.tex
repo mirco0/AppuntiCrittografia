@@ -44,3 +44,22 @@ Per evitare che Alice e Bob si mettano d'accordo in anticipo su una chiave comun
 %fatto paragrafo 6.1
 
 \subsection{Algoritmo Euclideo, Identità di Bezout e Teorema cinese del resto}
+Si presenta ora l'algoritmo euclideo utilizzato per calcolare il valore $\gcd(a,b)$ per due dati interi. Si inizia impostando $r_0 = a$ e $r_1 = b$:
+\begin{align*}
+    r_0 &= q_1r_1+r_2, \qquad 0 < r_2 < r_1\\
+    r_1 &= q_2r_2+r_3, \qquad 0 < r_3 < r_2\\
+    \quad \vdots & \quad \vdots  \quad \vdots \\
+    r_{m-2} &= q_{m-1}r_{m-1} + r_m, \qquad 0 < r_m < r_{m-1}\\
+    r_{m-1} &= q_{m}r_{m}. &
+\end{align*}
+
+Si presenta di seguito l'algoritmo iterato in cui si divide $r_{i-1}$ per $r_{i}$ per ogni $i=1,\dots,m$, dall'algoritmo è chiaro che 
+\[
+\gcd(r_0,r_1) = \gcd(r_1,r_2) = \ldots = \gcd(r_{m-1},r_m) = r_m
+\] 
+
+\input{algorithms/euclidean.tex}
+
+
+
+% l'inversa moltiplicativa degli elementi in ${\mathbb{Z}_n}^*$. 
