@@ -1,4 +1,5 @@
-\paragraph{Piccolo teorema di Fermat} Se $p$ è primo, allora, $\forall a$, 
+\begin{theorem}[Piccolo teorema di Fermat]
+Se $p$ è primo, allora, $\forall a$, 
 \[
     a^p \equiv a \pmod p.
     \]
@@ -6,8 +7,8 @@
     \[a^{p-1} \equiv 1 \pmod p.
     \] 
     
-    % (Tale teorema è alla base del test di primalità.) 
-
+\end{theorem}
+% (Tale teorema è alla base del test di primalità.) 
 \begin{proof} (Dimostrazione come corollario del teorema di Lagrange sui gruppi)\\
     Essendo $p$ primo, gli interi da $1$ a $p-1$, quindi escluso lo zero, formano un gruppo moltiplicativo $G \pmod p$, ovvero $(\mathbb{Z}_p^*, \cdot)$, avente come elemento identità il numero $1$. \\ L'ordine del gruppo ($\#$ elementi) è pari a $n-1$. \\ L'ordine di un elemento qualsiasi nel gruppo, $a \in G$, è il più piccolo esponente $i$ tale che $a^i$ sia l'identità. \\ Ma, dal teorema di Lagrange sui gruppi, l'ordine dell'elemento deve dividere l'ordine del gruppo. \\ Ciò significa che $a^{p-1} \equiv 1 \pmod p$ e che l'esponente deve essere un multiplo di $p-1$. Quindi, elevando qualsiasi elemento del gruppo a $p-1$, si ottiene sempre $1 \pmod p$. 
 \end{proof}
@@ -18,7 +19,9 @@
     \item \textbf{Teorema di Eulero} $\forall$ modulo $n$, e $ \forall a$, coprimo con $n$: $a^{\phi(n)} \equiv 1 \pmod n$.
 \end{itemize}
 
-\paragraph{Corollario} Se $a \in \mathbb{Z}_n^*$, allora $a^{\phi(n)} \equiv 1 \pmod n$. \label{Corollario1}
+\begin{corollary}
+    Se $a \in \mathbb{Z}_n^*$, allora $a^{\phi(n)} \equiv 1 \pmod n$. \label{Corollario1}
+\end{corollary}
 
 \begin{proof}
     $\mathbb{Z}_n^*$ è un gruppo moltiplicativo di ordine $n$.

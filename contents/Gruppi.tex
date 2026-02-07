@@ -1,94 +1,132 @@
-\paragraph{Gruppo} Un gruppo è una coppia $G=(X,\star)$, dove $G$ è un insieme e $\star$ un'operazione binaria definita su $X$. L'operazione $\star$ è:
+\begin{definition}[Gruppo]
+    Un gruppo è una coppia $G=(X,\star)$, dove $G$ è un insieme e $\star$ un'operazione binaria definita su $X$. L'operazione $\star$ è:
 \begin{itemize}
     \item associativa: $(a\star)\star c=a\star (b \star c)$, per qualche $a,b,c \in X$
     \item $id \in X$ è l'elemento \textit{identità} tale che: $a \star id=id \star a=a$ per qualche $a \in X$
-    \item $\forall a \in X \ \exists b \in X$ detta \textit{inversa} di $a$, tale che $a \star b = b\ star a= id$.
+    \item $\forall a \in X \ \exists b \in X$ detta \textit{inversa} di $a$, tale che $a \star b = b\ \star a= id$.
 \end{itemize} 
+\end{definition}
 
-\subparagraph{Gruppo Additivo} L'operazione $\star$ è l'addizione; $id$ è $0$; l'\textit{inversa} di $a$ è $-a$.
+\begin{definition}[Gruppo Additivo] L'operazione $\star$ è l'addizione; $id$ è $0$; l'\textit{inversa} di $a$ è $-a$.
+\end{definition}
 
-\subparagraph{Gruppo Moltiplicativo}L'operazione $\star$ è il prodotto; $id$ è $1$; l'\textit{inversa} di $a$ è $a^{-1}$.
+\begin{definition}[Gruppo Moltiplicativo]
+    L'operazione $\star$ è il prodotto; $id$ è $1$; l'\textit{inversa} di $a$ è $a^{-1}$.
+\end{definition}
 
-\paragraph{Gruppo abeliano} Un gruppo $G=(X,\star)$ è abeliano se $\star$ è commutativa: $a \star b=b \star a$. 
+\begin{definition}[Gruppo abeliano]
+    Un gruppo $G=(X,\star)$ è abeliano se $\star$ è commutativa: $a \star b=b \star a$. 
+\end{definition}
 
-\paragraph{Gruppo finito} Un gruppo $G=(X,\star)$ è finito se $X$ è un insieme finito. 
+\begin{definition}[Gruppo finito]
+     Un gruppo $G=(X,\star)$ è finito se $X$ è un insieme finito. 
+\end{definition}
 
-\paragraph{Ordine di un gruppo} L'ordine di un gruppo $G=(X,\star)$, scritto ord$(G)$, è il numero di elementi, ovvero ord$(G)=|X|$. 
+\begin{definition}[Ordine di un gruppo]
+    L'ordine di un gruppo $G=(X,\star)$, scritto $\ord(G)$, è il numero di elementi, ovvero $\ord(G)=|X|$. 
+\end{definition}
 
+\begin{definition}[Gruppo additivo $\mathbb{Z}_n$] 
+    Sia $n\geq 2$. Il gruppo $G=(\mathbb{Z}_n,+)$ è un gruppo abeliano finito di ordine $n$, con l'addizione $+$ modulo $n$. L'identità \textit{id} è $0$, l'\textit{inversa} di $a$ è $(-a) \pmod n$. Se $a=1, \dots, n-1$, allora $-a \pmod n=n-a$.
+\end{definition}
 
-\paragraph{Gruppo additivo $\mathbb{Z}_n$} Sia $n\geq 2$. Il gruppo $G=(\mathbb{Z}_n,+)$ è un gruppo abeliano finito di ordine $n$, con l'addizione $+$ modulo $n$. L'identità \textit{id} è $0$, l'\textit{inversa} di $a$ è $(-a) \pmod n$. Se $a=1, \dots, n-1$, allora $-a \pmod n=n-a$.
+\begin{definition}[Gruppo moltiplicativo $\mathbb{Z}_p$]
+    Sia $p\geq 2$ un primo. Sia $\mathbb{Z}_p^*=\mathbb{Z}\setminus\{0\}$. Il gruppo $G=(\mathbb{Z}_p^*,\cdot)$ è un gruppo abeliano finito di ordine $p-1$, col prodotto $\cdot$ modulo $p$. L'identità \textit{id} è $1$, l'\textit{inversa} di $a$ è $a^{-1}$. \\
+    
+    $\mathbb{Z}_n^*=\mathbb{Z}_n \setminus \{ d \in \mathbb{Z}_n : \gcd(d,n) > 1\}$. \\ L'ordine di $\mathbb{Z}_n^*$ è $\phi(n)$. 
+\end{definition}
 
-\paragraph{Gruppo moltiplicativo $\mathbb{Z}_p$} Sia $p\geq 2$ un primo. Sia $\mathbb{Z}_p^*=\mathbb{Z}\setminus\{0\}$. Il gruppo $G=(\mathbb{Z}_p^*,\cdot)$ è un gruppo abeliano finito di ordine $p-1$, col prodotto $\cdot$ modulo $p$. L'identità \textit{id} è $1$, l'\textit{inversa} di $a$ è $a^{-1}$. \\
-$\mathbb{Z}_n^*=\mathbb{Z}_n \setminus \{ d \in \mathbb{Z}_n : \gcd(d,n) > 1\}$. \\ L'ordine di $\mathbb{Z}_n^*$ è $\phi(n)$. 
+\begin{definition}[Funzione di Eulero]
+    Per $n \geq 2$, $\phi(n)$ è il numero di interi positivi, minori di $n$, coprimi con $n$.  
+\end{definition}
 
-\paragraph{Funzione di Eulero} Per $n \geq 2$, $\phi(n)$ è il numero di interi positivi, minori di $n$, coprimi con $n$.  
-
-\subparagraph{Teorema di Eulero} $\phi(n)$ può essere calcolato così: la \textbf{fattorizzazione} di $n$ è:
-\[
-n=\prod_{i=1}^{l}p_i^{e_i}, 
-\] 
-
-dove $p_i$ sono i primi, divisori distinti di $n$, ed $e_i \geq 1 $ per $i=1, \dots, l$. Allora 
-\[
-\phi(n)=\prod_{i=1}^{l}p_i^{e_i}-p_i(e_i-1)=n\prod_{p_i|n}(1-1/p_i).
-\]
+\begin{theorem}[Teorema di Eulero]
+    $\phi(n)$ può essere calcolato così: la \textbf{fattorizzazione} di $n$ è:
+    \[
+    n=\prod_{i=1}^{l}p_i^{e_i}, 
+    \] 
+    
+    dove $p_i$ sono i primi, divisori distinti di $n$, ed $e_i \geq 1 $ per $i=1, \dots, l$. Allora 
+    \[
+    \phi(n)=\prod_{i=1}^{l}p_i^{e_i}-p_i(e_i-1)=n\prod_{p_i|n}(1-1/p_i).
+    \]
+\end{theorem} 
 
 (Proprietà: $\phi(ab)=\phi(a)\phi(b)$, con $a,b$ divisori di $n$). 
 
-\subparagraph{Corollario Teorema di Eulero} 
-\begin{itemize}
-    \item Se $p$ è primo, allora $\phi(p)=p-1$
-    \item Se $p$ è primo, allora $\phi(p^e)=p^e-p^{e-1}$
-    \item Se $p_1, \dots, p_l$ sono primi distinti, allora $\phi(\prod_{i=1}^{l}p_i)=\prod_{i=1}^{l}(p_i-1)$.
-\end{itemize}
+\begin{corollary} 
+    \begin{itemize}
+        \item Se $p$ è primo, allora $\phi(p)=p-1$
+        \item Se $p$ è primo, allora $\phi(p^e)=p^e-p^{e-1}$
+        \item Se $p_1, \dots, p_l$ sono primi distinti, allora $\phi(\prod_{i=1}^{l}p_i)=\prod_{i=1}^{l}(p_i-1)$.
+    \end{itemize}
+\end{corollary}
 
-\paragraph{Ordine di un elemento} Per un gruppo finito $G=(X, \star)$, l'\textit{ordine} di un elemento $a \in X$, scritto $ord(a)$, è il più piccolo intero positivo $i$, tale che 
-\[
-\underbrace{a \star a \star \dots \star a}_{i} = id.
-\]
+\begin{definition}[Ordine di un elemento]
+    Per un gruppo finito $G=(X, \star)$, l'\textit{ordine} di un elemento $a \in X$, scritto $ord(a)$, è il più piccolo intero positivo $i$, tale che 
+   \[
+   \underbrace{a \star a \star \dots \star a}_{i} = id.
+   \]
 
-Se il gruppo è moltiplicativo: $a^i$; 
+\end{definition}
 
+Se il gruppo è moltiplicativo: $a^i$;
 Se il gruppo è additivo: $i \cdot a$. Infatti in $(\mathbb{Z}_n, +)$ l'elemento $1$ ha ordine $n$. 
 
-\paragraph{Teorema di Lagrange (ordine di un elemento)} \label{TeoLagrangeGruppi} Sia $G=(X, \star)$ un gruppo moltiplicativo di ordine $n$, e sia $g \in G$ un suo elemento. Allora l'ordine di ogni elemento $g$ divide l'ordine del gruppo $G$, ovvero \textbf{ord}(a) $|n$.
+\begin{theorem}[Teorema di Lagrange (ordine di un elemento)]
+    \label{TeoLagrangeGruppi} Sia $G=(X, \star)$ un gruppo moltiplicativo di ordine $n$, e sia $g \in G$ un suo elemento. Allora l'ordine di ogni elemento $g$ divide l'ordine del gruppo $G$, ovvero $\ord(a) |n$.
+\end{theorem}
 
 \begin{proof}
 \end{proof}
 % non viene dimostrato nello Stinson, su wikipedia usa concetto di classi laterali :|
 
+\begin{theorem}
+    In un gruppo finito moltiplicativo $G=(X, \cdot)$, $\forall a \in X$, l'ordine di $b=a^i$ è:
+    \[
+        \ord(b)=\frac{\ord(a)}{\gcd(\ord(a)}, i).
+    \]
+\end{theorem} 
 
-\paragraph{Teorema} In un gruppo finito moltiplicativo $G=(X, \cdot)$, $\forall a \in X$, l'ordine di $b=a^i$ è:
-\[
-\text{ord(b)}=\frac{\text{ord(a)}}{\gcd(\text{ord(a)}, i)}.
-\]
+\begin{corollary}
+     Nel gruppo $G=(X, +)$, l'elemento $b$ ha ordine $n/\gcd(n,b)$.
+\end{corollary}
 
-\subparagraph{Corollario} Nel gruppo $G=(X, +)$, l'elemento $b$ ha ordine $n/\gcd(n,b)$.
-
-
-\paragraph{Gruppo ciclico} Un gruppo abeliano finito $G=(X,\star)$ è un gruppo ciclico se esiste un elemento $a$ tale che ord($a$)=$|X|$. $a$ è detto \textbf{generatore} del gruppo. 
+\begin{definition}[Gruppo Ciclico]
+    Un gruppo abeliano finito $G=(X,\star)$ è un gruppo ciclico se esiste un elemento $a$ tale che $\ord(a)=|X|$. $a$ è detto \textbf{generatore} del gruppo. 
+\end{definition} 
 
 \vspace{0.2cm}
 Infatti in $(\mathbb{Z}_n, +)$, con $n \geq 2$, l'elemento $1$ è un generatore. Poiché un elemento $a$ è un generatore se e solo se $\gcd(a,n)=1$, il numero di tutti i generatori di $(\mathbb{Z}_n, +)$ è $\phi(n)$.
 
 Invece, $(\mathbb{Z}_p^*, \cdot)$, con $p \geq 2$ un primo, è un gruppo ciclico di ordine $(p-1)$ e un generatore di questo gruppo è detto \textbf{elemento primitivo} modulo $p$. Il numero di elementi primitivi è $\phi(p-1)=\phi(\phi(p))$. 
 
-\paragraph{Teorema} Se $p$ è primo, allora $\mathbb{Z}_p^*$ è un gruppo ciclico. \\ In altre parole, $\exists g\in \mathbb{Z}_p^*$ generatore tale che $\mathbb{Z}_p^*=\{1,g,g^2,g^3,\dots,g^{p-2}\}$. \\ Se la fattorizzazione di $p-1$ è conosciuta allora è un semplice determinare l'ordine di ogni singolo elemento in $\mathbb{Z}_p^*$.
+\begin{theorem}
+    Se $p$ è primo, allora $\mathbb{Z}_p^*$ è un gruppo ciclico. \\ In altre parole, $\exists g\in \mathbb{Z}_p^*$ generatore tale che $\mathbb{Z}_p^*=\{1,g,g^2,g^3,\dots,g^{p-2}\}$. \\ Se la fattorizzazione di $p-1$ è conosciuta allora è un semplice determinare l'ordine di ogni singolo elemento in $\mathbb{Z}_p^*$.
+\end{theorem}
 
-\paragraph{Sottogruppo} Sia $G=(X,\star)$ un gruppo finito e $Y \in X$. $H=(Y,\star)$ è un sottogruppo di G se anche H è un gruppo finito. 
+\begin{definition}[Sottogruppo]
+    Sia $G=(X,\star)$ un gruppo finito e $Y \in X$. $H=(Y,\star)$ è un sottogruppo di $G$ se anche $H$ è un gruppo finito. 
+\end{definition} 
 
-\paragraph{Teorema} Sia G=(X,$\star$) un gruppo finito e sia Y $\in X$. Allora H=(Y,$\star$) è un sottogruppo di G $\iff$ è chiuso, ovvero $h_1 \star h_2 \in H \ \ \forall h_1, h_2 \in H$.  
+\begin{theorem}
+    Sia $G=(X,\star$) un gruppo finito e sia $Y \in X$. Allora $H=(Y,\star$) è un sottogruppo di $G \iff$ è chiuso, ovvero $h_1 \star h_2 \in H \ \ \forall h_1, h_2 \in H$.  
+\end{theorem} 
 
+\begin{definition}
+    Sia $G=(X,\star)$ e sia $a \in X$. Allora è facile vedere che il gruppo $(\langle a\rangle, \star)$ è un sottogruppo di $G$, dove l'ordine($\langle a\rangle$)$=\ord(a)$, ovvero l'ordine dell'elemento $a$ (per il gruppo $X$) coincide con l'ordine del (sottogruppo) gruppo generato da $a$ $(\ord(\langle a \rangle))$.
+\end{definition}
 
-\paragraph{Def} Sia $G=(X,\star)$ e sia $a \in X$. Allora è facile vedere che il gruppo $(\langle a\rangle, \star)$ è un sottogruppo di G, dove l'ordine($\langle a\rangle$)$=$ord(a), ovvero l'ordine dell'elemento $a$ (per il gruppo X) coincide con l'ordine del (sottogruppo) gruppo generato da $a$.
+\begin{theorem}[Teorema di Lagrange (ordine di un sottogruppo)]
+    Vista la definizione sopra, \ref{TeoLagrangeGruppi} si può riscrivere anche così:\\ Sia $H=(Y,\star)$ un sottogruppo di $G=(X,\star)$. Allora $\ord(H)|\ord(G)$. 
+\end{theorem}
 
-\paragraph{Teorema di Lagrange (ordine di un sottogruppo)} Vista la definizione sopra, \ref{TeoLagrangeGruppi} si può riscrivere anche così:\\ Sia $H=(Y,\star)$ un sottogruppo di $G=(X,\star)$. Allora ord(H)$|$ord(G). 
-
-\paragraph{Teorema Fondamentale sui gruppi ciclici} Sia $G=(X,\star)$ un gruppo finito di ordine $n$ e sia $a$ un generatore di G. Sia $d$ è un divisore di $n$. Allora, per ogni divisore $d$, esiste un unico sottogruppo di $G$ avente ordine $d$, ovvero:
-\[
-\qquad |\langle a^{n/d} \rangle| = d.
+\begin{theorem}[Teorema Fondamentale sui gruppi ciclici] 
+    Sia $G=(X,\star)$ un gruppo finito di ordine $n$ e sia $a$ un generatore di $G$. Sia $d$ è un divisore di $n$. Allora, per ogni divisore $d$, esiste un unico sottogruppo di $G$ avente ordine $d$, ovvero:
+    \[
+    \qquad |\langle a^{n/d} \rangle| = d.
 \]
-
+\end{theorem}
 
 %forse togliere tutti i \mathcal per gli insiemi
 % fatta da pagina 528 a pagina 533 Stinson + aggiunti altri teo da fuori; fatta anche paragrafo 6.2.3 Stinson, riprendere per RSA direttamente (anche paragrafo prima )
