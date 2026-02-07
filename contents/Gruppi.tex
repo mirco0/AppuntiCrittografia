@@ -67,7 +67,7 @@
 \end{corollary}
 
 \begin{definition}[Ordine di un elemento]
-    Per un gruppo finito $G=(X, \star)$, l'\textit{ordine} di un elemento $a \in X$, scritto $ord(a)$, è il più piccolo intero positivo $i$, tale che 
+    Per un gruppo finito $G=(X, \star)$, l'\textit{ordine} di un elemento $a \in X$, scritto $\ord(a)$, è il più piccolo intero positivo $i$, tale che 
    \[
    \underbrace{a \star a \star \dots \star a}_{i} = id.
    \]
@@ -88,12 +88,12 @@ Se il gruppo è additivo: $i \cdot a$. Infatti in $(\mathbb{Z}_n, +)$ l'elemento
 \begin{theorem}
     In un gruppo finito moltiplicativo $G=(X, \cdot)$, $\forall a \in X$, l'ordine di $b=a^i$ è:
     \[
-        \ord(b)=\frac{\ord(a)}{\gcd(\ord(a)}, i).
+        \ord(b)=\frac{\ord(a)}{\gcd(\ord(a), i)}.
     \]
 \end{theorem} 
 
 \begin{corollary}
-     Nel gruppo $G=(X, +)$, l'elemento $b$ ha ordine $n/\gcd(n,b)$.
+     Nel gruppo $G=(X, +)$, l'elemento $b$ ha ordine $\frac{n}{\gcd(n,b)}$.
 \end{corollary}
 
 \begin{definition}[Gruppo Ciclico]
@@ -122,7 +122,7 @@ Invece, $({\mathbb{Z}_p}^*, \cdot)$, con $p \geq 2$ un primo, è un gruppo cicli
 \end{definition}
 
 \begin{theorem}[Teorema di Lagrange (ordine di un sottogruppo)]
-    Vista la definizione sopra, \ref{TeoLagrangeGruppi} si può riscrivere anche così:\\ Sia $H=(Y,\star)$ un sottogruppo di $G=(X,\star)$. Allora $\ord(H)|\ord(G)$. 
+    Vista la definizione sopra (\ref{TeoLagrangeGruppi}), si può riscrivere anche così:\\ Sia $H=(Y,\star)$ un sottogruppo di $G=(X,\star)$. Allora $\ord(H)|\ord(G)$. 
 \end{theorem}
 
 \begin{theorem}[Teorema Fondamentale sui gruppi ciclici] 
