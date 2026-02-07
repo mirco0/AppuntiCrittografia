@@ -124,9 +124,8 @@ Con questo corollario è possibile definire l'\emph{algoritmo euclideo esteso}, 
 
 
 \begin{theorem}[Teorema Cinese del resto]
-    Siano $n_1,\dots,n_r$ numeri primi tra loro, allora il sistema (\ref{eq:2}) 
+    Siano $n_1,\dots,n_r$ numeri primi tra loro, allora il sistema
     \begin{equation}
-        \label{eq:2}
         \begin{cases}
             x \equiv a_1 \mod n_1\\
             x \equiv a_2 \mod n_2\\
@@ -163,7 +162,7 @@ con $N_i = \frac{N}{n_i} e y_i = N_i^{-1}$.
     \]
     per cui nella funzione $\rho$, i termini con $n_j$ restano, mentre tutti gli altri si annullano
     \begin{align*}        
-        \rho(a_1,\dots,a_r) &\equiv \sum_{i=1}^{r} a_i N_i y_i \mod n_j 
+        \rho(a_1,\dots,a_r) &\equiv \sum_{i=1}^{r} a_i N_i y_i \mod n_j\\
         &\equiv a_j \pmod{n_j}. 
     \end{align*}
     Poiché è sempre vero per $0\leq j \leq r$, $\rho$ è una soluzione al sistema di congruenze, modulo $N$. $\chi$ è quindi una funzione iniettiva, poiché ha un dominio di cardinalità $N$ in un codominio di cardinalità $N$. $\chi$ è una biezione e vale che $\chi^{-1} = \rho$.
