@@ -44,6 +44,7 @@ Per evitare che Alice e Bob si mettano d'accordo in anticipo su una chiave comun
 %fatto paragrafo 6.1
 
 \subsection{Algoritmo Euclideo, Identità di Bézout e Teorema cinese del resto}
+\subsubsection{Algoritmo Euclideo}
 Si presenta ora l'algoritmo euclideo utilizzato per calcolare il valore $\gcd(a,b)$ per due dati interi. Si inizia impostando $r_0 = a$ e $r_1 = b$:
 \[
     \begin{aligned}
@@ -121,3 +122,38 @@ Con questo corollario è possibile definire l'\emph{algoritmo euclideo esteso}, 
 
 \input{algorithms/multiplicative_inverse.tex}
 
+
+\begin{theorem}[Teorema Cinese del resto]
+    Siano $n_1,\dots,n_r$ numeri primi tra loro, allora il sistema (\ref{eq:2}) 
+    \begin{equation}
+        \label{eq:2}
+        \begin{cases}
+            x \equiv a_1 \mod n_1\\
+            x \equiv a_2 \mod n_2\\
+            \ \vdots \qquad \vdots\\
+            x \equiv a_r \mod n_r
+        \end{cases}
+    \end{equation}
+ha soluzione unica modulo $N = n_1 \cdot n_r$, data dalla formula 
+\[
+    x = \sum_{i=1}^{r}a_i \frac{N_i} y_i \mod N
+\]
+con $N_i = \frac{N}{n_i} e y_i = N_i^{-1}$.
+\end{theorem}
+\begin{proof}
+    Si definisce una funzione $\chi: \mathbb{Z}_n \to \mathbb{Z}_{n_1} \times \cdots \times \cdots \mathbb{Z}_{r}$ chiamata funzione di proiezione, che, per una data sequenza $n_1,\dots,n_r$, e un valore $x$ restituisce una tupla con $r$ elementi:
+    \[
+        \chi(x) = (x \mod n_1, \dots, x \mod n_r),
+    \]
+    
+    si vuole dimostrare che la funzione $\chi$ è una biezione, per $1 \leq i \leq r$ 
+    \begin{equation*}
+        N_i := \frac{N}{n_i} \implies \gcd(N_i,n_i) = 1\\
+    \end{equation*}
+    per cui $N_i$ ha un inversa moltiplicativa modulo $n_i$, ovvero $y_i = {N_i}^{-1} \mod n_i$. Si definisce ora una funzione $\rho:\mathbb{Z}_{n_1} \times \cdots \times \cdots \mathbb{Z}_{r} \to \mathbb{Z}_n$, che al contrario di $\chi$ da una tupla di $r$ elementi modulo $n_i$ restituisce un elemento in $\mathbb{Z}_N$:
+    \[
+        \rho(a_1,\dots,a_r) = \sum_{i=1}^{r}a_i M_i y_i \mod N
+    \]
+
+    %TODO: finire pagina 194 S.P.
+\end{proof}
