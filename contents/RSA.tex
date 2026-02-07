@@ -40,7 +40,7 @@ Se $p$ è primo, allora, per ogni $a$,
 \end{proof}
 
 \subsection{Introduzione alla Crittografia Asimmetrica}
-Per evitare che Alice e Bob si mettano d'accordo in anticipo su una chiave comune, con il rischio di comunicare su un canale insicuro, nasce l'idea di crittografia a chiave pubblica. Alice usa una chiave pubblica $e_K$, disponibile a chiunque per la cifratura, mentre Bob decifra con la sua chiave privata $d_K$, posseduta solo da lui. 
+Per evitare che Alice e Bob si mettano d'accordo in anticipo su una chiave comune, con il rischio di comunicare su un canale insicuro, nasce l'idea di crittografia a chiave pubblica. Alice usa una chiave pubblica $e_K$, disponibile a chiunque per la cifratura, mentre Bob decifra con la sua chiave privata $d_K$, posseduta solo da lui.
 
 \vspace{0.2cm} \noindent Un'osservazione è che tale tipo di crittografia non può mai fornire una sicurezza incondizionata, perché un avversario, osservando il \emph{ciphertext} $y$, può cifrarlo usando $e_k$ finché non trova l'unica $x$ tale che $y=e_K(x)$.\\ Quindi decifrare dovrebbe essere difficile, tranne che per Bob.
 
@@ -196,9 +196,45 @@ I valori $n$ e $b$ costituiscono la chiave pubblica, $p,q, a$ formano la chiave 
     \begin{enumerate}
             \item Siano $p,q$ due primi grandi diversi. 
             \item $n \gets pq$ e $\phi(n) \gets (p-1)(q-1)$
-            \item Sceglii $b$ a caso $b(1<b<\phi(n))$ tale che $\gcd(b,\phi(n))=1$
+            \item Scegli $b$ a caso $b(1<b<\phi(n))$ tale che $\gcd(b,\phi(n))=1$
             \item $a \gets b^{-1} \pmod \phi(n)$
             \item La chiave pubblica è $(n,b)$ e la chiave privata è $(p,q,a)$.  
     \end{enumerate}
 
-    Affinché il crittosistema RSA sia sicuro, è necessario scegliere $n=pq$ tanto grande, da rendere computazionalmente impossibile la sua fattorizzazione. Attualmente, si consiglia di scegliere $p,q$ a $1024$ bit, cosicché $n$ ne abbia $2048$. \\ Supponiamo che $x$ e $y$,siano due interi con, rispettivamente, $k$ ed $l$ bit, con $k \geq l$.  Il $\gcd(x,y)$ può essere calcolato in $O(k^3)$. 
+    Affinché il crittosistema RSA sia sicuro, è necessario scegliere $n=pq$ tanto grande, da rendere computazionalmente impossibile la sua fattorizzazione. Attualmente, si consiglia di scegliere $p,q$ a $1024$ bit, cosicché $n$ ne abbia $2048$. 
+    
+    \vspace{1em}\noindent 
+    Supponiamo che $x$ e $y$ siano due interi con, rispettivamente, $k$ ed $\ell$ bit, con $k \geq \ell$:
+    \begin{align*}
+        x = \underbrace{{1,0,\dots,0,0}}_{k = \lfloor \log_2{x} \rfloor + 1} \quad y = \underbrace{{1,1,\dots,1,0}}_{\ell = \lfloor \log_2{y} \rfloor + 1}\\
+    \end{align*}
+    Da algoritmi banali è facile determinare le complessità delle operazioni, nella aritmetica modulare si ottiene un'analisi molto simile con le operazioni in $\mathbb{Z}_n $ e due elementi $0 \leq m_1,m_2 \leq n-1$, in cui $n$ è un intero a $k$ bit:
+
+    \begin{table}[h]
+        \centering
+        \begin{tabular}{|l|l|}
+            \hline
+            \textit{Operazione} & \textit{Costo}\\
+            \hline
+            $x + y$ & $O(k)$\\
+            $x-y$ & $O(k)$\\
+            $x \cdot y$ & $O(k \ell)$\\
+            $\lfloor \frac{x}{y} \rfloor$ & $O(\ell(k - \ell))$\\
+            $\gcd(x,y)$ & $O(k^3)$\\
+            \hline
+        \end{tabular}
+        \qquad 
+        \begin{tabular}{|l|l|}
+            \hline
+            \textit{Operazione} & \textit{Costo}\\
+            \hline
+            $m_0 + m_1$ & $O(k)$\\
+            $m_0-m_1$ & $O(k)$\\
+            $m_0 \cdot m_1$ & $O(k^2)$\\
+            ${m_1}^{-1}$ & $O(k^3)$\\
+            $m_1^c$ & $O(k^2 \log c )$\\
+            \hline
+        \end{tabular}
+    \caption{Tabella che confronta le complessità tra operazioni tra interi e tra elementi dell'anello $\mathbb{Z}_n$}.
+    \label{tab:1}
+    \end{table}
