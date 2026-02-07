@@ -31,9 +31,13 @@
 \end{definition}
 
 \begin{definition}[Gruppo moltiplicativo $\mathbb{Z}_p$]
-    Sia $p\geq 2$ un primo. Sia $\mathbb{Z}_p^*=\mathbb{Z}\setminus\{0\}$. Il gruppo $G=(\mathbb{Z}_p^*,\cdot)$ è un gruppo abeliano finito di ordine $p-1$, col prodotto $\cdot$ modulo $p$. L'identità \textit{id} è $1$, l'\textit{inversa} di $a$ è $a^{-1}$. \\
+    Sia $p\geq 2$ un primo. Sia ${\mathbb{Z}_p}^*=\mathbb{Z}\setminus\{0\}$. Il gruppo $G=({\mathbb{Z}_p}^*,\cdot)$ è un gruppo abeliano finito di ordine $p-1$, col prodotto modulo $p$. L'identità \textit{id} è $1$, l'\textit{inversa} di $a$ è $a^{-1}$. 
     
-    $\mathbb{Z}_n^*=\mathbb{Z}_n \setminus \{ d \in \mathbb{Z}_n : \gcd(d,n) > 1\}$. \\ L'ordine di $\mathbb{Z}_n^*$ è $\phi(n)$. 
+    \vspace{1em}
+    \[
+        \mathbb{Z}_n^*=\mathbb{Z}_n \setminus \{ d \in \mathbb{Z}_n : \gcd(d,n) > 1\}. 
+    \]
+    L'ordine di $\mathbb{Z}_n^*$ è $\phi(n)$. 
 \end{definition}
 
 \begin{definition}[Funzione di Eulero]
@@ -54,7 +58,7 @@
 
 (Proprietà: $\phi(ab)=\phi(a)\phi(b)$, con $a,b$ divisori di $n$). 
 
-\begin{corollary} 
+\begin{corollary}Si presenta un corollario
     \begin{itemize}
         \item Se $p$ è primo, allora $\phi(p)=p-1$
         \item Se $p$ è primo, allora $\phi(p^e)=p^e-p^{e-1}$
@@ -99,10 +103,10 @@ Se il gruppo è additivo: $i \cdot a$. Infatti in $(\mathbb{Z}_n, +)$ l'elemento
 \vspace{0.2cm}
 Infatti in $(\mathbb{Z}_n, +)$, con $n \geq 2$, l'elemento $1$ è un generatore. Poiché un elemento $a$ è un generatore se e solo se $\gcd(a,n)=1$, il numero di tutti i generatori di $(\mathbb{Z}_n, +)$ è $\phi(n)$.
 
-Invece, $(\mathbb{Z}_p^*, \cdot)$, con $p \geq 2$ un primo, è un gruppo ciclico di ordine $(p-1)$ e un generatore di questo gruppo è detto \textbf{elemento primitivo} modulo $p$. Il numero di elementi primitivi è $\phi(p-1)=\phi(\phi(p))$. 
+Invece, $({\mathbb{Z}_p}^*, \cdot)$, con $p \geq 2$ un primo, è un gruppo ciclico di ordine $(p-1)$ e un generatore di questo gruppo è detto \textbf{elemento primitivo} modulo $p$. Il numero di elementi primitivi è $\phi(p-1)=\phi(\phi(p))$. 
 
 \begin{theorem}
-    Se $p$ è primo, allora $\mathbb{Z}_p^*$ è un gruppo ciclico. \\ In altre parole, $\exists g\in \mathbb{Z}_p^*$ generatore tale che $\mathbb{Z}_p^*=\{1,g,g^2,g^3,\dots,g^{p-2}\}$. \\ Se la fattorizzazione di $p-1$ è conosciuta allora è un semplice determinare l'ordine di ogni singolo elemento in $\mathbb{Z}_p^*$.
+    Se $p$ è primo, allora ${\mathbb{Z}_p}^*$ è un gruppo ciclico. \\ In altre parole, $\exists g\in {\mathbb{Z}_p}^*$ generatore tale che ${\mathbb{Z}_p}^*=\{1,g,g^2,g^3,\dots,g^{p-2}\}$. \\ Se la fattorizzazione di $p-1$ è conosciuta allora è un semplice determinare l'ordine di ogni singolo elemento in ${\mathbb{Z}_p}^*$.
 \end{theorem}
 
 \begin{definition}[Sottogruppo]
