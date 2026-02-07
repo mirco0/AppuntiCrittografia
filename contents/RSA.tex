@@ -146,14 +146,26 @@ con $N_i = \frac{N}{n_i} e y_i = N_i^{-1}$.
         \chi(x) = (x \mod n_1, \dots, x \mod n_r),
     \]
     
-    si vuole dimostrare che la funzione $\chi$ è una biezione, per $1 \leq i \leq r$ 
+    si vuole dimostrare che la funzione $\chi$ è una biezione. Per $1 \leq i \leq r$ 
     \begin{equation*}
         N_i := \frac{N}{n_i} \implies \gcd(N_i,n_i) = 1\\
     \end{equation*}
     per cui $N_i$ ha un inversa moltiplicativa modulo $n_i$, ovvero $y_i = {N_i}^{-1} \mod n_i$. Si definisce ora una funzione $\rho:\mathbb{Z}_{n_1} \times \cdots \times \cdots \mathbb{Z}_{r} \to \mathbb{Z}_n$, che al contrario di $\chi$ da una tupla di $r$ elementi modulo $n_i$ restituisce un elemento in $\mathbb{Z}_N$:
     \[
-        \rho(a_1,\dots,a_r) = \sum_{i=1}^{r}a_i M_i y_i \mod N
+        \rho(a_1,\dots,a_r) = \sum_{i=1}^{r}a_i N_i y_i \mod N
     \]
-
-    %TODO: finire pagina 194 S.P.
+    si considera il termine $m_j$ nella somma precedente, se $j = i$ allora poiché $y_i$ è l'inversa di $N_i$ modulo $n_i$ allora $N_i y_i \equiv 1 \mod {n_i}$, per cui:  
+    \[
+        a_i N_i y_i \equiv a_i \mod (n_i),
+    \] al contrario se $j \neq i$ allora, poiché $n_j \mid N_i$
+    \[
+        a_i N_i y_i \equiv 0 \mod {n_j}
+    \]
+    per cui nella funzione $\rho$, i termini con $n_j$ restano, mentre tutti gli altri si annullano
+    \begin{align*}        
+        \rho(a_1,\dots,a_r) &\equiv \sum_{i=1}^{r} a_i N_i y_i \mod n_j 
+        &\equiv a_j \pmod{n_j}. 
+    \end{align*}
+    Poiché è sempre vero per $0\leq j \leq r$, $\rho$ è una soluzione al sistema di congruenze, modulo $N$. $\chi$ è quindi una funzione iniettiva, poiché ha un dominio di cardinalità $N$ in un codominio di cardinalità $N$. $\chi$ è una biezione e vale che $\chi^{-1} = \rho$.
+    %da capire meglio
 \end{proof}
