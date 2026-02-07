@@ -1,0 +1,27 @@
+\vspace{1em}
+\begin{algorithm}[H]
+    \SetAlgoVlined
+    \SetAlgoLined
+    \caption{Algoritmo Euclideo Esteso($a,b$)}
+    \label{alg:euclideo_esteso}
+
+    $a_0 \gets a, \quad b_0 \gets b, \quad t_0 \gets 0, \quad t \gets 1, \quad s_0 \gets 1, \quad s \gets 0$\;
+    $q \gets \lfloor \frac{a_0}{b_0}\rfloor$\;
+    $r \gets a_0 - qb_0$\;
+    
+    \While{$r > 0$}{
+        $ \mathit{temp} \gets t_0 - qt  $\;
+        $ t_0 \gets t$\;
+        $ t \gets \mathit{temp}$\;
+        $ \mathit{temp} \gets s_0 - qs$\;
+        $ s_0 \gets s$\;
+        $ s \gets \mathit{temp}$\;
+        $ a_0 \gets b_0$\;
+        $ b_0 \gets r$\;
+        $ q \gets \lfloor \frac{a_0}{b_0} \rfloor $\;
+        $ r \gets a_0 - qb_0$\;
+    }
+    $r \gets b_0$\;
+    \Return{$(r,s,t)$}\;
+\end{algorithm}
+\vspace{2em}

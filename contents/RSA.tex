@@ -45,21 +45,79 @@ Per evitare che Alice e Bob si mettano d'accordo in anticipo su una chiave comun
 
 \subsection{Algoritmo Euclideo, Identità di Bezout e Teorema cinese del resto}
 Si presenta ora l'algoritmo euclideo utilizzato per calcolare il valore $\gcd(a,b)$ per due dati interi. Si inizia impostando $r_0 = a$ e $r_1 = b$:
-\begin{align*}
-    r_0 &= q_1r_1+r_2, \qquad 0 < r_2 < r_1\\
-    r_1 &= q_2r_2+r_3, \qquad 0 < r_3 < r_2\\
-    \quad \vdots & \quad \vdots  \quad \vdots \\
-    r_{m-2} &= q_{m-1}r_{m-1} + r_m, \qquad 0 < r_m < r_{m-1}\\
-    r_{m-1} &= q_{m}r_{m}. &
-\end{align*}
-
-Si presenta di seguito l'algoritmo iterato in cui si divide $r_{i-1}$ per $r_{i}$ per ogni $i=1,\dots,m$, dall'algoritmo è chiaro che 
+\[
+    \begin{aligned}
+        r_0 &= q_1 r_1 + r_2, \qquad 0 < r_2 < r_1\\
+        r_1 &= q_2 r_2 + r_3, \qquad 0 < r_3 < r_2\\
+        \vdots &\qquad \vdots \\
+        r_{m-2} &= q_{m-1} r_{m-1} + r_m, \qquad 0 < r_m < r_{m-1}\\
+        r_{m-1} &= q_m r_m
+    \end{aligned}
+\]
+Si presenta di seguito l'algoritmo iterato in cui si divide $r_{i-1}$ per $r_{i}$ per ogni $i=1,\dots,m$, dall'algoritmo è chiaro che:
 \[
 \gcd(r_0,r_1) = \gcd(r_1,r_2) = \ldots = \gcd(r_{m-1},r_m) = r_m
 \] 
 
 \input{algorithms/euclidean.tex}
 
+poiché per ogni $b \in \mathbb{Z}_n$ esiste l'elemento inverso $b^{-1}$ esiste se $b$ è coprimo con $n$, ovvero $\gcd(b,n) = 1$, valore che l'algoritmo euclideo permette di calcolare.
 
+\begin{theorem}
+\label{thm:2}
+Per $ 0 \leq j \leq m$ vale $r_j = s_j r_0 + t_j r_1$ con $(t_0,t_1,\dots,t_m)$ e $(s_0,s_1,\dots,s_m)$ due sequenze di numeri in cui: 
+\[
+    \begin{aligned}
+    t_j &= \begin{cases}
+    0 & \text{se } j = 0\\
+    1 & \text{se } j = 1\\
+    t_{j-2}-q_{j-1}t_{j-1} & \text{se } j \geq 2 
+    \end{cases}
+    \qquad
+    s_j &= \begin{cases}
+    1 & \text{se } j = 0\\
+    0 & \text{se } j = 1\\
+    s_{j-2}-q_{j-1}s_{j-1} & \text{se } j \geq 2 
+    \end{cases}
+    \end{aligned}
+\]
+e le $r_j$ sono definite come nell'algoritmo euclideo.
+\end{theorem}
 
-% l'inversa moltiplicativa degli elementi in ${\mathbb{Z}_n}^*$. 
+\vspace{1em}
+\noindent Si procede a dimostrare per induzione
+\begin{proof}
+    Per $j = 0$ è chiaro che $r_0 = s_0 r_0 + t_0 r_1 = r_0  = 1 \cdot r_0 + 0 \cdot r_1 = \boxed{r_0}$, lo stesso vale per $j = 1$, $r_1 = 0 \cdot r_0 + 1 \cdot r_1 = \boxed{r_1}$.
+    
+    \vspace{1em}\noindent
+    Si assume vero per $j = i-1$ e $j = i-2$ con $i-2 \geq 2$, si dimostra vero per $j = i$
+    \begin{align*}        
+        r_{i-2} &= s_{i-2}r_0 + t_{i-2}r_1\\
+        r_{i-1} &= s_{i-1}r_0 + t_{i-1}r_1\\
+        r_i &= r_{i-2} - q_{i-1}r_{i-1}\\
+        &= s_{i-2}r_0 + t_{i-2}r_1 - q_{i-1}(s_{i-1}r_0 + t_{i-1}r_1)\\
+        &= r_0(s_{i-2} - q_{i-1}s_{i-1}) + r_1(t_{i-2-q_{i-1}t_{i-1}})\\
+        & = s_i r_0 + t_i r_1
+    \end{align*}
+    è perciò vero per $j \geq 0$.
+\end{proof}
+\begin{corollary}
+    Siano $r_1, r_2$ interi tali che $\gcd(r_0,r_1) = 1$ allora $r_1^{-1} \equiv t_m \pmod{r_0}$ con $t_m$ dalla sequenza del teorema~\ref{thm:2}
+\end{corollary}
+\begin{proof}
+    \begin{align*}
+        \gcd(r_0,r_1) &= s_m r_0 + t_m r_1\\
+        &= t_m r_1 \pmod n\\
+        &= 1.
+    \end{align*}
+\end{proof}
+%Vedere commento a Gruppi.tex:96
+Con questo corollario è possibile definire l'\emph{algoritmo euclideo esteso} che per due dati interi, $a$ e $b$, calcola $r,s,t$ per cui $r  =\gcd(a,b) = sa + bt$. Nel caso in cui $r = 1$ ($a$ e $b$ sono coprimi) si ha un algoritmo per il calcolo di $b^{-1} \mod a$, per un dato elemento nel gruppo ${\mathbb{Z}_a}^*$. Di seguito si presenta l'algoritmo:
+
+\input{algorithms/extended_euclidean.tex}
+
+\noindent
+è anche possibile rendere più efficiente l'algoritmo rimuovendo la variabile $s$ dall'algoritmo e ridurre la variabile $t$ calcolandone il modulo $a$.
+
+\input{algorithms/multiplicative_inverse.tex}
+
