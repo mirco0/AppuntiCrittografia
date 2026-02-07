@@ -1,4 +1,5 @@
 \begin{theorem}[Piccolo teorema di Fermat]
+\label{thm:fermat}
 Se $p$ è primo, allora, per ogni $a$, 
 \[
     a^p \equiv a \pmod p.
@@ -244,3 +245,63 @@ Le complessità non sono minime, ma rappresentano un'idea generale. Si spiegano 
 \input{algorithms/square_and_multiply.tex}
 
 È da specificare che, per semplicità, l'algoritmo \ref{alg:square_multiply} ha il parametro $c$ espresso in notazione binaria $c = \sum_{i=0}^{\ell - 1}c_i 2^i $.
+
+\subsection{Test di primalità}
+Si tratta ora il problema di determinare numeri primi sufficientemente grandi, che permettono al sistema RSA di essere sicuro
+
+\begin{definition}{Problema Composti}
+    Dato un numero $n$, determinare se è primo
+\end{definition}
+
+Ci sono diversi approcci per risolvere il problema, gli algoritmi proposti spesso sono basati sulla casualità, si dividono in due categorie: algoritmi \emph{Las Vegas}, di cui abbiamo già parlato e algoritmi del tipo \emph{Monte Carlo}
+
+\begin{definition}
+    Un algoritmo di Monte Carlo \emph{yes-biased} è un algoritmo il cui risultato è sempre corretto nel caso di risposta ``si'', mentre un risultato del tipo ``no'' può essere errato; nel caso contrario si parla algoritmo di Monte Carlo \emph{no-biased}. Un algoritmo di Monte Carlo, ha probabilità di errore $\varepsilon$ se per ogni istanza, il risultato è errato con una probabilità di al massimo $\varepsilon$.   
+\end{definition}
+
+\begin{definition}[residui quadratici]
+    Sia $p>2$ un primo, e $a$ un intero, $a$ è chiamato \emph{residuo quadratico} modulo $p$ se 
+    \[
+        a \not\equiv 0 \mod n \quad \land \quad  y^2 \equiv a \mod n 
+    \]
+    per una $y \in \mathbb{Z}_p$, nel caso in cui non esista $y$, $a$ è detto \textit{non residuo quadratico}.
+\end{definition}
+Ovviamente se $a$ è una residuo quadratico modulo $p$ allora esiste $y \in {\mathbb{Z}_p}^*$ per cui $y^2 \equiv a$ e
+\begin{align*}
+    y^2 \equiv a \implies (-y^2) \equiv a\\
+    y \not\equiv -y \mod p
+\end{align*}
+inoltre
+\begin{gather*}
+    x^2 - a \equiv 0 \\
+    x^2 - y^2 \equiv 0 \\
+    (x-y)(x+y) \equiv 0 \\
+    p|(x-y) \quad \text{oppure} \quad p |(x+1)\\
+    x \equiv \pm y 
+\end{gather*}
+
+\begin{theorem}
+    Sia $p$ un numero primo, allora $a$ è un residuo quadratico se e solo se 
+    \[
+        a^{(p-1)/2} \equiv 1 \mod p
+    \]
+\end{theorem}
+\begin{proof}
+    Supponiamo che $a$ sia un residuo quadratico, per cui vale che $a \equiv y^2$ per qualche $y \in {\mathbb{Z}_p}^*$, banalmente si ha che 
+    \begin{align*}
+        a^{(p-1)/2} &\equiv (y^{2})^{(p-1)/2} \mod p\\
+        &\equiv y^{p-1} \mod \\
+        \substack{\text{Per il teorema} \\\ref{thm:fermat}}  & \equiv 1.
+    \end{align*}
+    Ricordando che il teorema di Fermat \ref{thm:fermat}.
+
+    \vspace{1em}
+    Al contrario sia valido $a^{(p-1)/2} \equiv 1 \mod p$, allora sia $b$ un elemento primitivo modulo $p$, per cui è possibile scrivere qualsiasi elemento in ${\mathbb{Z}_p}^*$ come una potenza $i$-esima di $b$ ($a = b^i$)
+    \begin{align*}
+        a^{(p-1)/2} &\equiv (b^i)^{(p-1)/2} \mod p\\
+        &\equiv b^i(p-1)/2 \mod p 
+    \end{align*}
+    %TODO: Capire meglio
+    ovviamente $b$, essendo primitivo, ha ordine $p-1$, quindi $p-1$ divide $i(p-1)/2$, e $i$ è perciò pari, le radici di $a$ sono $\pm b^{i/2} \mod p$.
+    
+\end{proof}
