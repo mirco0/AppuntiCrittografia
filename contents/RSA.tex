@@ -300,7 +300,7 @@ inoltre
     Al contrario sia valido $a^{(p-1)/2} \equiv 1 \mod p$, allora sia $b$ un elemento primitivo modulo $p$, per cui è possibile scrivere qualsiasi elemento in ${\mathbb{Z}_p}^*$ come una potenza $i$-esima di $b$ ($a = b^i$)
     \begin{align*}
         a^{(p-1)/2} &\equiv (b^i)^{(p-1)/2} \mod p\\
-        &\equiv b^i(p-1)/2 \mod p 
+        &\equiv b^{i(p-1)/2} \mod p 
     \end{align*}
     %TODO: Capire meglio
     ovviamente $b$, essendo primitivo, ha ordine $p-1$, quindi $p-1$ divide $i(p-1)/2$, e $i$ è perciò pari, le radici di $a$ sono $\pm b^{i/2} \mod p$.
@@ -367,3 +367,31 @@ Dato il simbolo di Jacobi ora è possibile determinare la primalità di un numer
 \end{proof}
 %TODO: Verificare, ho scritto un'idea che avevo in mente, comunque mi sembra corretta, torna con gli appunti del prof
 %Sembra sensato vedendo l'algoritmo di Miller Rabin
+
+Ora si presenta un test di primalità chiamato \emph{test di Miller Rabin}
+
+\input{algorithms/miller_rabin.tex}
+
+\noindent
+L'algoritmo ha complessità temporale $O(\log^3(n))$, analizziamone il comportamento.
+
+
+\vspace{1em}\noindent Si riscrive il numero $n-1$ raccogliendo tutte le potenze di 2, ovvero $n-1 = 2^km$ chiaramente $m$ è un fattore dispari.
+Sia $b$ una base scelta casualmente in $[2, n-2]$. Considerando la sequenza delle potenze:
+\[ b^m, b^{2m}, \dots, b^{2^km} \]
+Se $n$ è primo, per il teorema di Fermat \ref{thm:fermat} $b^{n-1} \equiv 1 \mod n$.
+\begin{align*}
+    b^{n-1} &\equiv 1 \mod n = b^{2^km} \equiv 1 \mod n\\
+    b^{(n-1)/2} &\equiv \pm 1 \mod n = b^{2^{k-1}} \equiv \pm 1 \mod n
+\end{align*}
+
+L'idea dell'algoritmo è quella di verificare gli elementi $b$ del gruppo, data da una $b$, con una potenza pari ($b^2,b^4,\dots$), in questo caso è richiesto che se $b^{2^km}\equiv 1$ allora la sua radice quadrata $b^{2^{k-1}m}$ deve essere $\pm 1$, il test supera la verifica (ovvero $n$ è un \emph{probabile primo}) se:
+\begin{itemize}
+    \item $b^m \equiv 1 \pmod n$, oppure
+    \item Esiste un indice $i \in \{0, \dots, k-1\}$ tale che $b^{2^i m} \equiv -1 \pmod n$.
+\end{itemize}
+Se nessuna di queste condizioni è verificata, $n$ è sicuramente composto.
+
+%Appunti René schoff https://www.mat.uniroma2.it/~schoof/05rene.pdf
+%Non usati
+

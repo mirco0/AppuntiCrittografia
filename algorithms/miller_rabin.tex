@@ -1,0 +1,24 @@
+\vspace{1em}
+\begin{algorithm}[H]
+    \SetAlgoVlined
+    \SetAlgoLined
+    \caption{MillerRabin($n$)}
+    \label{alg:miller_rabin}
+
+    Scrivi $n-1 = 2^km$ con $m$ dispari\;
+    Scegli $a$ un intero casuale $1 \leq a \leq n-1$\;
+    $b \gets a^m \mod n$\;
+    \If {$b \equiv 1 \mod n$}{
+        \Return{$n$ primo}\;
+    }
+
+    \For{$i = 0$ \KwTo $k-1$}{
+        \uIf{$b \equiv -1 \mod n$}{
+            \Return {$n$ primo}\;
+        }
+        \Else{$b^2 \gets b \mod n$}
+    }
+    \Return{$n$ è composto}\;
+    
+\end{algorithm}
+\vspace{2em}
