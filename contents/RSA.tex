@@ -457,4 +457,43 @@ Se nessuna di queste condizioni è verificata, $n$ è sicuramente composto. Per 
 Questo significa che, moltiplicando una radice quadrata di $a$ per una radice quadrata di $1$, otteniamo un’altra radice quadrata dello stesso elemento $a$. \\ Di conseguenza, se ci sono $2^\ell$ radici quadrate di $1$ modulo $n$, allora a partire da una radice quadrata fissata di $a$ possiamo generare tutte le $2^\ell$ radici quadrate di $a$.
 
 \subsection{Algoritmi di fattorizzazione}
+\input{algorithms/pollard_p-1_fattorizzazione.tex} 
+
+\noindent Nell'input, $B$ rappresenta un ``limite'' prestabilito, ovvero ``quanto grandi'' possono essere i fattori primi di $(p-1)$.
+
+\vspace{0.2cm} \noindent Idea base: Supponiamo che $p$ sia un fattore primo di $n$.
+%q? q<B pagina 231 pdf 
+Se tutti i fattori primi di $p-1$ sono minori o uguali a $B$, ovvero ``piccoli'', allora $(p-1) | B!$ . \\ Alla fine del \textit{for} si ha: 
+\[
+\begin{aligned}
+    &a \equiv 2^{B!} \pmod n\\
+    &a \equiv 2^{B!} \pmod p \ \text{(poiché $p|n$)} \\
+    &2^{p-1} \equiv 1 \pmod p \ \text{(per il Teorema di Fermat)} \\
+    & a \equiv 1 \pmod p \ \text{(poiché $(p-1) | B!$)}.\\
+\end{aligned}
+\]
+
+\noindent In altre parole $p | (a-1)$. Poiché $p|n$, otteniamo:
+\[
+d= \gcd(a-1,n).
+\]
+Se $a \neq 1$, $d$ è un fattore non banale di $n$. Se $d$ e $n/d$ sono ancora composti, si itera l'algoritmo per ottenere la fattorizzazione completa. 
+ 
+\vspace{0.2cm}\noindent \textbf{Complessità:}  
+\begin{itemize}
+    \item Ci sono $(B-1)$ esponenziazioni modulari; ciascuna richiede $O(\log B)$ operazioni con \textit{square-and-multiply}.
+    \item Il calcolo del $\gcd(a-1,n)$ richiede $O((\log n)^3)$ usando l’algoritmo euclideo.
+    \item Dunque la complessità totale è
+    \[
+    O\big(B \log B (\log n)^2 + (\log n)^3\big)
+    \]
+\end{itemize}
+\noindent Se $B\approx \sqrt{n}$, ovvero molto grande, l'algoritmo garantisce successo, ma diventa lento quanto la divisione per tentativi. \\ Se $(p-1)$ contiene fattori primi grandi, l'algoritmo rischia di fallire. 
+
+\vspace{0.2cm}\noindent Dunque, un punto debole di tale algoritmo è che richiede che $n$ abbia un fattore primo $p$ tale che $(p-1)$ abbia fattori primi ``piccoli''.  
+
+\vspace{0.2cm} \noindent Si presenta ora un altro algoritmo di fattorizzazione: l'\textit{algoritmo di Pollard Rho}.
+
+\input{algorithms/pollard_rho_fattorizzazione.tex}
+%+Dixon
 

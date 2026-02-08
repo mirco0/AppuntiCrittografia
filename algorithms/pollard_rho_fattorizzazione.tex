@@ -1,0 +1,32 @@
+\vspace{1em}
+\begin{algorithm}[H]
+    \SetAlgoVlined
+    \SetAlgoLined
+    
+    \caption{Pollard Rho fattorizzazione$(n,x_1)$}
+    \label{alg:pollard_rho_fattorizzazione}
+
+    
+    \text{funzione esterna } $f$
+
+    $x \gets x_1$\;
+    $x' \gets f(x) \pmod n$\;
+    $p \gets \gcd(x-x',n)$\;
+
+    \While{$p=1$}{
+    \text{Nella i-esima iterazione, $x=x_i$ e $x'=x_{2i}$}
+    $x \gets f(x) \pmod n$\;
+    $x' \gets f(x') \pmod n$\;
+    $x' \gets f(x') \pmod n$\;
+    $p \gets \gcd(x-x',n) \pmod n$\;
+    }
+
+    \If{$p=n$}{
+        \Return{``Errore''}\;
+    }
+    \Else{
+        \Return{$p$}\;
+    }
+
+\end{algorithm}
+\vspace{2em}
