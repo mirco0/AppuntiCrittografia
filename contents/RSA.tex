@@ -385,7 +385,7 @@ Se $n$ è primo, per il teorema di Fermat \ref{thm:fermat} $b^{n-1} \equiv 1 \mo
     b^{(n-1)/2} &\equiv \pm 1 \mod n = b^{2^{k-1}} \equiv \pm 1 \mod n
 \end{align*}
 
-L'idea dell'algoritmo è quella di verificare gli elementi $b$ del gruppo, data da una $b$, con una potenza pari ($b^2,b^4,\dots$), in questo caso è richiesto che se $b^{2^km}\equiv 1$ allora la sua radice quadrata $b^{2^{k-1}m}$ deve essere $\pm 1$, il test supera la verifica (ovvero $n$ è un \emph{probabile primo}) se:
+L'idea dell'algoritmo è quella di verificare gli elementi del gruppo, dati da una base $b$, con una potenza pari ($b^2,b^4,\dots$), in questo caso è richiesto che se $b^{2^km}\equiv 1$ allora la sua radice quadrata $b^{2^{k-1}m}$ deve essere $\pm 1$, il test supera la verifica (ovvero $n$ è un \emph{probabile primo}) se:
 \begin{itemize}
     \item $b^m \equiv 1 \pmod n$, oppure
     \item Esiste un indice $i \in \{0, \dots, k-1\}$ tale che $b^{2^i m} \equiv -1 \pmod n$.
