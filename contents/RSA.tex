@@ -281,6 +281,7 @@ inoltre
 \end{gather*}
 
 \begin{theorem}
+    \label{thm:3}
     Sia $p$ un numero primo, allora $a$ è un residuo quadratico se e solo se 
     \[
         a^{(p-1)/2} \equiv 1 \mod p
@@ -306,3 +307,47 @@ inoltre
 
 \end{proof}
 
+\begin{theorem}
+    Sia $p>2$ un numero primo e $a \in \mathbb{Z}_p$ un intero, il numero di Legendre $\left(\frac{a}{p}\right)$ definito come segue:
+    \[
+        \left( \frac{a}{p}\right) = \begin{cases}
+            0 & \text{se } a \equiv 0 \mod p\\
+            1 & \text{se $a$ è un residuo quadratico modulo $p$}\\
+            -1 & \text{se $a$ è un non-residuo quadratico modulo $p$}
+        \end{cases}
+    \] allora vale la seguente proprietà
+    \[
+        a^{(p-1)/2} = \left(\frac{a}{p}\right) \pmod p .
+    \]
+\end{theorem}
+
+\begin{proof}
+    Partendo dal primo caso, assumiamo $a$ sia un multiplo di $p$, chiaramente  $a \equiv 0 \mod p$, e ovviamente 
+    \[
+        a^{(p-1)/2} \equiv 0 \mod p .
+    \]
+    Supponendo invece che $a$ sia un residuo quadratico, dal teorema \ref{thm:3} è immediato 
+    \[
+        a^{(p-1)/2} \equiv 1 \mod p .
+    \]
+    Come ultimo caso analizziamo il caso in cui $a$ sia un non-residuo quadratico, per cui $a^{(p-1)/2} \not\equiv 1 \mod p$ e 
+    \begin{gather}        
+        (a^{(p-1)/2})^2 \equiv a^{p-1} \equiv 1 \mod p \quad \substack{\text{per il teorema} \\ \ref{thm:fermat}}\\  
+        a^{(p-1)/2} \not\equiv 1 \implies a^{(p-1)/2} \equiv -1 \mod p . \label{eq4}
+    \end{gather}
+    in \ref*{eq4} poiché il quadrato è $1$, ma la radice è diversa da $1$ allora, il valore cercato è proprio $-1$. In tutti e tre i casi i risultati sono quindi verificati.
+
+\end{proof}
+
+Un altro risultato importante riguardante il numero di \emph{Legendre} è la seguente generalizzazione
+\begin{definition}[Simbolo di Jacobi]
+    Per un intero $n$, di cui la fattorizzazione è la seguente
+    \[
+        n = \prod_{i=1}^{k}p_i^{e_i}.
+    \]
+    per un valore $a$ intero, il simbolo di Jacobi è il seguente
+    \[
+        \left( \frac{a}{n}\right) = \prod_{i=1}^{k} \left(\frac{a}{p_i}\right)^{e_i}.
+    \]
+    ovvero il simbolo di Jacobi per un $n$ composto è calcolabile come prodotto di simboli di Legendre, dei primi che lo compongono.
+\end{definition}
