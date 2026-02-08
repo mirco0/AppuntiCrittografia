@@ -1,0 +1,19 @@
+\vspace{1em}
+\begin{algorithm}[H]
+    \SetAlgoVlined
+    \SetAlgoLined
+    \caption{Square and multiply($x,c,n$)}
+    \label{alg:square_multiply}
+
+    \KwIn{Parametri $x$, $c$ (espresso in binario), $n$}
+    \KwOut{ $z = x^c$}
+    $z \gets 1$\;
+    \For{$i = \ell -1$ \KwTo $0$}{
+        $z \gets z^2 \bmod n$\;
+        \If{$c_i = 1$}{
+            $z \gets z \cdot x \mod n$\;
+        }
+    }
+    \Return{$z$}\;
+\end{algorithm}
+\vspace{1em}

@@ -182,7 +182,7 @@ e_K(x)=x^b \pmod n \ \text{e} \ d_K(y)=y^a \pmod n \ \text{con} \ (x,y \in \math
 I valori $n$ e $b$ costituiscono la chiave pubblica, $p,q, a$ formano la chiave privata. 
 
 
-\vspace{0.2cm} \noindent Verifichiamo ora che cifratura e decifratura sono operazioni inverse. \\ Poiché $ab \equiv 1 \mod \phi(n)$, si ha che $ab =  t \phi(n)+1$ per qualche $t \geq 1$. \\ Supponiamo che $x \in \mathbb{Z}_n^*$, allora abbiamo: 
+\vspace{0.2cm} \noindent Verifichiamo ora che cifratura e decifratura sono operazioni inverse. Ovviamente $ ab \equiv 1 \mod \phi(p)$ sta a significare che $a$ e $b$ sono una l'inversa dell'altra modulo $\phi(n)$, inoltre si ha che $ab =  {t \phi(n)} +1$ per qualche $t \geq 1$. \\ Supponiamo che $x \in {\mathbb{Z}_n}^*$, allora abbiamo: 
 
 \begin{align*}
     (x^b)^a &\equiv x^{t\phi(n)+1} \pmod n \\
@@ -195,11 +195,11 @@ I valori $n$ e $b$ costituiscono la chiave pubblica, $p,q, a$ formano la chiave 
 
 \paragraph{Generazione dei parametri RSA} 
     \begin{enumerate}
-            \item Siano $p,q$ due primi grandi diversi. 
-            \item $n \gets pq$ e $\phi(n) \gets (p-1)(q-1)$
-            \item Scegli $b$ a caso $b(1<b<\phi(n))$ tale che $\gcd(b,\phi(n))=1$
-            \item $a \gets b^{-1} \pmod \phi(n)$
-            \item La chiave pubblica è $(n,b)$ e la chiave privata è $(p,q,a)$.  
+        \item Siano $p,q$ due primi diversi, sufficientemente ``grandi''
+        \item $n \gets pq$ e $\phi(n) \gets (p-1)(q-1)$
+        \item Scegli $b$ a caso $1<b<\phi(n)$ tale che $\gcd(b,\phi(n))=1$
+        \item $a \gets b^{-1} \pmod {\phi(n)}$
+        \item La chiave pubblica è $(n,b)$ e la chiave privata è $(p,q,a)$.  
     \end{enumerate}
 
     Affinché il crittosistema RSA sia sicuro, è necessario scegliere $n=pq$ tanto grande, da rendere computazionalmente impossibile la sua fattorizzazione. Attualmente, si consiglia di scegliere $p,q$ a $1024$ bit, cosicché $n$ ne abbia $2048$. Trovare numeri primi grandi non è un compito banale, per ora supponiamo di averne già alcuni a disposizione.
@@ -207,7 +207,7 @@ I valori $n$ e $b$ costituiscono la chiave pubblica, $p,q, a$ formano la chiave 
     \vspace{1em}\noindent 
     Supponiamo che $x$ e $y$ siano due interi con, rispettivamente, $k$ ed $\ell$ bit, con $k \geq \ell$:
     \begin{align*}
-        x = \underbrace{{1,0,\dots,0,0}}_{k = \lfloor \log_2{x} \rfloor + 1} \quad y = \underbrace{{1,1,\dots,1,0}}_{\ell = \lfloor \log_2{y} \rfloor + 1}\\
+        x = \underbrace{{10\dots00}}_{k = \lfloor \log_2{x} \rfloor + 1} \quad y = \underbrace{{11\dots10}}_{\ell = \lfloor \log_2{y} \rfloor + 1}\\
     \end{align*}
     Da algoritmi banali è facile determinare le complessità delle operazioni, nella aritmetica modulare si ottiene un'analisi molto simile con le operazioni in $\mathbb{Z}_n $ e due elementi $0 \leq m_1,m_2 \leq n-1$, in cui $n$ è un intero a $k$ bit:
 
@@ -236,7 +236,7 @@ I valori $n$ e $b$ costituiscono la chiave pubblica, $p,q, a$ formano la chiave 
             ${m_1}^c$ & $O(k^2 \log c )$\\
             \hline
         \end{tabular}
-    \caption{Tabella che confronta le complessità tra operazioni tra interi e tra elementi dell'anello $\mathbb{Z}_n$}.
+    \caption{Tabella che confronta le complessità tra operazioni tra interi e tra elementi dell'anello $\mathbb{Z}_n$.}
     \label{tab:1}
     \end{table}
 
@@ -262,7 +262,7 @@ Ci sono diversi approcci per risolvere il problema, gli algoritmi proposti spess
 \begin{definition}[residui quadratici]
     Sia $p>2$ un primo, e $a$ un intero, $a$ è chiamato \emph{residuo quadratico} modulo $p$ se 
     \[
-        a \not\equiv 0 \mod n \quad \land \quad  y^2 \equiv a \mod n 
+        a \not\equiv 0 \mod p \quad \land \quad  y^2 \equiv a \mod p 
     \]
     per una $y \in \mathbb{Z}_p$, nel caso in cui non esista $y$, $a$ è detto \textit{non residuo quadratico}.
 \end{definition}
@@ -303,5 +303,6 @@ inoltre
     \end{align*}
     %TODO: Capire meglio
     ovviamente $b$, essendo primitivo, ha ordine $p-1$, quindi $p-1$ divide $i(p-1)/2$, e $i$ è perciò pari, le radici di $a$ sono $\pm b^{i/2} \mod p$.
-    
+
 \end{proof}
+
