@@ -390,8 +390,40 @@ L'idea dell'algoritmo è quella di verificare gli elementi del gruppo, dati da u
     \item $b^m \equiv 1 \pmod n$, oppure
     \item Esiste un indice $i \in \{0, \dots, k-1\}$ tale che $b^{2^i m} \equiv -1 \pmod n$.
 \end{itemize}
-Se nessuna di queste condizioni è verificata, $n$ è sicuramente composto.
-
+Se nessuna di queste condizioni è verificata, $n$ è sicuramente composto. Per cui l'algoritmo di Miller Rabin restituisce la soluzione corretta in caso $n$ sia composto, la probabilità che l'algoritmo sbagli per un numero $n$ primo è $\leq \frac{1}{4}$.
 %Appunti René schoff https://www.mat.uniroma2.it/~schoof/05rene.pdf
 %Non usati
+
+%FIXME: Forse lo tolgo, dopo c'è una generalizzazione 
+\begin{theorem}
+    Sia $p>2$ un numero primo $e$ un numero positivo, e $a$ un intero tale che $\gcd(a,n) = 1$, la  congruenza $y^2 = a \pmod {p^e}$ ha:~
+    \begin{enumerate}
+        \item 0 soluzioni se $\left( \frac{a}{p}\right) = -1$
+        \item 2 soluzioni se $\left( \frac{a}{p}\right) = 1$
+    \end{enumerate}
+\end{theorem}
+
+\begin{theorem}
+    Sia $n>1$ un intero $e$ un numero positivo, e $a$ un intero tale che $\gcd(a,n) = 1$, sia la fattorizzazione di $n$:
+    \[
+        n = \prod_{i=1}^{\ell} p_i^{e_i},
+    \]
+    in cui $p_i$ sono i fattori primi di $n$ ed $e_i$ le rispettive potenze. La congruenza $y^2 = a \pmod {p}$ ha:
+    \begin{enumerate}
+        \item $2^{\ell}$ soluzioni se $\left( \frac{a}{p_i}\right) = 1 \quad \forall i=0,\dots,\ell$
+        \item 0 soluzioni altrimenti
+    \end{enumerate}
+
+\end{theorem}
+\begin{proof}
+    È ovvio che $y^2 \equiv a \pmod n$ ha soluzione per ogni $y^2 \equiv a \pmod {p_i^{e_i}}$. Supponendo che $\left(\frac{a}{p_i}\right) = 1$ per ogni $i = 1,\dots, \ell$, allora ognuna delle equazioni ha due soluzioni $b_{i1}, b_{i2}$, si definisce $b_i=\{b_{i1},b_{i2}\}$. Il sistema di congruenze:
+    \begin{align*}
+        {y_1} &\equiv b_1 \pmod {p_1^{e_1}}\\
+        \vdots &\quad \vdots \quad \vdots\\
+        {y_\ell} &\equiv b_\ell \pmod {p_\ell^{e_\ell}}
+    \end{align*}
+    ha un unica soluzione per il teorema cinese del resto. I sistemi possibili sono $2^{\ell}$, per cui ci sono $2^\ell$ possibili soluzioni uniche modulo $n$ per la congruenza $y^2 \equiv a \mod n$.
+    
+\end{proof}
+%TODO: manca osservazione pagina 211
 
