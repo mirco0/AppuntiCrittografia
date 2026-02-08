@@ -119,7 +119,7 @@ e le $r_j$ sono definite come nell'algoritmo euclideo.
     \end{align*}
 \end{proof}
 %Vedere commento a Gruppi.tex:96
-Con questo corollario è possibile definire l'\emph{algoritmo euclideo esteso}, che per due dati interi, $a$ e $b$, calcola $r,s,t$ per cui $r  =\gcd(a,b) = sa + bt$. Nel caso in cui $r = 1$ ($a$ e $b$ sono coprimi) si ha un algoritmo per il calcolo di $b^{-1} \mod a$, per un dato elemento nel gruppo ${\mathbb{Z}_a}^*$. Di seguito si presenta l'algoritmo:
+Con questo corollario è possibile definire l'\emph{algoritmo euclideo esteso}, che per due dati interi, $a$ e $b$, calcola $r,s,t$ per cui $r  =\gcd(a,b) = sa + bt$. Nel caso in cui $r = 1$ ($a$ e $b$ sono coprimi) si ha un algoritmo per il calcolo di $b^{-1} \pmod a$, per un dato elemento nel gruppo ${\mathbb{Z}_a}^*$. Di seguito si presenta l'algoritmo:
 
 \input{algorithms/extended_euclidean.tex}
 
@@ -133,56 +133,56 @@ Con questo corollario è possibile definire l'\emph{algoritmo euclideo esteso}, 
     Siano $n_1,\dots,n_r$ numeri primi tra loro, allora il sistema
     \begin{equation}
         \begin{cases}
-            x \equiv a_1 \mod n_1\\
-            x \equiv a_2 \mod n_2\\
+            x \equiv a_1 \pmod n_1\\
+            x \equiv a_2 \pmod n_2\\
             \ \vdots \qquad \vdots\\
-            x \equiv a_r \mod n_r
+            x \equiv a_r \pmod n_r
         \end{cases}
     \end{equation}
 ha soluzione unica modulo $N = n_1 \cdot n_r$, data dalla formula 
 \[
-    x = \sum_{i=1}^{r}a_i \frac{N_i} y_i \mod N
+    x = \sum_{i=1}^{r}a_i \frac{N_i} y_i \pmod N
 \]
 con $N_i = \frac{N}{n_i} e y_i = N_i^{-1}$.
 \end{theorem}
 \begin{proof}
     Si definisce una funzione $\chi: \mathbb{Z}_n \to \mathbb{Z}_{n_1} \times \cdots \times \cdots \mathbb{Z}_{r}$ chiamata funzione di proiezione, che, per una data sequenza $n_1,\dots,n_r$, e un valore $x$ restituisce una tupla con $r$ elementi:
     \[
-        \chi(x) = (x \mod n_1, \dots, x \mod n_r),
+        \chi(x) = (x \pmod n_1, \dots, x \pmod n_r),
     \]
     
     si vuole dimostrare che la funzione $\chi$ è una biezione. Per $1 \leq i \leq r$ 
     \begin{equation*}
         N_i := \frac{N}{n_i} \implies \gcd(N_i,n_i) = 1\\
     \end{equation*}
-    per cui $N_i$ ha un inversa moltiplicativa modulo $n_i$, ovvero $y_i = {N_i}^{-1} \mod n_i$. Si definisce ora una funzione $\rho:\mathbb{Z}_{n_1} \times \cdots \times \cdots \mathbb{Z}_{r} \to \mathbb{Z}_n$, che al contrario di $\chi$ da una tupla di $r$ elementi modulo $n_i$ restituisce un elemento in $\mathbb{Z}_N$:
+    per cui $N_i$ ha un inversa moltiplicativa modulo $n_i$, ovvero $y_i = {N_i}^{-1} \pmod n_i$. Si definisce ora una funzione $\rho:\mathbb{Z}_{n_1} \times \cdots \times \cdots \mathbb{Z}_{r} \to \mathbb{Z}_n$, che al contrario di $\chi$ da una tupla di $r$ elementi modulo $n_i$ restituisce un elemento in $\mathbb{Z}_N$:
     \[
-        \rho(a_1,\dots,a_r) = \sum_{i=1}^{r}a_i N_i y_i \mod N
+        \rho(a_1,\dots,a_r) = \sum_{i=1}^{r}a_i N_i y_i \pmod N
     \]
-    si considera il termine $m_j$ nella somma precedente, se $j = i$ allora poiché $y_i$ è l'inversa di $N_i$ modulo $n_i$ allora $N_i y_i \equiv 1 \mod {n_i}$, per cui:  
+    si considera il termine $m_j$ nella somma precedente, se $j = i$ allora poiché $y_i$ è l'inversa di $N_i$ modulo $n_i$ allora $N_i y_i \equiv 1 \pmod {n_i}$, per cui:  
     \[
-        a_i N_i y_i \equiv a_i \mod (n_i),
+        a_i N_i y_i \equiv a_i \pmod (n_i),
     \] al contrario se $j \neq i$ allora, poiché $n_j \mid N_i$
     \[
-        a_i N_i y_i \equiv 0 \mod {n_j}
+        a_i N_i y_i \equiv 0 \pmod {n_j}
     \]
     per cui nella funzione $\rho$, i termini con $n_j$ restano, mentre tutti gli altri si annullano
     \begin{align*}        
-        \rho(a_1,\dots,a_r) &\equiv \sum_{i=1}^{r} a_i N_i y_i \mod n_j\\
+        \rho(a_1,\dots,a_r) &\equiv \sum_{i=1}^{r} a_i N_i y_i \pmod n_j\\
         &\equiv a_j \pmod{n_j}. 
     \end{align*}
     Poiché è sempre vero per $0\leq j \leq r$, $\rho$ è una soluzione al sistema di congruenze, modulo $N$. $\chi$ è quindi una funzione iniettiva, poiché ha un dominio di cardinalità $N$ in un codominio di cardinalità $N$. $\chi$ è una biezione e vale che $\chi^{-1} = \rho$.
     %da capire meglio
 \end{proof}
 
-\subsection{Crittosistema RSA} Sia $n=pq$, con $p,q$ primi. Sia $\mathcal{M}=\mathcal{C}=\mathbb{Z}_n$ e definiamo $\mathcal{K}=\{(n,p,q,a,b) : ab \equiv 1 \mod \phi(n)\}$. \\ Per $\mathcal{K}=(n,p,q,a,b)$, definiamo: 
+\subsection{Crittosistema RSA} Sia $n=pq$, con $p,q$ primi. Sia $\mathcal{M}=\mathcal{C}=\mathbb{Z}_n$ e definiamo $\mathcal{K}=\{(n,p,q,a,b) : ab \equiv 1 \pmod \phi(n)\}$. \\ Per $\mathcal{K}=(n,p,q,a,b)$, definiamo: 
 \[
 e_K(x)=x^b \pmod n \ \text{e} \ d_K(y)=y^a \pmod n \ \text{con} \ (x,y \in \mathbb{Z}_n). 
 \]
 I valori $n$ e $b$ costituiscono la chiave pubblica, $p,q, a$ formano la chiave privata. 
 
 
-\vspace{0.2cm} \noindent Verifichiamo ora che cifratura e decifratura sono operazioni inverse. Ovviamente $ ab \equiv 1 \mod \phi(p)$ sta a significare che $a$ e $b$ sono una l'inversa dell'altra modulo $\phi(n)$, inoltre si ha che $ab =  {t \phi(n)} +1$ per qualche $t \geq 1$. \\ Supponiamo che $x \in {\mathbb{Z}_n}^*$, allora abbiamo: 
+\vspace{0.2cm} \noindent Verifichiamo ora che cifratura e decifratura sono operazioni inverse. Ovviamente $ ab \equiv 1 \pmod \phi(p)$ sta a significare che $a$ e $b$ sono una l'inversa dell'altra modulo $\phi(n)$, inoltre si ha che $ab =  {t \phi(n)} +1$ per qualche $t \geq 1$. \\ Supponiamo che $x \in {\mathbb{Z}_n}^*$, allora abbiamo: 
 
 \begin{align*}
     (x^b)^a &\equiv x^{t\phi(n)+1} \pmod n \\
@@ -256,20 +256,20 @@ Si tratta ora il problema di determinare numeri primi sufficientemente grandi, c
 Ci sono diversi approcci per risolvere il problema, gli algoritmi proposti spesso sono basati sulla casualità, si dividono in due categorie: algoritmi \emph{Las Vegas}, di cui abbiamo già parlato e algoritmi del tipo \emph{Monte Carlo}
 
 \begin{definition}
-    Un algoritmo di Monte Carlo \emph{yes-biased} è un algoritmo il cui risultato è sempre corretto nel caso di risposta ``si'', mentre un risultato del tipo ``no'' può essere errato; nel caso contrario si parla algoritmo di Monte Carlo \emph{no-biased}. Un algoritmo di Monte Carlo, ha probabilità di errore $\varepsilon$ se per ogni istanza, il risultato è errato con una probabilità di al massimo $\varepsilon$.   
+    Un algoritmo di Monte Carlo\footnote{Un algoritmo di tipo Monte Carlo dà sempre una risposta, che però potrebbe non essere corretta. \\ Diversamente da un algoritmo di tipo Las Vegas, che potrebbe non rispondere, ma se dà una risposta è sicuramente corretta.} \emph{yes-biased} è un algoritmo il cui risultato è sempre corretto nel caso di risposta ``si'', mentre un risultato del tipo ``no'' può essere errato; nel caso contrario si parla algoritmo di Monte Carlo \emph{no-biased}. Un algoritmo di Monte Carlo, ha probabilità di errore $\varepsilon$ se per ogni istanza, il risultato è errato con una probabilità di al massimo $\varepsilon$.   
 \end{definition}
 
 \begin{definition}[Residui quadratici]
-    Sia $p>2$ un primo, e $a$ un intero, $a$ è chiamato \emph{residuo quadratico} modulo $p$ se 
+    Sia $p>2$ un primo, e $a$ un intero. $a$ è chiamato \emph{residuo quadratico} modulo $p$ se 
     \[
-        a \not\equiv 0 \mod p \quad \land \quad  y^2 \equiv a \mod p 
+        a \not\equiv 0 \pmod p \quad \land \quad  y^2 \equiv a \pmod p 
     \]
-    per una $y \in \mathbb{Z}_p$, nel caso in cui non esista $y$, $a$ è detto \textit{non residuo quadratico}.
+    per una $y \in \mathbb{Z}_p$; nel caso in cui non esista $y$, $a$ è detto \textit{non residuo quadratico}.
 \end{definition}
-Ovviamente se $a$ è una residuo quadratico modulo $p$ allora esiste $y \in {\mathbb{Z}_p}^*$ per cui $y^2 \equiv a$ e
+Ovviamente se $a$ è un residuo quadratico modulo $p$ allora esiste $y \in {\mathbb{Z}_p}^*$ per cui $y^2 \equiv a$ e
 \begin{align*}
-    y^2 \equiv a \implies (-y^2) \equiv a\\
-    y \not\equiv -y \mod p
+    y^2 \equiv a \implies (-y^2) \equiv a \pmod p\\
+    y \not\equiv -y \pmod p
 \end{align*}
 inoltre
 \begin{gather*}
@@ -279,81 +279,84 @@ inoltre
     p|(x-y) \quad \text{oppure} \quad p |(x+1)\\
     x \equiv \pm y 
 \end{gather*}
+\noindent Quindi, si conclude che $x^2 -a \equiv 0 \pmod p$ ha esattamente $2$ soluzioni modulo $p$. 
 
-\begin{theorem}
+% \newpage
+\vspace{0.2cm}\noindent Dato $p$ primo e $a$ un intero, come capire se $a$ è residuo quadratico modulo $p$?
+
+\begin{theorem}[Criterio di Eulero]
     \label{thm:3}
-    Sia $p$ un numero primo, allora $a$ è un residuo quadratico se e solo se 
+    Sia $p$ un numero primo, allora $a$ è un residuo quadratico \textbf{se e solo se} 
     \[
-        a^{(p-1)/2} \equiv 1 \mod p
+        a^{(p-1)/2} \equiv 1 \pmod p
     \]
 \end{theorem}
 \begin{proof}
-    Supponiamo che $a$ sia un residuo quadratico, per cui vale che $a \equiv y^2$ per qualche $y \in {\mathbb{Z}_p}^*$, banalmente si ha che 
+    ($\Leftarrow$) Supponiamo che $a$ sia un residuo quadratico, per cui vale che $a \equiv y^2$ per qualche $y \in {\mathbb{Z}_p}^*$, banalmente si ha che 
     \begin{align*}
-        a^{(p-1)/2} &\equiv (y^{2})^{(p-1)/2} \mod p\\
-        &\equiv y^{p-1} \mod \\
-        \substack{\text{Per il teorema} \\\ref{thm:fermat}}  & \equiv 1.
+        a^{(p-1)/2} &\equiv (y^{2})^{(p-1)/2} \pmod p\\
+        &\equiv y^{p-1} \pmod p\\
+        \substack{\text{Per il teorema} \\\ref{thm:fermat}}  & \equiv 1 \pmod p.
     \end{align*}
     Ricordando che il teorema di Fermat \ref{thm:fermat}.
 
-    \vspace{1em}
-    Al contrario sia valido $a^{(p-1)/2} \equiv 1 \mod p$, allora sia $b$ un elemento primitivo modulo $p$, per cui è possibile scrivere qualsiasi elemento in ${\mathbb{Z}_p}^*$ come una potenza $i$-esima di $b$ ($a = b^i$)
+    \vspace{1em} ($\Rightarrow$)
+    Al contrario sia valido $a^{(p-1)/2} \equiv 1 \pmod p$, allora sia $b$ un elemento primitivo modulo $p$, per cui è possibile scrivere qualsiasi elemento in ${\mathbb{Z}_p}^*$ come una potenza $i$-esima di $b$ ($a = b^i$).
     \begin{align*}
-        a^{(p-1)/2} &\equiv (b^i)^{(p-1)/2} \mod p\\
-        &\equiv b^{i(p-1)/2} \mod p 
+        a^{(p-1)/2} &\equiv (b^i)^{(p-1)/2} \pmod p\\
+        &\equiv b^{i(p-1)/2} \pmod p 
     \end{align*}
     %TODO: Capire meglio
-    ovviamente $b$, essendo primitivo, ha ordine $p-1$, quindi $p-1$ divide $i(p-1)/2$, e $i$ è perciò pari, le radici di $a$ sono $\pm b^{i/2} \mod p$.
-
+    ovviamente $b$, essendo primitivo, ha ordine $p-1$, quindi $p-1$ divide $i(p-1)/2$, e $i$ perciò è pari; le radici di $a$ sono $\pm b^{i/2} \pmod p$.
+%mi sa ho sbagliato i versi delle frecce bah :)
 \end{proof}
 
 \begin{theorem}
-    Sia $p>2$ un numero primo e $a \in \mathbb{Z}_p$ un intero, il numero di Legendre $\left(\frac{a}{p}\right)$ definito come segue:
+    Sia $p>2$ un numero primo e $a \in \mathbb{Z}_p$ un intero. Il numero di Legendre $\left(\frac{a}{p}\right)$ è definito come segue:
     \[
         \left( \frac{a}{p}\right) = \begin{cases}
-            0 & \text{se } a \equiv 0 \mod p\\
+            0 & \text{se } a \equiv 0 \pmod p\\
             1 & \text{se $a$ è un residuo quadratico modulo $p$}\\
-            -1 & \text{se $a$ è un non-residuo quadratico modulo $p$}
+            -1 & \text{se $a$ è un non-residuo quadratico modulo $p$}.
         \end{cases}
-    \] allora vale la seguente proprietà
+    \] Allora vale la seguente proprietà:
     \[
-        a^{(p-1)/2} = \left(\frac{a}{p}\right) \pmod p .
+        \left(\frac{a}{p}\right) \equiv a^{(p-1)/2} \pmod p .
     \]
 \end{theorem}
 
 \begin{proof}
-    Partendo dal primo caso, assumiamo $a$ sia un multiplo di $p$, chiaramente  $a \equiv 0 \mod p$, e ovviamente 
+    Partendo dal primo caso, assumiamo $a$ sia un multiplo di $p$. Chiaramente  $a \equiv 0 \pmod p$, e ovviamente 
     \[
-        a^{(p-1)/2} \equiv 0 \mod p .
+        a^{(p-1)/2} \equiv 0^{(p-1)/2} \equiv 0 \pmod p .
     \]
     Supponendo invece che $a$ sia un residuo quadratico, dal teorema \ref{thm:3} è immediato 
     \[
-        a^{(p-1)/2} \equiv 1 \mod p .
+        a^{(p-1)/2} \equiv 1 \pmod p .
     \]
-    Come ultimo caso analizziamo il caso in cui $a$ sia un non-residuo quadratico, per cui $a^{(p-1)/2} \not\equiv 1 \mod p$ e 
+    Come ultimo caso analizziamo il caso in cui $a$ sia un non-residuo quadratico, per cui $a^{(p-1)/2} \not\equiv 1 \pmod p$ e 
     \begin{gather}        
-        (a^{(p-1)/2})^2 \equiv a^{p-1} \equiv 1 \mod p \quad \substack{\text{per il teorema} \\ \ref{thm:fermat}}\\  
-        a^{(p-1)/2} \not\equiv 1 \implies a^{(p-1)/2} \equiv -1 \mod p . \label{eq4}
+        (a^{(p-1)/2})^2 \equiv a^{p-1} \equiv 1 \pmod p \quad \substack{\text{per il teorema} \\ \ref{thm:fermat}}\\  
+        a^{(p-1)/2} \not\equiv 1 \implies a^{(p-1)/2} \equiv -1 \pmod p . \label{eq4}
     \end{gather}
     in \ref*{eq4} poiché il quadrato è $1$, ma la radice è diversa da $1$ allora, il valore cercato è proprio $-1$. In tutti e tre i casi i risultati sono quindi verificati.
-
 \end{proof}
 
-Un altro risultato importante riguardante il numero di \emph{Legendre} è la seguente generalizzazione
+\noindent Un altro risultato importante riguardante il numero di \emph{Legendre} è la seguente generalizzazione:
 \begin{definition}[Simbolo di Jacobi]
-    Per un intero $n$, di cui la fattorizzazione è la seguente
+    Per un intero $n$, di cui la fattorizzazione è
     \[
         n = \prod_{i=1}^{k}p_i^{e_i}.
     \]
-    per un valore $a$ intero, il simbolo di Jacobi è il seguente
+    e, per un intero $a$, il simbolo di Jacobi è definito come:
     \[
         \left( \frac{a}{n}\right) = \prod_{i=1}^{k} \left(\frac{a}{p_i}\right)^{e_i}.
     \]
-    ovvero il simbolo di Jacobi per un $n$ composto è calcolabile come prodotto di simboli di Legendre dei primi che lo compongono.
+    Il simbolo di Jacobi per un $n$ composto è quindi calcolabile come prodotto di simboli di Legendre dei primi che lo compongono.
 \end{definition}
 
 \noindent
-Dato il simbolo di Jacobi ora è possibile determinare la primalità di un numero con la seguente proprietà, 
+Dato il simbolo di Jacobi è ora possibile determinare la primalità di un numero con la seguente proprietà:
 \begin{theorem}
     Per $p$ primo, il numero di quadrati residui nel gruppo ${\mathbb{Z}_p}^*$ è esattamente $\frac{p-1}{2}$.
 \end{theorem}
@@ -362,13 +365,13 @@ Dato il simbolo di Jacobi ora è possibile determinare la primalità di un numer
     \[ 
         {\mathbb{Z}_p}^* = \langle g,g^2,\dots,g^{\phi(p)} \rangle
     \]
-    ${\mathbb{Z}_p}^*$ è ciclico di ordine $\phi(p)$. Per $p$ primo $\phi(p) = p-1$, i residui quadratici sono tutti gli elementi del gruppo, generati con un esponente \emph{pari} ($g^{2k}$), per cui i residui quadrati sono esattamente $\frac{p-1}{2}$.
+    ${\mathbb{Z}_p}^*$ è ciclico di ordine $\phi(p)$. Per $p$ primo $\phi(p) = p-1$, i residui quadratici sono tutti gli elementi del gruppo, generati con un esponente \emph{pari} ($g^{2k}$); per cui i residui quadrati sono esattamente $\frac{p-1}{2}$.
 
 \end{proof}
 %TODO: Verificare, ho scritto un'idea che avevo in mente, comunque mi sembra corretta, torna con gli appunti del prof
 %Sembra sensato vedendo l'algoritmo di Miller Rabin
 
-Ora si presenta un test di primalità chiamato \emph{test di Miller Rabin}
+\noindent Si presenta ora un test di primalità chiamato \emph{test di Miller Rabin}, un algoritmo di tipo ``yes-biased'' Monte Carlo. 
 
 \input{algorithms/miller_rabin.tex}
 
@@ -379,10 +382,10 @@ L'algoritmo ha complessità temporale $O(\log^3(n))$, analizziamone il comportam
 \vspace{1em}\noindent Si riscrive il numero $n-1$ raccogliendo tutte le potenze di 2, ovvero $n-1 = 2^km$ chiaramente $m$ è un fattore dispari.
 Sia $b$ una base scelta casualmente in $[2, n-2]$. Considerando la sequenza delle potenze:
 \[ b^m, b^{2m}, \dots, b^{2^km} \]
-Se $n$ è primo, per il teorema di Fermat \ref{thm:fermat} $b^{n-1} \equiv 1 \mod n$.
+Se $n$ è primo, per il teorema di Fermat \ref{thm:fermat} $b^{n-1} \equiv 1 \pmod n$.
 \begin{align*}
-    b^{n-1} &\equiv 1 \mod n = b^{2^km} \equiv 1 \mod n\\
-    b^{(n-1)/2} &\equiv \pm 1 \mod n = b^{2^{k-1}} \equiv \pm 1 \mod n
+    b^{n-1} &\equiv 1 \pmod n = b^{2^km} \equiv 1 \pmod n\\
+    b^{(n-1)/2} &\equiv \pm 1 \pmod n = b^{2^{k-1}} \equiv \pm 1 \pmod n
 \end{align*}
 
 L'idea dell'algoritmo è quella di verificare gli elementi del gruppo, dati da una base $b$, con una potenza pari ($b^2,b^4,\dots$), in questo caso è richiesto che se $b^{2^km}\equiv 1$ allora la sua radice quadrata $b^{2^{k-1}m}$ deve essere $\pm 1$, il test supera la verifica (ovvero $n$ è un \emph{probabile primo}) se:
@@ -394,36 +397,64 @@ Se nessuna di queste condizioni è verificata, $n$ è sicuramente composto. Per 
 %Appunti René schoff https://www.mat.uniroma2.it/~schoof/05rene.pdf
 %Non usati
 
+%questa parte, prima di teorema 6.14, non mi è chiarissima :/
+
 %FIXME: Forse lo tolgo, dopo c'è una generalizzazione 
 \begin{theorem}
-    Sia $p>2$ un numero primo $e$ un numero positivo, e $a$ un intero tale che $\gcd(a,n) = 1$, la  congruenza $y^2 = a \pmod {p^e}$ ha:~
-    \begin{enumerate}
+    Sia $p>2$ primo, $e>0$, e $a$ un intero tale che $\gcd(a,n) = 1$. Allora la  congruenza $y^2 = a \pmod {p^e}$ ha:~
+    \begin{itemize}
         \item 0 soluzioni se $\left( \frac{a}{p}\right) = -1$
-        \item 2 soluzioni se $\left( \frac{a}{p}\right) = 1$
-    \end{enumerate}
+        \item 2 soluzioni se $\left( \frac{a}{p}\right) = 1 \pmod {p^e}$
+    \end{itemize}
 \end{theorem}
 
 \begin{theorem}
-    Sia $n>1$ un intero $e$ un numero positivo, e $a$ un intero tale che $\gcd(a,n) = 1$, sia la fattorizzazione di $n$:
+    Sia $n>1$, $e>0$, e $a$ un intero tale che $\gcd(a,n) = 1$. La fattorizzazione di $n$ è:
     \[
         n = \prod_{i=1}^{\ell} p_i^{e_i},
     \]
     in cui $p_i$ sono i fattori primi di $n$ ed $e_i$ le rispettive potenze. La congruenza $y^2 = a \pmod {p}$ ha:
-    \begin{enumerate}
-        \item $2^{\ell}$ soluzioni se $\left( \frac{a}{p_i}\right) = 1 \quad \forall i=0,\dots,\ell$
+    \begin{itemize}
+        \item $2^{\ell}$ soluzioni $\pmod n$ se $\left( \frac{a}{p_i}\right) = 1 \quad \forall i=0,\dots,\ell$
         \item 0 soluzioni altrimenti
-    \end{enumerate}
+    \end{itemize}
 
 \end{theorem}
 \begin{proof}
-    È ovvio che $y^2 \equiv a \pmod n$ ha soluzione per ogni $y^2 \equiv a \pmod {p_i^{e_i}}$. Supponendo che $\left(\frac{a}{p_i}\right) = 1$ per ogni $i = 1,\dots, \ell$, allora ognuna delle equazioni ha due soluzioni $b_{i1}, b_{i2}$, si definisce $b_i=\{b_{i1},b_{i2}\}$. Il sistema di congruenze:
+    È ovvio che $y^2 \equiv a \pmod n$ ha soluzione per ogni $y^2 \equiv a \pmod {p_i^{e_i}}$. Supponendo che $\left(\frac{a}{p_i}\right) = 1$ per ogni $i = 1,\dots, \ell$, allora ognuna delle equazioni ha due soluzioni $b_{i1}, b_{i2}$; si definisce $b_i=\{b_{i1},b_{i2}\}$. Il sistema di congruenze:
     \begin{align*}
         {y_1} &\equiv b_1 \pmod {p_1^{e_1}}\\
         \vdots &\quad \vdots \quad \vdots\\
         {y_\ell} &\equiv b_\ell \pmod {p_\ell^{e_\ell}}
     \end{align*}
-    ha un unica soluzione per il teorema cinese del resto. I sistemi possibili sono $2^{\ell}$, per cui ci sono $2^\ell$ possibili soluzioni uniche modulo $n$ per la congruenza $y^2 \equiv a \mod n$.
+    ha un unica soluzione per il teorema cinese del resto. I sistemi possibili sono $2^{\ell}$, per cui ci sono $2^\ell$ possibili soluzioni uniche modulo $n$ per la congruenza $y^2 \equiv a \pmod n$.
     
 \end{proof}
 %TODO: manca osservazione pagina 211
+
+\paragraph{Osservazione} Supponiamo \label{congruenza}{$x^2 \equiv y^2 \equiv a \pmod n$}, con $\gcd(a,n)=1$, ovvero stiamo supponendo che $x$ e $y$ siano due radici quadrate di $a$ modulo $n$. 
+
+\noindent Dato che $y$ è coprimo con $n$, esiste $y^{-1} \pmod n$, definiamo $z \equiv \frac{x}{y} = xy^{-1} \pmod n$. Allora:
+\[ 
+\begin{aligned}
+    z^2 &\equiv \frac{x^2}{y^2} \pmod n \\ 
+    &\equiv x^2(y^{-1})^2 \pmod n   \\ \ref{congruenza} 
+    &\equiv a(y^{-1})^2 \pmod n \\  
+    &\equiv a \cdot a^{-1} \pmod n \\
+    &\equiv 1 \pmod n.
+\end{aligned}
+\]
+
+%scrivere il rapporto in aritmetica modulare è un po' così, però almeno ci aiuta a capire...
+%sistemare \ref mi sa
+
+\noindent Ovvero, moltiplicare la radice quadrata di un elemento per una radice quadrata di $1$ produce un'altra radice quadrata dell'elemento. 
+
+\vspace{0.2cm} \noindent Al contrario, supponiamo che $z^2 \equiv 1 \pmod n$. Allora, per ogni radice quadrata $x$ di $a$, vale
+\[
+(x z)^2 \equiv x^2 z^2 \equiv x^2 \pmod n.
+\]
+Questo significa che, moltiplicando una radice quadrata di $a$ per una radice quadrata di $1$, otteniamo un’altra radice quadrata dello stesso elemento $a$. \\ Di conseguenza, se ci sono $2^\ell$ radici quadrate di $1$ modulo $n$, allora a partire da una radice quadrata fissata di $a$ possiamo generare tutte le $2^\ell$ radici quadrate di $a$.
+
+\subsection{Algoritmi di fattorizzazione}
 
