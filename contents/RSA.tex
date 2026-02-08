@@ -259,7 +259,7 @@ Ci sono diversi approcci per risolvere il problema, gli algoritmi proposti spess
     Un algoritmo di Monte Carlo \emph{yes-biased} è un algoritmo il cui risultato è sempre corretto nel caso di risposta ``si'', mentre un risultato del tipo ``no'' può essere errato; nel caso contrario si parla algoritmo di Monte Carlo \emph{no-biased}. Un algoritmo di Monte Carlo, ha probabilità di errore $\varepsilon$ se per ogni istanza, il risultato è errato con una probabilità di al massimo $\varepsilon$.   
 \end{definition}
 
-\begin{definition}[residui quadratici]
+\begin{definition}[Residui quadratici]
     Sia $p>2$ un primo, e $a$ un intero, $a$ è chiamato \emph{residuo quadratico} modulo $p$ se 
     \[
         a \not\equiv 0 \mod p \quad \land \quad  y^2 \equiv a \mod p 
@@ -349,5 +349,21 @@ Un altro risultato importante riguardante il numero di \emph{Legendre} è la seg
     \[
         \left( \frac{a}{n}\right) = \prod_{i=1}^{k} \left(\frac{a}{p_i}\right)^{e_i}.
     \]
-    ovvero il simbolo di Jacobi per un $n$ composto è calcolabile come prodotto di simboli di Legendre, dei primi che lo compongono.
+    ovvero il simbolo di Jacobi per un $n$ composto è calcolabile come prodotto di simboli di Legendre dei primi che lo compongono.
 \end{definition}
+
+\noindent
+Dato il simbolo di Jacobi ora è possibile determinare la primalità di un numero con la seguente proprietà, 
+\begin{theorem}
+    Per $p$ primo, il numero di quadrati residui nel gruppo ${\mathbb{Z}_p}^*$ è esattamente $\frac{p-1}{2}$.
+\end{theorem}
+\begin{proof}
+    Per il gruppo ${\mathbb{Z}_p}^*$ esiste un generatore $g$ tale che: 
+    \[ 
+        {\mathbb{Z}_p}^* = \langle g,g^2,\dots,g^{\phi(p)} \rangle
+    \]
+    ${\mathbb{Z}_p}^*$ è ciclico di ordine $\phi(p)$. Per $p$ primo $\phi(p) = p-1$, i residui quadratici sono tutti gli elementi del gruppo, generati con un esponente \emph{pari} ($g^{2k}$), per cui i residui quadrati sono esattamente $\frac{p-1}{2}$.
+
+\end{proof}
+%TODO: Verificare, ho scritto un'idea che avevo in mente, comunque mi sembra corretta, torna con gli appunti del prof
+%Sembra sensato vedendo l'algoritmo di Miller Rabin
