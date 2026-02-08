@@ -446,7 +446,7 @@ Se nessuna di queste condizioni è verificata, $n$ è sicuramente composto. Per 
 \]
 
 %scrivere il rapporto in aritmetica modulare è un po' così, però almeno ci aiuta a capire...
-%sistemare \ref mi sa
+%sistemare \ref mi sa 
 
 \noindent Ovvero, moltiplicare la radice quadrata di un elemento per una radice quadrata di $1$ produce un'altra radice quadrata dell'elemento. 
 
@@ -495,5 +495,23 @@ Se $a \neq 1$, $d$ è un fattore non banale di $n$. Se $d$ e $n/d$ sono ancora c
 \vspace{0.2cm} \noindent Si presenta ora un altro algoritmo di fattorizzazione: l'\textit{algoritmo di Pollard Rho}.
 
 \input{algorithms/pollard_rho_fattorizzazione.tex}
-%+Dixon
+\noindent Sia $p$ il più piccolo divisore primo di $n$. Supponiamo che esistano due interi $x,x' \in \mathbb{Z}_n$ tale che:
+\[  
+x \neq x' \land x \equiv x' \pmod p.
+\]
+Allora $p \leq \gcd(x-x',n) <n$, ottenendo così un fattore non banale di $n$ calcolandone il $\gcd$. 
 
+\vspace{0.2cm} \noindent Si prova a fattorizzare $n$ scegliendo un sottoinsieme a caso $X \subseteq \mathbb{Z}_n$ e calcolando $\gcd(x-x',n)$ per tutti i valori distinti $x,x' \in X$. Questo metodo avrà successo se e solo se $x \mapsto x \pmod p$ produce almeno una collisione per $x \in X$. Ciò può essere anazalizzato usando il paradosso del compleanno: se $|X| \approx \sqrt{p}$, c'è il $50\%$ di probabilità che ci sia almeno una collisione, e quindi di trovare un fattore non banale di $n$. Tuttavia, per trovare una collisione della forma $x \pmod p=x' \pmod p$, bisogna calcolare $\gcd(x-x',n)$. Questo significa che ci aspettiamo di calcolare più di $\binom{|X|}{2}>p/2 \ \gcd$ prima di trovare un fattore di $n$. 
+
+\vspace{0.2cm}\noindent L'algoritmo di Pollard-Rho incorpora(?) una variante per calcolare meno $\gcd$ e usare meno memoria. \\ Supponiamo che $f$ sia una funzione polinomiale con coefficienti interi (tipo $f(x)=x^2+a$, con $a$ costante). Assumiamo che la mappa $x \mapsto f(x) \pmod p$ si comporta come una mappa casuale(?). \\ Sia $x_1 \in \mathbb{Z}_n$, e consideriamo la sequenza $x_1, \dots$ dove $x_j=f(x_{j-1}) \pmod n$, $\forall j \geq 2$. \\ Sia $m$ un intero, e definiamo $X=\{x_1,\dots,x_m\}$. \\ Stiamo cercando due valori distinti $x_i,x_j \in X$ tale che $\gcd(x_j-x_i, n)>1$. Ogni volta che calcoliamo un nuovo termine $x_j$ nella sequenza, calcoliamo $\gcd(x_j-x_i,n) \ \forall i<j$. Tuttavia possiamo ridurre il numero di calcoli di $\gcd$.
+
+\vspace{0.2cm} \noindent Supponiamo che $x_i \equiv x_j \pmod p$. Usando il fatto che $f$ è polinomiale, si ha che $f(x_i)=f(x_j) \pmod p$. \\ Allora $x_{i+1} \pmod p =(f(x_i)\pmod n) \pmod p= f(x_i) \pmod p$, perché $p|n$. \\ Similmente, $x_{j+1} \pmod p=f(x_j) \pmod p$. Quindi $x_{i+1} \equiv x_{j+1} \pmod p$. Ripetendo ciò, otteniamo questo importante risultato: \\ se $x_i \equiv x_j \pmod p$, allora $x_{i+\delta} \equiv x_{j+ \delta} \pmod p \ \forall \delta \geq 0$. \\ Denotiamo $\ell=j-i$; segue che $x_{i'} \equiv x_{j'}$ se $j'>i'\geq i$ e $j'-i' \equiv 0  \pmod \ell$. \\ Supponiamo di costruire un grafo $G$ su un insieme di vertici $\mathbb{Z}_p \ , \forall i \geq 1$; abbiamo un arco diretto $(x_i,x_{i+1}) \pmod p$. Allora deve esistere una coppia $x_i, x_j$, con $i<j$, tale che $x_i \equiv x_j \pmod p$. Dall'osservazione sopra, è facile vedere che $G$ consiste in una ``coda'': $x_1 \pmod p \to x_2 \pmod p \to \dots \to x_i \pmod p$, e di un ciclo infinito di lunghezze $\ell$ avente i vertici $x_i \pmod p \to x_{i+1} \pmod p \to \dots \to x_j \pmod p = x_i \pmod p$. Allora $G$ assomiglia alla lettera grega $\rho$, da cui prende il nome l'algoritmo. 
+
+\vspace{0.2cm} \noindent Per migliorare e semplificare, limitiamo la ricerca delle collisioni prendendo $j=2i$. \\
+\textbf{Analisi dell'algoritmo} Se $x_i \equiv x_j \pmod p$, allora è anche il caso in cui $x_{i'} \equiv x_{2i'} \pmod p \ \forall i'$ tale che $i' \equiv 0 \pmod \ell$ e $i' \geq i$. Tra tutti gli $\ell$ interi consecutivi $i,\dots, j-1$ deve essercene uno divisibile per $\ell$. Quindi, il più piccolo valore $i'$ che soddisfa le due condizioni sopra è al più $j-1$. Quindi il numero di iterazioni richieste per trovare un fattore $p$ è al massimo $j$, come previsto è al massimo $\sqrt{p}$. 
+
+\vspace{0.2cm} \noindent In generale, poiché $p<\sqrt{n}$, la complessità è $O(n^{1/4})$. È possibile che l'algoritmo non riesca a trovare un fattore non banale di $n$. Ciò accade se e solo se i primi valori di $x$ e $x'$ che $x \equiv x' \pmod p$ soddisfano $x \equiv x'  \pmod n$. Stimeremo euristicamente la probabilità di questa situazione come $p/n$. Se l'algo fallisce, si inizia con un valore differente o con una scelta diversa per la funzione $f$. 
+
+%da controllare tutto 
+
+\vspace{0.2cm} \noindent \textbf{Algoritmo di Dixon}
