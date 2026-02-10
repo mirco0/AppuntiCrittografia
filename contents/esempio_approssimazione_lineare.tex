@@ -40,11 +40,14 @@ Separando i bit della chiave rimangono solamente variabili $U$ relative all'ulti
     \label{chiave}
     K_{1,5} \oplus K_{1,7} \oplus K_{1,8} \oplus K_{2,6} \oplus K_{3,6} \oplus K_{3,14} \oplus K_{4,6} \oplus K_{4,8} \oplus K_{4,14} \oplus K_{4,16} 
 \end{equation}
-e
-\[
+
+\begin{equation}
+    \label{eq5}
     X_{5} \oplus X_{7} \oplus X_{8} \oplus U_{4,6} \oplus U_{4,8} \oplus U_{4,14} \oplus U_{4,16} 
-\]
+\end{equation}
 
-con cui si ricorda avere un bias $\varepsilon = -1/32$, di cui le uniche variabili sconosciute sono quelle della chiave \ref{chiave}. Se si cercassero di indovinare i bit della chiave con $T \approx 8000$ coppie di \emph{plaintext} e \emph{ciphertext}, si riuscirebbero a trovare i bit della chiave nel 5 round usati dalle S-box 2 e 4. 
 
+con cui si ricorda avere un bias $\varepsilon = -1/32$, di cui le uniche variabili sconosciute sono quelle della chiave \ref{chiave}. Se si cercassero di indovinare i bit della chiave con $T \approx 8000$ coppie di \emph{plaintext} e \emph{ciphertext}, si riuscirebbero a trovare i bit della chiave nel 5 round usati dalle S-box 2 e 4. Per una chiave candidata di 8 bit ci sono 256 possibili chiavi da verificare, per ogni coppia di \emph{plaintext} e \emph{ciphertext} e ogni chiave K viene verificato quando \ref{eq5} $= 0$, si incrementa un contatore associato alla chiave utilizzata, molti contatori saranno vicini al valore $T/2$, il contatore con valore più vicino al valore $T/32$ sarà associato alla chiave candidata corretta.
 %Continua con la spiegazione, ma l'idea è questa
+
+Generalmente per un attacco lineare c'è bisogno di $T \approx c \varepsilon^{-2}$ con $c$ costante e $\varepsilon$ bias.
