@@ -303,7 +303,7 @@ Ciò permette all'avversario di calcolare l'ultimo byte $x_1$ facilmente, $x_1 =
 \vspace{0.2cm} \noindent Perché funziona? Poiché CBC combina \texttt{xor} col blocco precedente, modificando il \emph{ciphertext} precedente si controlla il \emph{plaintext} del blocco successivo, pur non conoscendo la chiave.
 
 \subsection{Attacchi lineari a Cifrari a blocchi}
-L'idea dell'analisi lineare è basata sul trovare una relazione probabilistica tra un sottoinsieme di bit nel \emph{plaintext} e un sottoinsieme di bit nel \emph{ciphertext} che precede la permutazione dell'ultimo round. Assumendo di avere a disposizione un grande numero di coppie, per un attacco \emph{known-plaintext}, per ogni coppia si cerca di decifrare l'ultimo round, e per ogni chiave provata si calcolano le relazioni tra i bit rilevanti, e si cerca di capire se la relazione ideata si verifica, alla fine del processo si spera di trovare una chiave per cui la relazione si applica più di $1/2$ volte. 
+L'idea dell'analisi lineare è basata sul trovare una relazione probabilistica tra un sottoinsieme di bit nel \emph{plaintext} e un sottoinsieme di bit nel \emph{ciphertext} che precede la permutazione dell'ultimo round. Assumendo di avere a disposizione un grande numero di coppie, per un attacco \emph{known-plaintext}, per ogni coppia si cerca di decifrare l'ultimo round, e per ogni chiave provata si calcolano le relazioni tra i bit rilevanti, si cerca di capire quanto la relazione ideata si verifica per ogni chiave provata, alla fine del processo si spera di trovare una chiave per cui la relazione si applica almeno a $1/2$ bit della relazione. 
 
 Si introducono delle variabili aleatorie, siano $X_1,X_2,\dots$ le variabili indipendenti uniformi, assumenti i valori $0,1$, per cui $\Pr[X_i = 0] = p_i$ e $\Pr[X_i = 1] = 1-p_i$, allora per $i\neq j$ si ha:
 \begin{gather*}
@@ -350,8 +350,8 @@ Si procede alla dimostrazione per induzione su $k$,
     Sia $X_{i1} \oplus X_{i2} \oplus \dots \oplus X_{ik}$ una variabile aleatoria composta da variabili $X_i$ indipendenti, di cui un bias $\varepsilon_{ij} = 0$ allora il bias $\varepsilon_{i1,\dots,ik} = 0$ 
 \end{corollary}
 
-\paragraph{Approssimazione lineare delle S-Box}
-Sia $\pi_S: \{0,1\}^m \to \{0,1\}^n$ una S-Box, per una tupla $X = (x_1,\dots,x_m)$ scelta in modo uniforme casuale, anche tutti i suoi componenti $x_i$ sono scelti in modo uniforme casuale (sono inoltre indipendenti) definiscono delle variabili aleatorie $X_i$ con bias $\varepsilon_i = 0$. Sia $Y = (y_1,\dots,y_n)$ una tupla scelta in modo uniforme casuale, che definisce delle variabili aleatorie $Y_i$, allora se $\pi(X) \neq Y$:
+\paragraph{Approssimazione lineare delle S-box}
+Sia $\pi_S: \{0,1\}^m \to \{0,1\}^n$ una S-box, per una tupla $X = (x_1,\dots,x_m)$ scelta in modo uniforme casuale, anche tutti i suoi componenti $x_i$ sono scelti in modo uniforme casuale (sono inoltre indipendenti) definiscono delle variabili aleatorie $X_i$ con bias $\varepsilon_i = 0$. Sia $Y = (y_1,\dots,y_n)$ una tupla scelta in modo uniforme casuale, che definisce delle variabili aleatorie $Y_i$, allora se $\pi(X) \neq Y$:
 \[
     \Pr[X_1 = x_1\dots X_m = x_m, Y_1 = y_1 \dots, Y_n = y_n] = 0,
 \] 
@@ -366,3 +366,16 @@ invece
     \Pr[Y_1 = y_1 \dots, Y_n = y_n | X_1 = x_1\dots X_m = x_m] = 1.  
 \]
 è facile calcolare il bias della variabile $X_{i1} \oplus \dots X_{im} \oplus Y_{j1} \oplus \dots \oplus Y_{jn}$.
+
+
+\begin{definition}
+    Per una variabile aleatoria con un vettore $a = (a_1,a_2,a_3,a_4)$ in input e un vettore $b = (b_1,b_2,b_3,b_4)$ in output, si definisce $N_L(a,b)$ come il numero di vettori $(x_1,x_2,x_3,x_4,y_1,y_2,y_3,y_4)$ tale che 
+    \begin{gather*}
+        \pi_S(x_1,x_2,x_3,x_4) = (y_1,y_2,y_3,y_4)\\    
+        \left(\bigoplus_{i=1}^{4}a_i x_i\right) \oplus \left(\bigoplus_{i=1}^{4}b_i y_i\right) = 0 
+    \end{gather*}
+    questo equivale selezionare le variabili $X_i$ di input in cui $a_i = 1$, e le variabili in output $Y_i$ per cui $b_i = 1$. Inoltre il bias della variabile descritta dai due vettori $a$ e $b$ è esprimibile attraverso il valore $N_L(a,b)$ definito: $\varepsilon = \frac{N_L(a,b) - 8}{16}$.
+\end{definition}
+
+% L'esempio non è necessario: pagina 94 S.P.
+\input{contents/esempio_approssimazione_lineare.tex}
