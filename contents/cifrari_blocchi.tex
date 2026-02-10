@@ -301,3 +301,68 @@ Ciò permette all'avversario di calcolare l'ultimo byte $x_1$ facilmente, $x_1 =
 \vspace{0.2cm} \noindent L'attaccante può quindi recuperare il \emph{plaintext} del messaggio cifrato.
 
 \vspace{0.2cm} \noindent Perché funziona? Poiché CBC combina \texttt{xor} col blocco precedente, modificando il \emph{ciphertext} precedente si controlla il \emph{plaintext} del blocco successivo, pur non conoscendo la chiave.
+
+\subsection{Attacchi lineari a Cifrari a blocchi}
+L'idea dell'analisi lineare è basata sul trovare una relazione probabilistica tra un sottoinsieme di bit nel \emph{plaintext} e un sottoinsieme di bit nel \emph{ciphertext} che precede la permutazione dell'ultimo round. Assumendo di avere a disposizione un grande numero di coppie, per un attacco \emph{known-plaintext}, per ogni coppia si cerca di decifrare l'ultimo round, e per ogni chiave provata si calcolano le relazioni tra i bit rilevanti, e si cerca di capire se la relazione ideata si verifica, alla fine del processo si spera di trovare una chiave per cui la relazione si applica più di $1/2$ volte. 
+
+Si introducono delle variabili aleatorie, siano $X_1,X_2,\dots$ le variabili indipendenti uniformi, assumenti i valori $0,1$, per cui $\Pr[X_i = 0] = p_i$ e $\Pr[X_i = 1] = 1-p_i$, allora per $i\neq j$ si ha:
+\begin{gather*}
+    \Pr[X_i \oplus X_j = 0] = p_i p_j + (1-p_1)(1-p_j)\\
+    \Pr[X_i \oplus X_j = 1] = p_i (1-p_j) + (1-p_1)p_j\\
+\end{gather*}
+
+sia definito $\varepsilon := p_i - \frac{1}{2}$ il valore chiamato \emph{bias} di $X_i$.
+
+\begin{theorem}[Piling up lemma]
+    Sia $X_{i1} \oplus X_{i2} \oplus \dots \oplus X_{ik}$ una variabile aleatoria composta da variabili $X_i$ indipendenti, allora il suo bias è
+    \[
+        \varepsilon_{i1,i2,\dots,ik} = 2^{k-1}\prod^{k}_{j = 1}\varepsilon_{ij}
+    \]
+\end{theorem}
+Si procede alla dimostrazione per induzione su $k$,
+\begin{proof}
+    Per $k = 1$, chiaramente vero. 
+    
+    \vspace{1em}
+    Per $k = 2$ 
+    \begin{align*}        
+        X_1 \oplus X_2 &= \Pr[X_{i1} \oplus X_{i2}] =\\
+        & (\frac{1}{2} + \varepsilon_{i1})(\frac{1}{2} + \varepsilon_{i2}) +  (\frac{1}{2}- \varepsilon_{i1})(\frac{1}{2} - \varepsilon_{i2}) \\
+        & = \frac{1}{2} + 2{\varepsilon_{i1}\varepsilon_{i2}}.
+    \end{align*}
+
+    Ora supponendo vero $k= \ell$ con $\ell > 2$:
+    la variabile $X_{i1} \oplus \dots \oplus X_{i\ell + 1}$ è scritta come:
+
+    \begin{align*}
+        (X_{i1} \oplus \dots \oplus X_{i\ell}) \oplus X_{i\ell +1}\\
+        \varepsilon_{i1,\dots,\ell} = 2^{\ell -1 }\prod_{j = 1}^{\ell}\varepsilon_{ij}\\
+    \end{align*}
+
+    Il bias di $X_{i1} \oplus \dots \oplus X_{i\ell + 1}$ è scritto come:
+    \[
+        2 \cdot \left( 2^{\ell -1 }\prod_{j=1}^{\ell} \varepsilon_{ij} \right) \cdot \varepsilon_{i\ell +1} = 2^{\ell} \prod_{j=1}^{\ell + 1}\varepsilon_{ij}.
+    \]
+
+\end{proof}
+
+\begin{corollary}
+    Sia $X_{i1} \oplus X_{i2} \oplus \dots \oplus X_{ik}$ una variabile aleatoria composta da variabili $X_i$ indipendenti, di cui un bias $\varepsilon_{ij} = 0$ allora il bias $\varepsilon_{i1,\dots,ik} = 0$ 
+\end{corollary}
+
+\paragraph{Approssimazione lineare delle S-Box}
+Sia $\pi_S: \{0,1\}^m \to \{0,1\}^n$ una S-Box, per una tupla $X = (x_1,\dots,x_m)$ scelta in modo uniforme casuale, anche tutti i suoi componenti $x_i$ sono scelti in modo uniforme casuale (sono inoltre indipendenti) definiscono delle variabili aleatorie $X_i$ con bias $\varepsilon_i = 0$. Sia $Y = (y_1,\dots,y_n)$ una tupla scelta in modo uniforme casuale, che definisce delle variabili aleatorie $Y_i$, allora se $\pi(X) \neq Y$:
+\[
+    \Pr[X_1 = x_1\dots X_m = x_m, Y_1 = y_1 \dots, Y_n = y_n] = 0,
+\] 
+al contrario se $\pi(X) = Y$
+\begin{gather*}    
+    \Pr[X_1 = x_1\dots X_m = x_m, Y_1 = y_1 \dots, Y_n = y_n] = 2^{-m}\\
+    \Pr[X_1 = x_1\dots X_m = x_m] = 2^{-m},
+\end{gather*}
+
+invece
+\[    
+    \Pr[Y_1 = y_1 \dots, Y_n = y_n | X_1 = x_1\dots X_m = x_m] = 1.  
+\]
+è facile calcolare il bias della variabile $X_{i1} \oplus \dots X_{im} \oplus Y_{j1} \oplus \dots \oplus Y_{jn}$.
