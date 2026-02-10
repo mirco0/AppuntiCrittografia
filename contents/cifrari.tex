@@ -1,6 +1,6 @@
-Prima di affrontare cifrari moderni, analizziamo cifrari storici per capirne le debolezze
+Prima di affrontare cifrari moderni, analizziamo cifrari storici per capirne le debolezze.
 \subsection{Cifrario a Shift}
-    Questo tipo di cifrario è anche detto Cifrario di Cesare
+    Per $K=3$, questo tipo di cifrario è anche detto \textit{Cifrario di Cesare}.
     \begin{definition}[Cifrario a shift]
         Sia $M = C = K = \mathbb{Z}_{26}$ per $0 \leq k \leq 25$, per ogni messaggio $x \in M$
         \begin{align*}
@@ -29,7 +29,7 @@ Prima di affrontare cifrari moderni, analizziamo cifrari storici per capirne le 
     
     \subsection{Cifrario a Sostituzione}
     \begin{definition}[Cifrario a sostituzione] 
-        Sia $M = C = \mathbb{Z}_{26}$. $K$ è composto da tutte le possibili permutazioni dei 26 simboli $0,1, \dots, 25$\\
+        Sia $M = C = \mathbb{Z}_{26}$. $K$ è composto da tutte le possibili permutazioni dei 26 simboli $0,1, \dots, 25$.\\
         $\forall \pi \in K$ definiamo
         \[ e_{\pi}(x) = \pi(x) \]
         \[ d_{\pi}(y) = \pi^{-1}(y)\]
@@ -59,22 +59,6 @@ Prima di affrontare cifrari moderni, analizziamo cifrari storici per capirne le 
     
     \subsection{Cifrario affine}
         %Definizione 2.3
-        \begin{definition}[Funzione di Eulero]
-            Siano $a,m \in \mathbb{Z}. \ a\geq 1, m \geq 2$ Se $\gcd(a,m) = 1$ $a$ e $m$ si dicono \textit{co-primi} tra loro. Il numero di interi in $\mathbb{Z}_m$ co-primi con $m$ è scritto come $\phi(m)$ \textit{(funzione di Eulero)} 
-        \end{definition}
-    
-        
-        %Teorema 2.2
-        \begin{theorem} Supponiamo $m$ un intero con la seguente fattorizzazione 
-            \[m = \prod^{n}_{i=1}{p_i}^{e_i}\]
-            dove $p$ è l'\textit{i-esimo} numero primo, e $e_i > 0$. Allora  \[\phi(m) = \prod^{n}_{i=1}{({p_i}^{e_i}-{p_i}^{e_i-1})}\]
-        \end{theorem}
-
-        \begin{definition}
-            Sia $a  \in \mathbb{Z}_m$. L'inversa moltiplicativa di $a$ modulo $m$ scritta $a^{-1} \mod m$, è un elemento $a' \in \mathbb{Z}_m$ tale che $aa' \equiv 1 \pmod m$.
-            L'inversa moltiplicativa esiste solo se $a$ e $m$ sono \textit{co-primi}
-        \end{definition}
-
         \begin{definition}[Cifrario Affine]
             Sia $M = C = \mathbb{Z}_{26}$ e $K = \{ (a,b) \in \mathbb{Z}_{26} \times \mathbb{Z}_{26} \mid \gcd(a,26) = 1 \}$                
             per $K = (a,b)$ si definiscono
@@ -158,4 +142,4 @@ $y = \texttt{DELW}$.
 \end{example}
 
 \subsubsection{Crittoanalisi}
-Il cifrario è facile da rompere con un \emph{known-plaintext attack}. Supponendo che l'avversario abbia $m$ coppie $x,y$,$x \in M, y \in C$ tale che $e_K(x) = y$
+Il cifrario è facile da rompere con un \emph{known-plaintext attack}. Supponendo che l'avversario abbia $m$ coppie $x,y$,$x \in M, y \in C$ tale che $e_K(x) = y$.
