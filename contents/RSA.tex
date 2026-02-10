@@ -538,3 +538,67 @@ Il problema ora è quindi trovare $c$ vettori che siano tra di loro \textit{line
 \end{proof}
 
 Si ottengono quindi molte congruenze del tipo $x^2 \equiv y^2 \pmod n$, ma solo una parte sono tali per cui $x \not\equiv  \pm y \pmod n$, ottenendo così un fattore di $n$ non banale.
+
+Gli interi della forma $j + \lceil \sqrt{kn} \rceil $ per $j = 0,1,\dots, k=1,\dots$, sono relativamente piccoli quando elevati al quadrato e ridotti in modulo $n$, per cui hanno una buona probabilità di essere composti da primi piccoli, quindi contenuti in $\mathcal{B}$. Anche gli interi del tipo $z = \lfloor \sqrt{kn} \rfloor$ al quadrato sono poco più piccoli di $n$, per cui $-z^2 \pmod n$ sono piccoli e riducibili con primi piccoli (in $\mathcal{B}$), per cui $-1$ spesso viene incluso in $\mathcal{B}$.
+
+Si discute ora della grandezza della base dei fattori di $n$, ovvero, quanti numeri primi è necessario sapere per avere una buona probabilità di ottenere un fattore di $n$ non banale? Generalmente più fattori primi comportano più vettori per cui si ha una complessità maggiore, ma si ha anche una probabilità maggiore che $z^2$ sia fattorizzabile con gli elementi in $\mathcal{B}$.
+
+Si forniscono ora alcune definizioni
+\begin{definition}[Numero Liscio]
+    Siano $n$ e $m$ due interi, $n$ è chiamato $m$-\textit{liscio} se data la fattorizzazione di $n$:
+    \[
+        n = \prod p_i^{e_i}
+    \]
+    $\forall p_i \quad p_i \leq m$, ovvero ogni primo, fattore di $n$ è minore o uguale a $m$. La funzione $\Psi(n,m)$ è il numero di interi minori di $n$ che sono $m$ lisci. 
+\end{definition}
+
+Un teorema afferma che 
+\[
+    \frac{\Psi(n,m)}{n} = \frac{1}{u^u},
+\]
+in cui $u = \frac{\log n}{\log m}$. Ovviamente $\frac{1}{u^u}$ è proprio la probabilità che un numero da 0 a $n$ sia $m$-liscio.
+
+\begin{theorem}
+    Sia $n$ un intero e $\pi(n)$ il numero di primi minori o uguali a $n$, si ha che 
+    \[
+        \pi(n) \approx \frac{n}{\log n}.
+    \]    
+\end{theorem}
+La base di fattori primi $\mathcal{B}$ è composta da tutti i fattori minori di $m$. Per il teorema precedente si cerca una base $\mathcal{B}$ tale che:
+
+\[
+    |\mathcal{B}| = b = \pi(n) \approx \frac{n}{\log n}.
+\]
+
+Poiché si cercano $c > b$ quadrati modulo $n$, per far sì che l'algoritmo funzioni, ci si aspetta di verificare $bu^u$ numeri per trovarne $b$ $m$-lisci. 
+
+Per $n$ a $r$-bit e $m$ a $s$-bit ($n = 2^r, m=2^s$), si ha che la moltiplicazione ha costo $O(rs)$; secondo la tabella \ref{tab:1} e $u = \frac{r}{s}$, si verifica che un numero sia $m$ liscio in tempo $O(mrs)$, il tempo totale è $O(bu^u \cdot mrs) = O(rm^2 \cdot u^u)$, per la prima parte dell'algoritmo.
+
+Una volta trovati i vettori giusti, nella seconda parte dell'algoritmo, vanno generate le congruenze e calcolato l'\textit{algoritmo euclideo}, la procedura deve essere ripetuta al massimo due volte, in quanto la probabilità che la congruenza non trovi un fattore non banale di $n$ è $\leq 1/2$. Il tempo totale è quindi verificabile essere $O(r^i m^j)$, per qualche coppia di interi $i,j$ (banalmente è detta polinomiale in $r$ e $m$). 
+
+\vspace{1em}
+Il tempo totale dell'algoritmo è perciò $O(rm^2 \cdot u^u + r^i m^j)$, con $n \approx 2^r$, e $m \approx 2^s$ cercato, per ottimizzare il tempo di esecuzione, il valore di $s$ ottimo è $ \sqrt{r \log_2(r)}$, quindi 
+\[
+    u \approx \frac{r}{s} = \sqrt{\frac{r}{log_2 r}}.
+\]
+quindi, 
+\begin{align*}
+    \log_2(u^u) &= u \log_2(u)\\
+    &\approx  \sqrt{\frac{r}{\log_2(r)}}\log_2\left(\sqrt{\frac{r}{\log_2(r)}}\right)\\
+    &< \sqrt{\frac{r}{\log_2(r)}}\log_2(r)\\
+    &= \sqrt{\frac{r}{\log_2(r)}} \times \frac{\log_2(r)}{2}\\
+    &= \frac{\sqrt{r \log_2(r)}}{2}\\
+    u^u &\leq 2^{\frac{1}{2}\sqrt{r\log_2(r)}},
+\end{align*}
+
+\noindent
+concludendo $m \approx 2^{\sqrt{r\log_2(r)}}$ e banalmente $r = 2^{\log_2(r)} \approx \log_2(n)$.
+La complessità temporale totale può essere scritta come:
+\[
+    O\left( 2^{\log_2(r) + 2\sqrt{r\log_2(r)} + \frac{1}{2} \sqrt{r \log_2(r)}} + 2^{i\log_2(r) + j \sqrt{r\log_2(r)}}\right),
+\]
+e più semplicemente
+\begin{gather*}
+    O\left( 2^{c \sqrt{r \log_2(r)}}\right) = O\left( 2^{c \sqrt{\log_2(n)\log_2(\log_2(n))}}\right).
+\end{gather*}
+
