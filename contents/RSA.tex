@@ -521,7 +521,12 @@ perché $p|n$. Similmente,
 \[
     x_{j+1} \pmod p=f(x_j) \pmod p.
 \]
-Quindi $x_{i+1} \equiv x_{j+1} \pmod p$. Ripetendo ciò, otteniamo questo importante risultato: \\ se $x_i \equiv x_j \pmod p$, allora $x_{i+\delta} \equiv x_{j+ \delta} \pmod p \ \forall \delta \geq 0$. \\ Denotiamo $\ell=j-i$; segue che $x_{i'} \equiv x_{j'}$ se $j'>i'\geq i$ e $j'-i' \equiv 0  \pmod \ell$. \\ Supponiamo di costruire un grafo $G$ su un insieme di vertici $\mathbb{Z}_p \ , \forall i \geq 1$; abbiamo un arco diretto $(x_i,x_{i+1}) \pmod p$. Allora deve esistere una coppia $x_i, x_j$, con $i<j$, tale che $x_i \equiv x_j \pmod p$. Dall'osservazione sopra, è facile vedere che $G$ consiste in una ``coda'': $x_1 \pmod p \to x_2 \pmod p \to \dots \to x_i \pmod p$, e di un ciclo infinito di lunghezze $\ell$ avente i vertici $x_i \pmod p \to x_{i+1} \pmod p \to \dots \to x_j \pmod p = x_i \pmod p$. Allora $G$ assomiglia alla lettera greca $\rho$, da cui prende il nome l'algoritmo. 
+Quindi $x_{i+1} \equiv x_{j+1} \pmod p$. Ripetendo ciò, otteniamo questo importante risultato: \\ se $x_i \equiv x_j \pmod p$, allora $x_{i+\delta} \equiv x_{j+ \delta} \pmod p \ \forall \delta \geq 0$. \\ Denotiamo $\ell=j-i$; segue che $x_{i'} \equiv x_{j'}$ se $j'>i'\geq i$ e $j'-i' \equiv 0  \pmod \ell$. 
+
+\vspace{1em}\noindent
+Supponiamo di costruire un grafo $G$ su un insieme di vertici $\mathbb{Z}_p \ , \forall i \geq 1$; abbiamo un arco diretto $(x_i,x_{i+1}) \pmod p$. Allora deve esistere una coppia $x_i, x_j$, con $i<j$, tale che $x_i \equiv x_j \pmod p$. Dall'osservazione sopra, è facile vedere che $G$ consiste in una ``coda'': $x_1 \pmod p \to x_2 \pmod p \to \dots \to x_i \pmod p$, e di un ciclo infinito di lunghezza $\ell$ avente i vertici $x_i \pmod p \to x_{i+1} \pmod p \to \dots \to x_j \pmod p = x_i \pmod p$. Allora $G$ assomiglia alla lettera greca $\rho$, da cui prende il nome l'algoritmo. 
+
+\input{figures/pollard_rho.tex}
 
 \vspace{0.2cm} \noindent Per migliorare e semplificare, limitiamo la ricerca delle collisioni prendendo $j=2i$. \\
 \textbf{Analisi dell'algoritmo} Se $x_i \equiv x_j \pmod p$, allora è anche il caso in cui $x_{i'} \equiv x_{2i'} \pmod p \ \forall i'$ tale che $i' \equiv 0 \pmod \ell$ e $i' \geq i$. Tra tutti gli $\ell$ interi consecutivi $i,\dots, j-1$ deve essercene uno divisibile per $\ell$. Quindi, il più piccolo valore $i'$ che soddisfa le due condizioni sopra è al più $j-1$. Quindi il numero di iterazioni richieste per trovare un fattore $p$ è al massimo $j$, come previsto è al massimo $\sqrt{p}$. 
