@@ -107,7 +107,7 @@ Per cui una collisione sarà sempre trovata. L'algoritmo può essere implementat
 \paragraph{Algoritmo Rho di Pollard}
 Sia $(G, \cdot )$ un gruppo moltiplicativo, con un elemento $\alpha \in G$ di ordine $n$. Sia $\beta$ il valore di cui si è interessati a trovare il logaritmo ($\log_{\alpha}(\beta)$).
 
-%TODO: SCrivere algoritmo Rho per la fattorizzazione S.P. 6.6.1. 
+%Scrivere algoritmo Rho per la fattorizzazione S.P. 6.6.1. [x] 
 Poiché $\langle \alpha \rangle$ è ciclico, il valore cercato può essere associato a un elemento in $\mathbb{Z}_p$, procedendo come per l'algoritmo Rho \ref{alg:rho_fattorizzazione} per la fattorizzazione, si cerca una sequenza $x_1,x_2,\dots$ applicando una funzione $f$, \emph{pseudo-casuale} nel momento in cui si ottengono due elementi tali $x_i =x_j \ i < j$, si ha la possibilità di calcolare il logaritmo discreto. Come nel caso della fattorizzazione si cercano due elementi $x_i = x_{2i}$ per risparmiare tempo.
 
 \vspace{1em}\noindent
@@ -203,7 +203,7 @@ a=\sum_{i=0}^{c-1}a_iq^i+   \underbrace{sq^c}_{\substack{\text{Multiplo di }q^c\
 \noindent Dimostriamo \ref{osservazione} come segue:
 \begin{align*}
     \beta^{n/q}=& \alpha^{an/q} \\
-    =& \alpha^{(a_0+\underbrace{a_1q+\dots+Sq^c}_{Kq})n/q}\\
+    =& \alpha^{(a_0+\underbrace{a_1q+\dots+sq^c}_{Kq})n/q}\\
     =& \alpha^{(a_0+Kq)n/q} \\
     =& \alpha^{a_0n/q+Kn} \qquad Kn \equiv 0 \pmod n\\
     =& \alpha^{a_0n/q}.

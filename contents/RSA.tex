@@ -306,7 +306,7 @@ inoltre
         a^{(p-1)/2} &\equiv (b^i)^{(p-1)/2} \pmod p\\
         &\equiv b^{i(p-1)/2} \pmod p 
     \end{align*}
-    %TODO: Capire meglio
+    %Capire meglio [x]
     ovviamente $b$, essendo primitivo, ha ordine $p-1$, quindi $p-1$ divide $i(p-1)/2$, e $i$ perciò è pari; le radici di $a$ sono $\pm b^{i/2} \pmod p$.
 %mi sa ho sbagliato i versi delle frecce bah :)
 \end{proof}
@@ -368,8 +368,8 @@ Dato il simbolo di Jacobi è ora possibile determinare la primalità di un numer
     ${\mathbb{Z}_p}^*$ è ciclico di ordine $\phi(p)$. Per $p$ primo $\phi(p) = p-1$, i residui quadratici sono tutti gli elementi del gruppo, generati con un esponente \emph{pari} ($g^{2k}$); per cui i residui quadrati sono esattamente $\frac{p-1}{2}$.
 
 \end{proof}
-%TODO: Verificare, ho scritto un'idea che avevo in mente, comunque mi sembra corretta, torna con gli appunti del prof
-%Sembra sensato vedendo l'algoritmo di Miller Rabin
+%Verificare, ho scritto un'idea che avevo in mente, comunque mi sembra corretta, torna con gli appunti del prof
+%Sembra sensato vedendo l'algoritmo di Miller Rabin [x]
 
 \noindent Si presenta ora un test di primalità chiamato \emph{test di Miller Rabin}, un algoritmo di tipo ``yes-biased'' Monte Carlo. 
 
@@ -431,7 +431,7 @@ Se nessuna di queste condizioni è verificata, $n$ è sicuramente composto. Per 
     ha un unica soluzione per il teorema cinese del resto. I sistemi possibili sono $2^{\ell}$, per cui ci sono $2^\ell$ possibili soluzioni uniche modulo $n$ per la congruenza $y^2 \equiv a \pmod n$.
     
 \end{proof}
-%TODO: manca osservazione pagina 211
+%manca osservazione pagina 211 [x]
 
 \paragraph{Osservazione} Supponiamo $x,y$ tale che
 \begin{equation}
@@ -468,13 +468,13 @@ Questo significa che, moltiplicando una radice quadrata di $a$ per una radice qu
 
 \vspace{0.2cm} \noindent Idea base: Supponiamo che $p$ sia un fattore primo di $n$.
 %q? q<B pagina 231 pdf 
-Se tutti i fattori primi di $p-1$ sono minori o uguali a $B$, ovvero ``piccoli'', allora $(p-1) | B!$ . \\ Alla fine del ciclo \textit{for} si ha: 
+Se tutti i fattori primi di $p-1$ sono minori o uguali a $B$, ovvero ``piccoli'', allora $(p-1) | B!$ . \\ Alla fine dell'iterazione si ha: 
 \[
 \begin{aligned}
     &a \equiv 2^{B!} \pmod n\\
-    &a \equiv 2^{B!} \pmod p \ \text{(poiché $p|n$)} \\
-    &2^{p-1} \equiv 1 \pmod p \ \text{(per il Teorema di Fermat)} \\
-    & a \equiv 1 \pmod p \ \text{(poiché $(p-1) | B!$)}.\\
+    &a \equiv 2^{B!} \pmod p \ \substack{\text{poiché} \\ p|n} \\
+    &2^{p-1} \equiv 1 \pmod p \ \substack{\text{per il teorema} \\ \ref{thm:fermat}}\\
+    & a \equiv 1 \pmod p \ \substack{\text{poiché} \\ (p-1) | B!}.\\
 \end{aligned}
 \]
 
@@ -486,16 +486,16 @@ Se $a \neq 1$, $d$ è un fattore non banale di $n$. Se $d$ e $n/d$ sono ancora c
  
 \vspace{0.2cm}\noindent \textbf{Complessità:}  
 \begin{itemize}
-    \item Ci sono $(B-1)$ calcoli di potenze modulari; ciascuna richiede $O(\log B)$ operazioni con \textit{square-and-multiply}.
-    \item Il calcolo del $\gcd(a-1,n)$ richiede $O((\log n)^3)$ usando l’algoritmo euclideo.
-    \item Dunque la complessità totale è
+    \item Ci sono $(B-1)$ calcoli di potenze modulari; ciascuna richiede $O(\log B)$ operazioni con \textit{square-and-multiply},
+    \item il calcolo del $\gcd(a-1,n)$ richiede $O((\log n)^3)$ usando l'algoritmo euclideo,
+    \item dunque la complessità totale è
     \[
     O\big(B \log B (\log n)^2 + (\log n)^3\big)
     \]
 \end{itemize}
 \noindent Se $B\approx \sqrt{n}$, ovvero molto grande, l'algoritmo garantisce successo, ma diventa lento quanto la divisione per tentativi. \\ Se $(p-1)$ contiene fattori primi grandi, l'algoritmo rischia di fallire. 
 
-\vspace{0.2cm}\noindent Dunque, un punto debole di tale algoritmo è che richiede che $n$ abbia un fattore primo $p$ tale che $(p-1)$ abbia fattori primi ``piccoli''.  
+\vspace{0.2cm}\noindent Dunque, un punto debole dell'algoritmo è il requisito che $n$ abbia un fattore primo $p$, tale che $(p-1)$ abbia fattori primi ``piccoli''.  
 
 \vspace{0.2cm} \noindent Si presenta ora un altro algoritmo di fattorizzazione: l'\textit{algoritmo di Pollard Rho}.
 
@@ -508,9 +508,20 @@ Allora $p \leq \gcd(x-x',n) <n$, ottenendo così un fattore non banale di $n$ ca
 
 \vspace{0.2cm} \noindent Si prova a fattorizzare $n$ scegliendo un sottoinsieme a caso $X \subseteq \mathbb{Z}_n$ e calcolando $\gcd(x-x',n)$ per tutti i valori distinti $x,x' \in X$. Questo metodo avrà successo se e solo se $x \mapsto x \pmod p$ produce almeno una collisione per $x \in X$. Ciò può essere analizzato usando il paradosso del compleanno: se $|X| \approx \sqrt{p}$, c'è il $50\%$ di probabilità che ci sia almeno una collisione, e quindi di trovare un fattore non banale di $n$. Tuttavia, per trovare una collisione della forma $x \pmod p=x' \pmod p$, bisogna calcolare $\gcd(x-x',n)$. Questo significa che ci aspettiamo di calcolare più di $\binom{|X|}{2}>p/2 \ \gcd$ prima di trovare un fattore di $n$. 
 
-\vspace{0.2cm}\noindent L'algoritmo di Pollard-Rho incorpora(?) una variante per calcolare meno $\gcd$ e usare meno memoria. \\ Supponiamo che $f$ sia una funzione polinomiale con coefficienti interi (tipo $f(x)=x^2+a$, con $a$ costante). Assumiamo che la mappa $x \mapsto f(x) \pmod p$ si comporta come una mappa casuale(?). \\ Sia $x_1 \in \mathbb{Z}_n$, e consideriamo la sequenza $x_1, \dots$ dove $x_j=f(x_{j-1}) \pmod n$, $\forall j \geq 2$. \\ Sia $m$ un intero, e definiamo $X=\{x_1,\dots,x_m\}$. \\ Stiamo cercando due valori distinti $x_i,x_j \in X$ tale che $\gcd(x_j-x_i, n)>1$. Ogni volta che calcoliamo un nuovo termine $x_j$ nella sequenza, calcoliamo $\gcd(x_j-x_i,n) \ \forall i<j$. Tuttavia possiamo ridurre il numero di calcoli di $\gcd$.
+\vspace{0.2cm}\noindent L'algoritmo di Pollard-Rho include una variante di questa tecnica per calcolare meno $\gcd$ e usare meno memoria. Supponiamo che $f$ sia una funzione polinomiale con coefficienti interi (tipo $f(x)=x^2+a$, con $a$ costante). Assumiamo che la mappa $x \mapsto f(x) \pmod p$ si comporti un modo casuale.
 
-\vspace{0.2cm} \noindent Supponiamo che $x_i \equiv x_j \pmod p$. Usando il fatto che $f$ è polinomiale, si ha che $f(x_i)=f(x_j) \pmod p$. \\ Allora $x_{i+1} \pmod p =(f(x_i)\pmod n) \pmod p= f(x_i) \pmod p$, perché $p|n$. \\ Similmente, $x_{j+1} \pmod p=f(x_j) \pmod p$. Quindi $x_{i+1} \equiv x_{j+1} \pmod p$. Ripetendo ciò, otteniamo questo importante risultato: \\ se $x_i \equiv x_j \pmod p$, allora $x_{i+\delta} \equiv x_{j+ \delta} \pmod p \ \forall \delta \geq 0$. \\ Denotiamo $\ell=j-i$; segue che $x_{i'} \equiv x_{j'}$ se $j'>i'\geq i$ e $j'-i' \equiv 0  \pmod \ell$. \\ Supponiamo di costruire un grafo $G$ su un insieme di vertici $\mathbb{Z}_p \ , \forall i \geq 1$; abbiamo un arco diretto $(x_i,x_{i+1}) \pmod p$. Allora deve esistere una coppia $x_i, x_j$, con $i<j$, tale che $x_i \equiv x_j \pmod p$. Dall'osservazione sopra, è facile vedere che $G$ consiste in una ``coda'': $x_1 \pmod p \to x_2 \pmod p \to \dots \to x_i \pmod p$, e di un ciclo infinito di lunghezze $\ell$ avente i vertici $x_i \pmod p \to x_{i+1} \pmod p \to \dots \to x_j \pmod p = x_i \pmod p$. Allora $G$ assomiglia alla lettera greca $\rho$, da cui prende il nome l'algoritmo. 
+\vspace{1em}\noindent
+Sia $x_1 \in \mathbb{Z}_n$, sia una sequenza $x_1, \dots$ dove $x_j=f(x_{j-1}) \pmod n$, $\forall j \geq 2$ e $m$ un intero, e definiamo $X=\{x_1,\dots,x_m\}$. \\ Si cercano due valori distinti $x_i,x_j \in X$ tale che $\gcd(x_j-x_i, n)>1$. Ogni volta che calcoliamo un nuovo termine $x_j$ nella sequenza, calcoliamo $\gcd(x_j-x_i,n) \ \forall i<j$. Tuttavia non è necessario calcolare $\gcd$ da capo.
+
+\vspace{0.2cm} \noindent Supponiamo che $x_i \equiv x_j \pmod p$. Usando il fatto che $f$ è polinomiale, si ha che $f(x_i)=f(x_j) \pmod p$. Allora 
+\[
+    x_{i+1} \pmod p = \left[ f(x_i)\pmod n \right] \pmod p = f(x_i) \pmod p,
+\]
+perché $p|n$. Similmente, 
+\[
+    x_{j+1} \pmod p=f(x_j) \pmod p.
+\]
+Quindi $x_{i+1} \equiv x_{j+1} \pmod p$. Ripetendo ciò, otteniamo questo importante risultato: \\ se $x_i \equiv x_j \pmod p$, allora $x_{i+\delta} \equiv x_{j+ \delta} \pmod p \ \forall \delta \geq 0$. \\ Denotiamo $\ell=j-i$; segue che $x_{i'} \equiv x_{j'}$ se $j'>i'\geq i$ e $j'-i' \equiv 0  \pmod \ell$. \\ Supponiamo di costruire un grafo $G$ su un insieme di vertici $\mathbb{Z}_p \ , \forall i \geq 1$; abbiamo un arco diretto $(x_i,x_{i+1}) \pmod p$. Allora deve esistere una coppia $x_i, x_j$, con $i<j$, tale che $x_i \equiv x_j \pmod p$. Dall'osservazione sopra, è facile vedere che $G$ consiste in una ``coda'': $x_1 \pmod p \to x_2 \pmod p \to \dots \to x_i \pmod p$, e di un ciclo infinito di lunghezze $\ell$ avente i vertici $x_i \pmod p \to x_{i+1} \pmod p \to \dots \to x_j \pmod p = x_i \pmod p$. Allora $G$ assomiglia alla lettera greca $\rho$, da cui prende il nome l'algoritmo. 
 
 \vspace{0.2cm} \noindent Per migliorare e semplificare, limitiamo la ricerca delle collisioni prendendo $j=2i$. \\
 \textbf{Analisi dell'algoritmo} Se $x_i \equiv x_j \pmod p$, allora è anche il caso in cui $x_{i'} \equiv x_{2i'} \pmod p \ \forall i'$ tale che $i' \equiv 0 \pmod \ell$ e $i' \geq i$. Tra tutti gli $\ell$ interi consecutivi $i,\dots, j-1$ deve essercene uno divisibile per $\ell$. Quindi, il più piccolo valore $i'$ che soddisfa le due condizioni sopra è al più $j-1$. Quindi il numero di iterazioni richieste per trovare un fattore $p$ è al massimo $j$, come previsto è al massimo $\sqrt{p}$. 
