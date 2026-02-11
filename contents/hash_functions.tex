@@ -262,16 +262,16 @@ I \emph{MAC} sono funzioni hash con chiave che soddisfano determinate proprietà
 
 %6.1 B.S.
 \begin{definition}
-    Un sistema \emph{MAC} \emph{I}$=$(\emph{S},\emph{V}) è una coppia di algoritmi efficienti, \textit{S} e \textit{V}, definito su $(\mathcal{K},\mathcal{M},\mathcal{T})$. \textit{S} è l'algoritmo di firma e \textit{V} quello di verifica. \textit{S} genera i tag e \textit{V} è usato per verificare i tag. 
+    Un sistema \emph{MAC} $I=(S,V)$ è una coppia di algoritmi efficienti, $S$ e $V$, definito su $(\mathcal{K},\mathcal{M},\mathcal{T})$. $S$ è l'algoritmo di firma e $V$ quello di verifica. $S$ genera i tag e $V$ è usato per verificare i tag. 
     \begin{itemize}
-        \item \textit{S} è un algoritmo probabilistico tale che $y = S(k,x)$, dove $k$ è la chiave, $m$ il messaggio, e $t$ il tag. 
-        \item \textit{V} è un algoritmo deterministico per $r = V(k,m,t)$, in cui l'output $r$ è \textit{accetta} o \textit{rifiuta}. 
-        \item Si richiede che i tag generati da \textit{S} sono sempre accettati da \textit{V}, ovvero il \emph{MAC} deve soddisfare la proprietà di correttezza: 
+        \item $S$ è un algoritmo probabilistico tale che $y = S(k,x)$, dove $k$ è la chiave, $m$ il messaggio, e $t$ il tag. 
+        \item $V$ è un algoritmo deterministico per $r = V(k,m,t)$, in cui l'output $r$ è \textit{accetta} o \textit{rifiuta}. 
+        \item Si richiede che i tag generati da $S$ sono sempre accettati da $V$, ovvero il \emph{MAC} deve soddisfare la proprietà di correttezza: 
         \[
         \forall k, \forall  m \ \Pr[V(k,m,S(k,m))=\text{accetta}]=1.
         \]
     \end{itemize}
-    \noindent Ogni volta che \textit{V} ritorna \textit{accetta} per qualche coppia $(m,t)$, diciamo che $t$ è un tag valido. \\ Naturalmente, vogliamo sistemi MAC dove i tag siano il più corti possibili. Uno di questi, è un sistema \emph{MAC} deterministico, che ha la proprietà di avere un unico tag $t$ per $m$ su $k$. 
+    \noindent Ogni volta che $V$ ritorna \textit{accetta} per qualche coppia $(m,t)$, diciamo che $t$ è un tag valido. \\ Naturalmente, vogliamo sistemi MAC dove i tag siano il più corti possibili. Uno di questi, è un sistema \emph{MAC} deterministico, che ha la proprietà di avere un unico tag $t$ per $m$ su $k$. 
 \end{definition}
 
 \paragraph{Sicurezza per un \emph{MAC}} Supponiamo che un avversario $\mathcal{A}$ stia attaccando un sistema \emph{MAC} $\mathcal{I}=(S,V)$ con un \textbf{chosen message attack}. Sia $k$ una chiave scelta a caso, sconosciuta all'attaccante. $\mathcal{A}$è in grado di ricevere coppie $(m,t)$ di messaggi firmati. Lo scopo di $\mathcal{A}$ è di trovare una contraffazione. Cioè l'attaccante deve trovare una nuova coppia $(m,t)$, diversa da tutte le altre firmate. L'attaccante sceglie $m$ arbitrariamente. \\ Un sistema \emph{MAC} è sicuro se un avversario che è in grado di fare un \textit{chosen message attack} non può creare una contraffazione.  
@@ -359,7 +359,7 @@ Per studiare la sicurezza di un \emph{MAC} annidato si studiano le proprietà de
 
 %Da controllare
 \begin{definition}[Attacco a little Mac]
-    L'avversario $\mathcal{A}$ ha la possibilità di eseguire un \emph{chosen-plaintext-attack}(??), può quindi calcolare l'hash dei valori $y$ a scelta, con $h_L$, lo scopo dell'avversario è trovare una coppia valida $(y',z = h_L(y'))$ tale che $y'$ è un valore mai visto.
+    L'avversario $\mathcal{A}$ ha la possibilità di eseguire un \emph{chosen-plaintext-attack}, può quindi calcolare l'hash dei valori $y$ a scelta, con $h_L$, lo scopo dell'avversario è trovare una coppia valida $(y',z = h_L(y'))$ tale che $y'$ è un valore mai visto.
 \end{definition}
 
 \begin{definition}[Attacco a chiave sconosciuta]
