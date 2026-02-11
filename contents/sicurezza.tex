@@ -55,7 +55,7 @@ Ci sono quattro tipi di attacchi noti in crittografia, ordinati per forza di att
     \item \emph{chosen-plaintext attack}
     \item \emph{chosen-ciphertext attack.}
 \end{enumerate}
-Nel \emph{known-ciphertext attack} l'avversario ha accesso a una quantità di \emph{ciphertext} cifrati con la stessa chiave sconosciuta. Nel \emph{known-plaintext attack} l'avversario ha accesso a delle coppie di \emph{plaintext} e \emph{ciphertext} corrispondenti cifrati con la stessa chiave. Nel \emph{chosen-plaintext attack} l'avversario ha la possibilità di cifrare dei \emph{plaintext} a scelta, mentre nel \emph{chosen-ciphertext attack} l'avversario ha la possibilità di decifrare dei \emph{ciphertext} a scelta.
+Nel \emph{known-ciphertext attack}, anche chiamato \emph{ciphertext-only attack}, l'avversario ha accesso a una quantità di \emph{ciphertext} cifrati con la stessa chiave sconosciuta. Nel \emph{known-plaintext attack} l'avversario ha accesso a delle coppie di \emph{plaintext} e \emph{ciphertext} corrispondenti, cifrati con la stessa chiave. Nel \emph{chosen-plaintext attack} l'avversario ha la possibilità di cifrare dei \emph{plaintext} a scelta, mentre nel \emph{chosen-ciphertext attack} l'avversario ha la possibilità di decifrare dei \emph{ciphertext} a scelta.
 
 \vspace{1em} \noindent
 Riprendendo l'obiettivo dell'avversario, si presenta il concetto di ``rottura completa'', in cui un avversario ottiene accesso alle chiavi e di conseguenza ha accesso completo ai messaggi scambiati. La rottura completa non è comunque l'unico obiettivo di un possibile attaccante: anche la possibilità di decifrare un singolo messaggio, o essere capace di distinguere due \emph{ciphertext} di due \emph{plaintext} con una probabilità non nulla.
@@ -127,7 +127,7 @@ In maniera alternativa è possibile descrivere la segretezza perfetta come di se
 %B.S. Definizione 2.1
 \begin{definition}[Sicurezza/Segretezza perfetta]
     \label{def:perfect_secrecy}
-    Un sistema di crittografia $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ è detto essere \textbf{a sicurezza perfetta} se, considerando $K \in \mathcal{K}$ con distribuzione uniforme, per tutte le possibili coppie di messaggi $x_0,x_1 \in M$, per ogni $y \in C$ si ha:
+    Un sistema di crittografia $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ è detto essere a \textbf{sicurezza perfetta} se, considerando $K \in \mathcal{K}$ con distribuzione uniforme, per tutte le possibili coppie di messaggi $x_0,x_1 \in M$, per ogni $y \in C$ si ha:
     \[
         \Pr[e_K(x_0) = y] = \Pr[e_K(x_1) = y]
     \]
@@ -228,7 +228,7 @@ In maniera alternativa è possibile descrivere la segretezza perfetta come di se
     \end{align*}
 \end{definition}
 
-Il \textit{One-time-pad} fornisce \textbf{segretezza perfetta}, ma un principale svantaggio riguarda la lunghezza delle chiavi: $|\mathcal{K}| \geq |M|$, ovvero la quantità di chiavi scambiate deve essere almeno pari alla quantità di messaggi scambiati; la sicurezza e robustezza del sistema sono basate sull'utilizzo singolo delle chiavi. Il cifrario è inoltre vulnerabile ad attacchi del tipo \emph{known-plaintext} dal momento che una chiave $K$ può essere determinata con lo \texttt{xor} tra messaggio originale e messaggio cifrato $x \oplus e_K(x) = K$. 
+Il \textit{One-time-pad} fornisce segretezza perfetta, ma un principale svantaggio riguarda la lunghezza delle chiavi: $|\mathcal{K}| \geq |M|$, ovvero la quantità di chiavi scambiate deve essere almeno pari alla quantità di messaggi scambiati; la sicurezza e robustezza del sistema sono basate sull'utilizzo singolo delle chiavi. Il cifrario è inoltre vulnerabile ad attacchi del tipo \emph{known-plaintext} dal momento che una chiave $K$ può essere determinata con lo \texttt{xor} tra messaggio originale e messaggio cifrato $x \oplus e_K(x) = K$. 
 Ne segue ora la dimostrazione della segretezza perfetta di \textit{One-time-pad}
 
 %B.S. Teorema 2.2
@@ -320,7 +320,7 @@ Per la sicurezza semantica si definisce un gioco d'attacco specifico.
             \item L'avversario restituisce $\hat{b} \in \{0,1\}$.
         \end{itemize}
 
-        Per $b = 0,1$ si definisce $W_b$ come l'evento in cui $\mathcal{A}$ restituisce 1 nell'esperimento $b$.
+        Per $b = 0,1$ si definisce $W_b$ come l'evento in cui $\mathcal{A}$ restituisce \texttt{1} nell'esperimento $b$.
 
     Infine si definisce il vantaggio di sicurezza semantica di $\mathcal{A}$ rispetto a $L$ come
     \[

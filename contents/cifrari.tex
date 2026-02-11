@@ -53,7 +53,7 @@ Prima di affrontare cifrari moderni, analizziamo cifrari storici per capirne le 
     \end{example}
     
     \subsubsection{Crittoanalisi}
-    È possibile decriptare il messaggio (trovando la chiave) attraverso l'analisi delle frequenze delle lettere presenti nel \textit{ciphertext}. L'analisi delle 10 lettere più frequenti nel testo cifrato permette l'abbinamento con le lettere corrispondenti.
+    È possibile decifrare il messaggio (trovando la chiave) attraverso l'analisi delle frequenze delle lettere presenti nel \textit{ciphertext}. L'analisi delle 10 lettere più frequenti nel testo cifrato permette l'abbinamento con le lettere corrispondenti.
 
     Una volta stabilito un piccolo insieme di lettere di cui si ha abbastanza certezza, è possibile valutare la frequenza delle coppie di 2 lettere più comuni. Aggiungendo nuove assunzioni è possibile ottenere sempre più informazioni sulla permutazione utilizzata.
     
@@ -142,4 +142,4 @@ $y = \texttt{DELW}$.
 \end{example}
 
 \subsubsection{Crittoanalisi}
-Il cifrario è facile da rompere con un \emph{known-plaintext attack}. Supponendo che l'avversario abbia $m$ coppie $x,y$,$x \in M, y \in C$ tale che $e_K(x) = y$.
+Il cifrario è facile da rompere con un \emph{known-plaintext attack}. Supponendo che l'avversario abbia $m$ coppie $x,y$  $x \in M, y \in C$ tale che $e_K(x) = y$.

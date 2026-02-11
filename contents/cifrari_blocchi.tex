@@ -241,7 +241,7 @@ e un attacco \textit{known-plaintext} come in \emph{DES}, in cui si è a conosce
 \begin{itemize}
     \item ECB  =``Electronic codebook mode''
     \item CBC = ``Cipher block chaining mode''
-    \item CTR =`` Counter mode''
+    \item CTR = ``Counter mode''
 \end{itemize}
 
 \paragraph{ECB} Corrisponde a usare un cifrario a blocchi: data una sequenza $x_1 \dots x$ di plaintext, ogni $x_i$ è cifrata con la \textbf{stessa} chiave $K$, producendo il ciphertext $Y_1 \dots $. Quindi la cifratura di blocchi di plaintext identici produce blocchi di ciphertext identici: rappresenta una debolezza, motivo per cui non viene usato (Caso estremo: blocchi di plaintext di tutti $0$ o $1$).
