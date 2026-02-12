@@ -60,7 +60,7 @@ Prima di affrontare cifrari moderni, analizziamo cifrari storici per capirne le 
     \subsection{Cifrario affine}
         %Definizione 2.3
         \begin{definition}[Cifrario Affine]
-            Sia $M = C = \mathbb{Z}_{26}$ e $K = \{ (a,b) \in \mathbb{Z}_{26} \times \mathbb{Z}_{26} \mid \gcd(a,26) = 1 \}$                
+            Sia $M = C = \mathbb{Z}_{26}$ e $\mathcal{K} = \{ (a,b) \in \mathbb{Z}_{26} \times \mathbb{Z}_{26} \mid \gcd(a,26) = 1 \}$                
             per $K = (a,b)$ si definiscono
             
             \begin{align*}
@@ -78,7 +78,7 @@ Prima di affrontare cifrari moderni, analizziamo cifrari storici per capirne le 
     
     \subsection{Cifrario di Vigenère}
     \begin{definition}[Cifrario di Vigenère]
-        Sia $m \in \mathbb{Z}$, $M = C = K = (\mathbb{Z}_{26})^{m}$. Per una chiave $K = (k_{1},\dots,k_{26})$, si definiscono per $x = (x_1,\dots,x_m) \in M$ e $y = (y_1,\dots,y_m) \in C$
+        Sia $m \in \mathbb{Z}$, $M = C = \mathcal{K} = (\mathbb{Z}_{26})^{m}$. Per una chiave $K = (k_{1},\dots,k_{m})$, si definiscono per $x = (x_1,\dots,x_m) \in M$ e $y = (y_1,\dots,y_m) \in C$
         \begin{align*}
             e_K(x) = (x_1+k_1,\dots, x_m + k_m)\\    
             d_K(y) = (y_1-k_1,\dots,y_m-k_m)
@@ -124,7 +124,7 @@ Successivamente si provano 25 shift per le sotto-stringhe con $M_g = \frac{p_i f
 
 \subsection{Cifrario di Hill}
 \begin{definition}[Cifrario di Hill]
-    Sia $m \geq 2 \in \mathbb{Z}$, $M = C = (\mathbb{Z})^{26}$ e $K = \{ \text{matrici invertibili } m \times m\}$, si definiscono 
+    Sia $m \geq 2 \in \mathbb{Z}$, $M = C = (\mathbb{Z})^{26}$ e $\mathcal{K} = \{ \text{matrici invertibili } m \times m\}$, si definiscono 
     \[
         e_K(x) = xK \qquad d_K(y) = yK^{-1}
     \]
