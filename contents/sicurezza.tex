@@ -151,7 +151,7 @@ In maniera alternativa è possibile descrivere la segretezza perfetta come di se
    
     $(2 \iff 3)$
     
-    Riscrivendo la seconda affermazione come: per ogni $y \in C$ esiste un numero $P_y$ tale che per ogni $x \in M$ si ha $\Pr[e_K(x) = y] = P_y$, in cui $K$ è una variabile distribuita in modo uniforme si nota $P_y = \frac{N_y}{\mathcal{K}}$.
+    Riscrivendo la seconda affermazione come: per ogni $y \in C$ esiste un numero $P_y$ tale che per ogni $x \in M$ si ha $\Pr[e_K(x) = y] = P_y$, in cui $K$ è una variabile distribuita in modo uniforme si nota $P_y = \frac{N_y}{|\mathcal{K}|}$.
     
     \vspace{1em}
     $(1 \implies 2)$
@@ -223,8 +223,8 @@ In maniera alternativa è possibile descrivere la segretezza perfetta come di se
 \begin{definition}[One-time-pad]
     Sia $n \geq 1$ un intero, e sia $M = C = \mathcal{K} = (\mathbb{Z}_{2})^n$. Per $K \in (\mathbb{Z}_{2})^n$, si definisce la cifratura come la somma della chiave e del messaggio modulo 2. Per $x \in M$ $x = (x_1,\dots,x_n)$ e $K \in \mathcal{K}= (K_1,\dots,K_n)$
     \begin{align*}
-        e_K(x) = (x_1 + K_1, \dots, x_n + K_n) \mod 2\\
-        d_K(y) = (x_1 + K_1, \dots, x_n + K_n) \mod 2\\
+        e_K(x) &= (x_1 + K_1, \dots, x_n + K_n) \mod 2\\
+        d_K(y) &= (y_1 + K_1, \dots, y_n + K_n) \mod 2\\
     \end{align*}
 \end{definition}
 
@@ -254,7 +254,7 @@ Il prossimo teorema mostra che il \textit{One-time-pad} è il massimo che si pu�
     per una variabile $K$ distribuita in modo uniforme su $\mathcal{K}$.
 
     \vspace{1em}\noindent
-    Scegliendo un qualsiasi messaggio $x_0 \in M$ e una chiave $k_0 \in \mathcal{K}$ è chiaro che (\ref{eq1}) sia vero.
+    Scegliendo un qualsiasi messaggio $x_0 \in M$ e una chiave $k_0 \in \mathcal{K}$ è chiaro che (\ref{eq1}) sia vero definendo $y:= e_{k_0}(x_0)$.
 
     \vspace{1em}\noindent
     Sia $S = \{ d_{k_1}(y) \mid k_1 \in \mathcal{K}\}$ l'insieme dei messaggi decifrabili, ovviamente $|S| \leq |\mathcal{K}| < |M|$. È possibile prendere un messaggio $x_1 \in M-S$. Si assuma $k_1$ tale che $e_{k_1}(x_1) = y$, allora per la correttezza del cifrario
