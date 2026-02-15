@@ -46,7 +46,7 @@ Nel caso in cui il problema preimmagine sia difficile, la funzione $h$ è detta 
 \end{definition}
 
 \begin{definition}[Vantaggio resistenza alle collisioni]
-    In un gioco d'attacco con una funzione hash $h: \mathcal{X} \to \mathcal{Y}$, definiamo il vantaggi di un avversario $\mathcal{A}$ rispetto ad $h$, denotato $CR_{\text{adv}}[\mathcal{A},h]$ come la probabilità dell'avversario di risolvere il problema collisione \ref{def:collision}.
+    In un gioco d'attacco con una funzione hash $h: \mathcal{X} \to \mathcal{Y}$, definiamo il vantaggio di un avversario $\mathcal{A}$ rispetto ad $h$, denotato $CR_{\text{adv}}[\mathcal{A},h]$ come la probabilità dell'avversario di risolvere il problema collisione \ref{def:collision}.
 \end{definition}
 
 \noindent
@@ -223,7 +223,7 @@ Il teorema \ref{teoremaMerkle} mostra che è possibile costruire una funzione ha
 
 Sia $L = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ un cifrario a blocchi con $\mathcal{X} = \{0,1\}^{n}$. La funzione di compressione di Davies-Meyer $h_{DM}$, associa un elemento in $(\mathcal{X} \times \mathcal{K})$ a un elemento in $\mathcal{X}$ come segue
 \[
-    h_{DM}:= e_y(x) \oplus x
+    h_{DM}(x,y):= e_y(x) \oplus x
 \]
 $h_{DM}$ è definita su $(\mathcal{X}\times \mathcal{K},\mathcal{X})$. Questa funzione, nel paradigma di \emph{Merkle Damgard}, ha input $x$ come variabili di incatenazione $x:= t_{i-1}$ e un blocco $y:= m_i \in \mathcal{K}$, il risultato rappresenta invece la variabile $t_i := e_{m_i}(t_{i-1}) \oplus t_{i-1}$. Solitamente i cifrari sono ottimizzati per fare uso di una singola chiave durante tutto il processo, al contrario questo metodo, fa uso di più chiavi, così facendo ottiene una funzione hash relativamente lenta. Per questo motivo si fa uso di cifrari a blocchi creati per un cambio di chiavi rapido.
 
@@ -276,7 +276,7 @@ I \emph{MAC} sono funzioni hash con chiave che soddisfano determinate proprietà
 
 \paragraph{Sicurezza per un \emph{MAC}} Supponiamo che un avversario $\mathcal{A}$ stia attaccando un sistema \emph{MAC} $\mathcal{I}=(S,V)$ con un \textbf{chosen message attack}. Sia $k$ una chiave scelta a caso, sconosciuta all'attaccante. $\mathcal{A}$è in grado di ricevere coppie $(m,t)$ di messaggi firmati. Lo scopo di $\mathcal{A}$ è di trovare una contraffazione. Cioè l'attaccante deve trovare una nuova coppia $(m,t)$, diversa da tutte le altre firmate. L'attaccante sceglie $m$ arbitrariamente. \\ Un sistema \emph{MAC} è sicuro se un avversario che è in grado di fare un \textit{chosen message attack} non può creare una contraffazione.  
 
-\vspace{0.2cm} \noindent Più precisamente, diamo la definizione di sicurezza di \emph{MAC} usando un gioco d'attacco tra uno sfidante e un avversario \emph{A}. 
+\vspace{0.2cm} \noindent Più precisamente, diamo la definizione di sicurezza di \emph{MAC} usando un gioco d'attacco tra uno sfidante e un avversario $\mathcal{A}$. 
 
 \paragraph{Gioco d'attacco: Sicurezza \emph{MAC}} Per un dato sistema \emph{MAC} $\mathcal{I}=(S,V)$, definito su $(\mathcal{K},\mathcal{M},\mathcal{T})$, e un dato avversario $\mathcal{A}$, il gioco d'attacco funziona così:
 \begin{itemize}

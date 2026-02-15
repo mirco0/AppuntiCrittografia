@@ -1,9 +1,9 @@
 \begin{definition}[Gruppo]
-    Un gruppo è una coppia $G=(X,\star)$, dove $G$ è un insieme e $\star$ un'operazione binaria definita su $X$. L'operazione $\star$ è:
+    Un gruppo è una coppia $G=(X,\star)$, dove $X$ è un insieme e $\star$ un'operazione binaria definita su $X$. L'operazione $\star$ è tale che:
 \begin{itemize}
-    \item associativa: $(a\star)\star c=a\star (b \star c)$, per qualche $a,b,c \in X$
-    \item $id \in X$ è l'elemento \textit{identità} tale che: $a \star id=id \star a=a$ per qualche $a \in X$
-    \item $\forall a \in X \ \exists b \in X$ detta \textit{inversa} di $a$, tale che $a \star b = b\ \star a= id$.
+    \item l'operazione è \textbf{associativa}: $(a\star b)\star c=a\star (b \star c)$, per ogni $a,b,c \in X$
+    \item esistenza di $id$ detto \textbf{elemento identità}, tale che: $a \star id=id \star a=a$ per ogni $a \in X$
+    \item esistenza dell'\textbf{inversa}: $\forall a \in X \ \exists b \in X$, dove $b$ è detta \textit{inversa} di $a$, tale che $a \star b = b\star a= id$.
 \end{itemize} 
 \end{definition}
 
@@ -15,7 +15,7 @@
 \end{definition}
 
 \begin{definition}[Gruppo abeliano]
-    Un gruppo $G=(X,\star)$ è abeliano se $\star$ è commutativa: $a \star b=b \star a$. 
+    Un gruppo $G=(X,\star)$ è abeliano se l'operazione $\star$ è commutativa: $a \star b=b \star a$. 
 \end{definition}
 
 \begin{definition}[Gruppo finito]
@@ -110,11 +110,11 @@ Invece, $({\mathbb{Z}_p}^*, \cdot)$, con $p \geq 2$ un primo, è un gruppo cicli
 \end{theorem}
 
 \begin{definition}[Sottogruppo]
-    Sia $G=(X,\star)$ un gruppo finito e $Y \in X$. $H=(Y,\star)$ è un sottogruppo di $G$ se anche $H$ è un gruppo finito. 
+    Sia $G=(X,\star)$ un gruppo finito e $Y \subseteq X$. $H=(Y,\star)$ è un sottogruppo di $G$ se anche $H$ è un gruppo finito. 
 \end{definition} 
 
 \begin{theorem}
-    Sia $G=(X,\star$) un gruppo finito e sia $Y \in X$. Allora $H=(Y,\star$) è un sottogruppo di $G \iff$ è chiuso, ovvero $h_1 \star h_2 \in H \ \ \forall h_1, h_2 \in H$.  
+    Sia $G=(X,\star$) un gruppo finito e sia $Y \subseteq X$. Allora $H=(Y,\star$) è un sottogruppo di $G \iff$ è chiuso, ovvero $h_1 \star h_2 \in H \ \ \forall h_1, h_2 \in H$.  
 \end{theorem} 
 
 \begin{definition}
