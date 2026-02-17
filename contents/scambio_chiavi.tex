@@ -89,18 +89,20 @@ Ovviamente il sistema è sicuro finché il valore di $a$ è sconosciuto, $a$ pu�
 
 \paragraph{Algoritmo di Shanks}
 \noindent
-Si giustifica la correttezza dell'algoritmo, vengono create due liste $L_1,L_2$ entrambe di lunghezza $\sqrt{n}$, una collisione è trovata quando $(j,y) \in L_1 \ (i,y) \in L_2$
-\begin{align*}
-    a^{mj} = y &= \beta\alpha^{-1}\\
-    a^{mj+i} &= \beta
-\end{align*}
-Al contrario se $\beta \in \langle a \rangle$ si ha $0 \leq \log_{\alpha}(\beta) \leq n-1$ e dividendo $\log_{\alpha}(\beta)$ per me è possibile scrivere 
+Si giustifica la correttezza dell'algoritmo, vengono create due liste $L_1,L_2$ entrambe di lunghezza $m = \sqrt{n}$; se $(j,y) \in L_1$ e $(i,y) \in L_2$, si ha:
+\begin{gather*}
+    a^{mj} = y \quad \beta\alpha^{-1} = y \\
+    a^{mj} =  \beta\alpha^{-1} = y\\
+    a^{mj} \alpha^{i} = a^{mj+i} = \beta
+\end{gather*}
+Al contrario se $\beta \in \langle a \rangle$ si ha $0 \leq \log_{\alpha}(\beta) \leq n-1$ e dividendo $\log_{\alpha}(\beta)$ per $m$ è possibile scrivere 
 \[
     \log_{\alpha}(\beta) = mj +i,
 \]
-con $0 \leq j$ e $i \leq m-1$ inoltre $j \leq m-1$
+con opportuni valori di $j$ e $i$ ($0 \leq j$ e $i \leq m-1$), inoltre $j \leq m-1$
 \[
-    \log_{\alpha}(\beta) \leq n - 1 \leq m^2 - 1 = m(m-1) + m -1.
+    \log_{\alpha}(\beta) \leq n - 1 \leq m^2 - 1 = m\underbrace{(m-1)}_{
+    \substack{\text{Valore massimo} \\ \text{per $j$}}} + \underbrace{m -1}_{\substack{\text{Valore massimo} \\ \text{per $i$}}}.
 \]
 Per cui una collisione sarà sempre trovata. L'algoritmo può essere implementato per impiegare $O(m\log(m))$ tempo e memoria. L'operazione più costosa è proprio l'ordinamento. 
 
