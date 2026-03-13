@@ -1,0 +1,39 @@
+Abbiamo mostrato sistemi che garantiscono segretezza e sistemi che permettono l'integrità dei dati, i sistemi che combinano le due forniscono la \emph{authenticated encryption}, chiamate \emph{AE-Secure}. Per creare un sistema AE ci sono due metodi, \textbf{composizione generica}, in cui si unisce un cifrario CPA-sicuro e un \emph{MAC} sicuro. 
+
+\vspace{1em}
+Sia $(M, C, \mathcal{K}, \mathcal{E}, \mathcal{D})$ un cifrario e $I = (S,V)$ un \emph{MAC}, con $k_{\text{enc}} \in \mathcal{K}$ e $k_{\text{mac}}$ una chiave per MAC.
+Ci sono due modalità per creare un sistema: 
+\begin{definition}[Encrypt-then-MAC]
+    Sia $m$ un messaggio e $c = e_{k_{\text{enc}}}(m)$ il messaggio cifrato. Il tag viene calcolato come segue 
+    \[ \text{tag} = S(k_{\text{mac}},c) \]
+    $(c,\text{tag})$ è il messaggio con sicurezza AE.
+\end{definition}
+
+\begin{definition}[Mac-then-Encrypt]
+    Sia $m$ un messaggio, si definisce $\text{tag} = S(k_{\text{mac}},m)$, infine il tag viene cifrato $c = e_{k_{\text{enc}}}((m,t))$
+\end{definition}
+\noindent
+Solo \emph{encrypt-then-mac} è sicuro tra i due, ed è utilizzato in TLS 1.2. Il secondo metodo per creare un sistema AE sicuro è quello di basare il sistema su un cifrario a blocchi o una PRF, questo tipo di schema è chiamato \textbf{schema integrato}.
+
+\begin{definition}[Integrità dei messaggi cifrati]
+    % \label{def:ciphertext_integrity}
+    Per un dato cifrario $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ e un dato avversario $\mathcal{A}$, il gioco d'attacco funziona cosi:
+    
+    \begin{itemize}
+        \item Lo sfidante sceglie $k \in \emph{K}$ a caso
+        \item $\mathcal{A}$ interroga lo sfidante diverse volte. $\forall i=1, \dots$ la $i-$esima query è un messaggio $m_i \in \mathcal{M}$. Dato $m_i$, calcola un $c_i = e_k(m_i)$ e manda $c_i$ ad $\mathcal{A}$.
+        \item  Alla fine $\mathcal{A}$ restituisce un messaggio cifrato $c \in C$ mai visto prima, ovvero $c \not\in \{c_1,c_2,\dots\}$. 
+    \end{itemize}
+
+    $\mathcal{A}$ vince il gioco se $c$ è un messaggio cifrato con chiave $k$, cioè $d_k(c) = m$ per qualche messaggio $m \in \mathcal{M}$. CIadv$[\mathcal{L},\mathcal{A}]$ è il vantaggio di $\mathcal{A}$ rispetto a $\mathcal{L}$ è definito come la probabilità che $\mathcal{A}$ vinca il gioco d'attacco. In particolare $\mathcal{A}$ è chiamato avversario a \textit{Q-query} se fa uso di al massimo $q$ query. 
+\end{definition}
+
+
+\begin{definition}[Authenticated Encryption]
+    Un cifrario $\mathcal{L}$ fornisce authenticated encryption se soddisfa le due condizioni
+    \begin{itemize}
+        \item $\mathcal{L}$ ha sicurezza semantica su un \emph{chosen plaintext attack}
+        \item $\mathcal{L}$ deve fornire \emph{integrità del messaggio cifrato}
+    \end{itemize}
+\end{definition}
+
