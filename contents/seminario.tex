@@ -13,10 +13,13 @@ Ci sono due modalità per creare un sistema:
     Sia $m$ un messaggio, si definisce $\text{tag} = S(k_{\text{mac}},m)$, infine il tag viene cifrato $c = e_{k_{\text{enc}}}((m,t))$
 \end{definition}
 \noindent
-Solo \emph{encrypt-then-mac} è sicuro tra i due, ed è utilizzato in TLS 1.2. Il secondo metodo per creare un sistema AE sicuro è quello di basare il sistema su un cifrario a blocchi o una PRF, questo tipo di schema è chiamato \textbf{schema integrato}.
+Solo \emph{encrypt-then-MAC} è sicuro tra i due, ed è utilizzato in TLS 1.2. Il secondo metodo per creare un sistema \mbox{AE-sicuro} è quello di basare il sistema su un cifrario a blocchi o una PRF, questo tipo di schema è chiamato \textbf{schema integrato}.
+
+% \begin{definition}[Sicurezza CPA]
+% \end{definition}
 
 \begin{definition}[Integrità dei messaggi cifrati]
-    % \label{def:ciphertext_integrity}
+    \label{def:ciphertext_integrity}
     Per un dato cifrario $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ e un dato avversario $\mathcal{A}$, il gioco d'attacco funziona cosi:
     
     \begin{itemize}
@@ -25,9 +28,11 @@ Solo \emph{encrypt-then-mac} è sicuro tra i due, ed è utilizzato in TLS 1.2. I
         \item  Alla fine $\mathcal{A}$ restituisce un messaggio cifrato $c \in C$ mai visto prima, ovvero $c \not\in \{c_1,c_2,\dots\}$. 
     \end{itemize}
 
-    $\mathcal{A}$ vince il gioco se $c$ è un messaggio cifrato con chiave $k$, cioè $d_k(c) = m$ per qualche messaggio $m \in \mathcal{M}$. CIadv$[\mathcal{L},\mathcal{A}]$ è il vantaggio di $\mathcal{A}$ rispetto a $\mathcal{L}$ è definito come la probabilità che $\mathcal{A}$ vinca il gioco d'attacco. In particolare $\mathcal{A}$ è chiamato avversario a \textit{Q-query} se fa uso di al massimo $q$ query. 
-\end{definition}
+    $\mathcal{A}$ vince il gioco se $c$ è un messaggio cifrato con chiave $k$, cioè $d_k(c) = m$ per qualche messaggio $m \in \mathcal{M}$. CIadv$[\mathcal{L},\mathcal{A}]$ è il vantaggio di $\mathcal{A}$ rispetto a $\mathcal{L}$ è definito come la probabilità che $\mathcal{A}$ vinca il gioco d'attacco. In particolare $\mathcal{A}$ è chiamato avversario a \textit{Q-query} se fa uso di al massimo $Q$ query.
 
+    \vspace{1em}
+    In altre parole l'integrità dei messaggi aiuta a definire quanto sia difficile determinare, da parte di un avversario $\mathcal{A}$, quali messaggi cifrati siano effettivamente validi (decifrabili).
+\end{definition}
 
 \begin{definition}[Authenticated Encryption]
     Un cifrario $\mathcal{L}$ fornisce authenticated encryption se soddisfa le due condizioni
@@ -37,3 +42,49 @@ Solo \emph{encrypt-then-mac} è sicuro tra i due, ed è utilizzato in TLS 1.2. I
     \end{itemize}
 \end{definition}
 
+\begin{definition}[Sicurezza AE]
+    Un cifrario $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ fornisce sicurezza authenticated encryption, è \textit{AE-Sicuro} se $\mathcal{L}$ ha sicurezza semantica per l'attacco \emph{chosen plaintext} e ha integrità del messaggio cifrato. 
+\end{definition}
+
+\begin{definition}[Sicurezza messaggio cifrato one-time]
+    Un cifrario $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ ha integrità del messaggio cifrato one-time se per ogni avversario efficiente \emph{1-Query} $\mathcal{A}$, il valore di CIadv$[\mathcal{L},\mathcal{A}]$ è trascurabile. 
+\end{definition}
+
+\begin{definition}[Sicurezza 1AE]
+    Un cifrario $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ è 1AE-sicuro se $\mathcal{L}$ è semanticamente sicuro e fornisce \emph{integrità dei messaggi cifrati one-time}.
+\end{definition}
+
+\subsection{Conseguenze dell' Authenticated Encryption}
+Si consideri un cifrario AE-sicuro $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$, Alice e Bob, che condividono una chiave segreta $k \in \mathcal{K}$. Alice invia una sequenza di messaggi cifrati $c_1,c_2,\dots$ tale che per ogni $i \quad c_i = e_k(m_i)$ per qualche messaggio $m_i$.
+
+Sia ora $\mathcal{A}$ un avversario che ha l'obiettivo di inviare a Bob un messaggio $m$, impersonando Alice. Sia $c$ un messaggio generico inviato da Alice a Bob tale che $c = e_k(m)$, L'obiettivo di $\mathcal{A}$ è quello di trovare $\hat{c}$ tale che esiste un messaggio $\hat{m} = d_k(\hat{c})$. Se $\mathcal{A}$ fosse in grado di trovare $\hat{c}$ allora sarebbe anche capace di vincere il gioco d'attacco \ref{def:ciphertext_integrity}, ma ciò non è possibile poiché $\mathcal{L}$ è AE-sicuro. Questo mostra che integrità del messaggio cifrato implica l'integrità del messaggio.
+
+\subsubsection{Chosen Plaintext Attack}
+
+
+\subsubsection{Chosen Ciphertext Attack}
+% Pagina 362 B.S.
+\begin{definition}[Sicurezza CCA]
+    Per un dato cifrario $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ e un dato avversario $\mathcal{A}$ si definiscono due diversi esperimenti $b = 0,1$:
+    
+    \vspace{1em}
+    \noindent
+    \textbf{Esperimento} $b$:
+    \begin{itemize}
+        \item Lo sfidante sceglie $k \in \mathcal{K}$ in modo casuale
+        \item $\mathcal{A}$ fa delle query allo sfidante, le query possono essere di due tipi:
+        \begin{itemize}
+            \item Query di cifratura: per $i = 1,2,\dots$ l'attaccante sceglie due messaggi $m_{i0}, m_{i1}$ e li invia allo sfindate. Lo sfidante calcola $c_i = e_k(m_{ib})$ e lo invia all'attaccante.
+            \item Query di decifratura: per $j = 1,2,\dots$ lo sfidante sceglie un testo cifrato $\hat{c}_j$ mai visto prima $\hat{c}_i \notin \{c_1,c_2\dots\}$
+        \end{itemize}
+    \end{itemize}
+    Alla fine del gioco $\mathcal{A}$ restituisce un bit $\hat{b} \in \{0,1\}$. Sia $W_b$ l'evento in cui $\mathcal{A}$ restituisca 1 nell'esperimento $b$, si definisce il vantaggio di $\mathcal{A}$ rispetto a $\mathcal{L}$ così:
+    \[
+        \text{CCAadv}[\mathcal{A},\mathcal{L}] = |\Pr[W_0] - \Pr[W_1|
+    \]
+    Un cifrario $\mathcal{L}$ è semanticamente sicuro contro l'attacco \emph{chosen ciphertext}, se CCAadv$[\mathcal{A},\mathcal{L}]$ è trascurabile.
+\end{definition}
+
+\begin{definition}[Sicurezza 1CCA]
+    Un cifrario $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ è 1CCA-sicuro se $\mathcal{L}$ se un attaccante $\mathcal{A}$ ha solo una query di cifratura disponibile.
+\end{definition}
