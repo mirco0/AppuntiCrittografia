@@ -15,8 +15,27 @@ Ci sono due modalità per creare un sistema:
 \noindent
 Solo \emph{encrypt-then-MAC} è sicuro tra i due, ed è utilizzato in TLS 1.2. Il secondo metodo per creare un sistema \mbox{AE-sicuro} è quello di basare il sistema su un cifrario a blocchi o una PRF, questo tipo di schema è chiamato \textbf{schema integrato}.
 
-% \begin{definition}[Sicurezza CPA]
-% \end{definition}
+\begin{definition}[Sicurezza CPA]
+    Per un dato cifrario $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ e un dato avversario $\mathcal{A}$ si definiscono due diversi esperimenti $b = 0,1$:
+    
+    \vspace{1em}
+    \noindent
+    \textbf{Esperimento} $b$:
+    \begin{itemize}
+        \item Lo sfidante sceglie $k \in \emph{K}$ a caso
+        \item $\mathcal{A}$ fa delle query allo sfidante:
+            Per $i = 1,2,\dots$ lo sfidante sceglie una coppia di messaggi $(m_{i0}, m_{i1})$ della stessa lunghezza, lo sfidante calcola $c_i = e_k(m_{ib})$ e invia $c_i$ all'avversario.
+        
+        \item L'avversario restituisce un bit $\hat{b} \in \{0,1\}$
+    \end{itemize}
+    Per $b = 0,1$ sia $W_b$ l'evento in cui $\mathcal{A}$ restituisca 1 nell'esperimento $b$, si definisce il vantaggio di $\mathcal{A}$ rispetto a $\mathcal{L}$ così:
+    \[
+        \text{CPAadv}[\mathcal{A},\mathcal{L}] = |\Pr[W_0] - \Pr[W_1|
+    \]
+
+    Un cifrario $\mathcal{L}$ è semanticamente sicuro contro l'attacco \emph{chosen plaintext}, se CPAadv$[\mathcal{A},\mathcal{L}]$ è trascurabile.
+    
+\end{definition}
 
 \begin{definition}[Integrità dei messaggi cifrati]
     \label{def:ciphertext_integrity}
@@ -59,9 +78,6 @@ Si consideri un cifrario AE-sicuro $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\ma
 
 Sia ora $\mathcal{A}$ un avversario che ha l'obiettivo di inviare a Bob un messaggio $m$, impersonando Alice. Sia $c$ un messaggio generico inviato da Alice a Bob tale che $c = e_k(m)$, L'obiettivo di $\mathcal{A}$ è quello di trovare $\hat{c}$ tale che esiste un messaggio $\hat{m} = d_k(\hat{c})$. Se $\mathcal{A}$ fosse in grado di trovare $\hat{c}$ allora sarebbe anche capace di vincere il gioco d'attacco \ref{def:ciphertext_integrity}, ma ciò non è possibile poiché $\mathcal{L}$ è AE-sicuro. Questo mostra che integrità del messaggio cifrato implica l'integrità del messaggio.
 
-\subsubsection{Chosen Plaintext Attack}
-
-
 \subsubsection{Chosen Ciphertext Attack}
 % Pagina 362 B.S.
 \begin{definition}[Sicurezza CCA]
@@ -78,7 +94,7 @@ Sia ora $\mathcal{A}$ un avversario che ha l'obiettivo di inviare a Bob un messa
             \item Query di decifratura: per $j = 1,2,\dots$ lo sfidante sceglie un testo cifrato $\hat{c}_j$ mai visto prima $\hat{c}_i \notin \{c_1,c_2\dots\}$
         \end{itemize}
     \end{itemize}
-    Alla fine del gioco $\mathcal{A}$ restituisce un bit $\hat{b} \in \{0,1\}$. Sia $W_b$ l'evento in cui $\mathcal{A}$ restituisca 1 nell'esperimento $b$, si definisce il vantaggio di $\mathcal{A}$ rispetto a $\mathcal{L}$ così:
+    Alla fine del gioco $\mathcal{A}$ restituisce un bit $\hat{b} \in \{0,1\}$. Per $b = 0,1$ sia $W_b$ l'evento in cui $\mathcal{A}$ restituisca 1 nell'esperimento $b$, si definisce il vantaggio di $\mathcal{A}$ rispetto a $\mathcal{L}$ così:
     \[
         \text{CCAadv}[\mathcal{A},\mathcal{L}] = |\Pr[W_0] - \Pr[W_1|
     \]
