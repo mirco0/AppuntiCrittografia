@@ -116,11 +116,11 @@ Si mostra ora la relazione tra sicurezza CCA e sicurezza AE, il seguente teorema
 %Dimostrazione omessa per ora B.S. 363
 
 \subsection{Creazione di cifrari attraverso la composizione}
-\paragraph{Enrypt then MAC}:
+\paragraph{Enrypt then MAC}
 Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K}_e,\mathcal{E},\mathcal{D})$ e sia $\mathcal{I} = (S,V)$ un \emph{MAC} definito su $(\mathcal{K}_m,C,\mathcal{T})$. Si definisce un sistema $\mathcal{E}_{EM} = (E_{EM}, D_{EM})$ come di seguito:
 
 \begin{gather*}
-    E_{EM}((k_e,k_m),m) = c = e_{k_e}(m) \quad t = S(K_m,c)\\
+    E_{EM}((k_e,k_m),m) = (c,t) \quad c = e_{k_e}(m) \quad t = S(K_m,c)\\
     D_{EM}( (k_e,k_m), (c,t)) = 
     \begin{cases}
         \texttt{reject} & \text{se $V(k_m,c,t) = \texttt{reject}$}\\
@@ -132,6 +132,44 @@ Il sistema $\mathcal{E}_{EM}$ è definito su $(\mathcal{K}_e \times \mathcal{K}_
 
 \begin{theorem}[Il sistema $\mathcal{E}_{EM}$ è AE-sicuro]
     Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K}_e,\mathcal{E},\mathcal{D})$ e sia $\mathcal{I} = (S,V)$ un \emph{MAC} definito su $(\mathcal{K}_m,C,\mathcal{T})$. Se $\mathcal{L}$ è CPA-sicuro e $\mathcal{I}$ è un sistema \emph{MAC} sicuro, allota il sistema $\mathcal{E}_{EM} = (E_{EM}, D_{EM})$ è AE-sicuro.
-
-    
 \end{theorem}
+
+\begin{proof}
+    Iniziamo con il dimostrare che $\mathcal{E}_{MC}$ fornisce integrità del messaggio cifrato. Sia $\mathcal{A}$ l'avversario che svolge il gioco d'attacco per l'integrità del messaggio cifrato. In altre parole $\mathcal{A}$ è capace di generare un messaggio cifrato valido $c$, per una chiave sconosciuta $k$.
+    
+    \vspace{1em}
+    Si costruisce un avversario $\mathcal{B}$ che attacca $\mathcal{I}$ (il sistema MAC). Che opera come segue:
+    $\mathcal{B}$ interagisce con un avversario $\mathcal{C}$, e ha lo scopo di trovare una coppia $(m,t)$ messaggio, tag.
+
+    \vspace{1em}
+    $\mathcal{B}$ svolge il ruolo di sfidante per $\mathcal{A}$ e comunica con uno sfidante per il gioco d'attacco a \emph{MAC}. $\mathcal{B}$ 
+    
+    \begin{itemize}
+        \item Sceglie una chiave casuale $k_e \in \mathcal{K}_e$ 
+        \item Quando riceve una query da $\mathcal{A}$ $m_i \in \mathcal{M}$: invia una query al proprio sfidante
+        $c_i = e_{k_e}(m_i)$, ottiene così $t_i = S(k_m,c_i)$ e invia $(c_i,t_i)$ ad $\mathcal{A}$.
+    \end{itemize}
+    Quando $\mathcal{A}$ restituirà $(c,t)$, $\mathcal{B}$ restituirà $(c,t)$
+
+    Con probabilità $\text{CIadv}[\mathcal{A},\mathcal{E}_{MC}]$ $\mathcal{A}$ vince il gioco e trova una coppia $(c,t)$ valida ($V(K_m,c,t) = \texttt{accept}$) allora $(c,t)$ permette anche a $\mathcal{B}$ di vincere il gioco d'attacco \emph{MAC} per cui
+    \[
+        \text{CIadv}[\mathcal{A},\mathcal{E}_{EM}] = \text{MACadv}[\mathcal{B},\mathcal{I}].
+    \]
+    Inoltre se $\mathcal{L}$ è CPA-sicuro anche $\mathcal{E}_{EM}$ lo è
+    % pag 366 B.S. lasciato come esercizio
+\end{proof}
+
+\vspace{1em}\noindent
+Un errore comune può essere la scelta delle due chiavi tali che $k_e = k_m$, in questa situazione il cifario risultante sarà AE-sicuro.
+
+Un altro errore è applicare il \emph{MAC} solo a parte del testo cifrato. Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ un cifrario CPA-sicuro \emph{random CBC} tale che, per un IV $r$ casuale  
+\[
+    (r,c) = e_k(m)
+\]
+Implementando un cifrario $\mathcal{E} = {E_{EM},D_{EM}}$ l'algoritmo di cifratura risulterà essere
+\[
+    E_{EM}( (k_e,k_m),m) = \{ (r,t,c) \mid (r,c) = e_{k_e}(m), t = S(k_m,c)\}
+\]
+
+In questo caso $e_{k_e}(m)$ da come risultato una coppia $(r,c)$ ma l'algoritmo di firma $S$ è applicato solamente a $c$, IV non è protetto da \emph{MAC}, questo permette di sconfiggere l'integrità del messaggio cifrato:
+

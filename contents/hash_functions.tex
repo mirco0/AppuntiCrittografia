@@ -284,7 +284,7 @@ I \emph{MAC} sono funzioni hash con chiave che soddisfano determinate proprietà
     \item $\mathcal{A}$ interroga lo sfidante diverse volte. $\forall i=1, \dots$ la $i-$esima query di firma è un messaggio $m_i \in \mathcal{M}$. Dato $m_i$, calcola un tag $t_i = S(k,m)$ e manda $t_i$ ad $\mathcal{A}$.
     \item  Alla fine $\mathcal{A}$ restituisce una coppia $(m,t) \in \emph{M} \times \emph{T}$ non ancora firmata, ovvero $(m,t) \not\in \{(m_1,t_1),\dots\}$. 
 \end{itemize}
-\noindent $\mathcal{A}$ vince il gioco se $(m,t)$ è una coppia valida per la chiave $k$. $MAC_{\text{adv}}\left[\mathcal{A},\emph{I}\;\right]$ è il vantaggio di $\mathcal{A}$, ovvero la probabilità che $\mathcal{A}$ vinca il gioco. 
+\noindent $\mathcal{A}$ vince il gioco se $(m,t)$ è una coppia valida per la chiave $k$. $\emph{MAC}_{\text{adv}}\left[\mathcal{A},\mathcal{I}\;\right]$ è il vantaggio di $\mathcal{A}$, ovvero la probabilità che $\mathcal{A}$ vinca il gioco. 
 
 \vspace{0.2cm} \noindent Un sistema \textit{MAC} è sicuro se per tutti gli avversari efficienti $\mathcal{A}$, il valore $MAC_{\text{adv}}$ è trascurabile. 
 
