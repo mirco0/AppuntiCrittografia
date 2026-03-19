@@ -34,7 +34,6 @@ Solo \emph{encrypt-then-MAC} è sicuro tra i due, ed è utilizzato in TLS 1.2. I
     \]
 
     Un cifrario $\mathcal{L}$ è semanticamente sicuro contro l'attacco \emph{chosen plaintext}, se CPAadv$[\mathcal{A},\mathcal{L}]$ è trascurabile.
-    
 \end{definition}
 
 \begin{definition}[Integrità dei messaggi cifrati]
@@ -104,3 +103,35 @@ Sia ora $\mathcal{A}$ un avversario che ha l'obiettivo di inviare a Bob un messa
 \begin{definition}[Sicurezza 1CCA]
     Un cifrario $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ è 1CCA-sicuro se $\mathcal{L}$ se un attaccante $\mathcal{A}$ ha solo una query di cifratura disponibile.
 \end{definition}
+
+Si mostra ora la relazione tra sicurezza CCA e sicurezza AE, il seguente teorema mostra come un cifrario AE-sicuro sia anche un cifrario CCA-sicuro.
+\begin{theorem}
+    Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ e un dato avversario $\mathcal{A}$ CCA che fa uso di $Q_e$ Query di cifratura e $Q_d$ Query di decicfratura, allora esistono due avversari $\mathcal{B}_{\text{cpa}}$ e $\mathcal{B}_{\text{ci}}$ rispettivamente avversari per i giochi d'attacco CPA e CI. Tali che 
+    \[
+        \text{CCAadv}[\mathcal{A},\mathcal{L}] = \text{CPAadv}[\mathcal{B}_{\text{cpa}}] + 2Q_{d} \cdot \text{CIadv}[\mathcal{B}_{\text{ci}},\mathcal{L}]
+    \]
+\end{theorem}
+
+%TODO: Scrivere dimostrazione
+%Dimostrazione omessa per ora B.S. 363
+
+\subsection{Creazione di cifrari attraverso la composizione}
+\paragraph{Enrypt then MAC}:
+Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K}_e,\mathcal{E},\mathcal{D})$ e sia $\mathcal{I} = (S,V)$ un \emph{MAC} definito su $(\mathcal{K}_m,C,\mathcal{T})$. Si definisce un sistema $\mathcal{E}_{EM} = (E_{EM}, D_{EM})$ come di seguito:
+
+\begin{gather*}
+    E_{EM}((k_e,k_m),m) = c = e_{k_e}(m) \quad t = S(K_m,c)\\
+    D_{EM}( (k_e,k_m), (c,t)) = 
+    \begin{cases}
+        \texttt{reject} & \text{se $V(k_m,c,t) = \texttt{reject}$}\\
+        d_{k_e}(c) & \text{altrimenti}
+    \end{cases}
+\end{gather*}
+
+Il sistema $\mathcal{E}_{EM}$ è definito su $(\mathcal{K}_e \times \mathcal{K}_m, \mathcal{M}, C \times \mathcal{T})$.
+
+\begin{theorem}[Il sistema $\mathcal{E}_{EM}$ è AE-sicuro]
+    Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K}_e,\mathcal{E},\mathcal{D})$ e sia $\mathcal{I} = (S,V)$ un \emph{MAC} definito su $(\mathcal{K}_m,C,\mathcal{T})$. Se $\mathcal{L}$ è CPA-sicuro e $\mathcal{I}$ è un sistema \emph{MAC} sicuro, allota il sistema $\mathcal{E}_{EM} = (E_{EM}, D_{EM})$ è AE-sicuro.
+
+    
+\end{theorem}
