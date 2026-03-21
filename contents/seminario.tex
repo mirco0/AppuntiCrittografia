@@ -260,3 +260,34 @@ Così facendo l'attaccante può ottenere un secondo byte di informazione, e cont
 \vspace{1em}\noindent
 In generale questo tipo di attacchi sono possibili in quanto il server risponde con un codice errore che permette all'attaccante di determinare se l'attacco sta avendo successo. Nel caso di assenza di errori è anche possibile per l'attaccante fare attachi sul tempo di risposta del server.
 
+\subsection{Costruzioni sicure MAC-then-encrypt}
+Nonostate la costruzione MAC-then-encrypt non sia sempre sicura (vengono quindi preferite costruzioni \emph{Encrypt-then-MAC}) esistono delle costruzioni \emph{ME} che sono sicure. In particolare nel caso un cifrario $\mathcal{E}$ implementi una \emph{randomized counter mode} allora $\mathcal{E}$ sarebbe AE-sicuro, anche nel caso \emph{MAC} abbia sicurezza \emph{one-time}.
+
+\vspace{1em}\noindent
+Sia $\mathcal{L} = (E,D)$ un cifrario AES, in \emph{randomized counter mode} costruito su una \emph{PRF} sicura $F$ definita su $(\mathcal{K}_e,\mathcal{X} \times \mathbb{Z}_{\ell}, \mathcal{Y})$ di cui $\mathcal{Y} = \{0,1\}^{n}$.
+
+L'algoritmo $E$ funziona come segue 
+\[
+    E(k_e,m) = 
+    \begin{cases}
+        x \in \mathcal{X}\\
+        \text{for } j = 0 \text{ to } |m| -1:\\
+        \quad u[j] = F(k_, (x,j)) \oplus m[j]\\
+        c = (x,u) \in \mathcal{X} \times \mathcal{Y}^{|m|}
+    \end{cases}
+\]
+$D$ è definito in modo simile. Sia $\mathcal{I} = (S,V)$ un \emph{MAC} sicuro \emph{one-time} definito su $(\mathcal{K}_m, \mathcal{M},\mathcal{T})$ di cui $\mathcal{M} = \mathcal{Y}^{\leq \ell_m}$ e $\mathcal{T} = \mathcal{Y^{\ell_t}}$ $\ell_m + \ell_t < \ell$. Il cifrario $\mathcal{E}_{ME} = (E_{ME},D_{ME})$ costruito da $F$ e $\mathcal{I}$ con i messaggi in $\mathcal{M}$ definito come segue:
+
+\begin{align*}
+    &E_{ME}( (k_e,k_m),m) = \{ t = S(k_m,m), \quad c = E(k_e (m \conc t))\} \\
+    &D_{ME}( (k_e,k_m),c) = \begin{cases}
+        (m \conc t) = D(k_e,c)\\
+        \text{ return } V(k_m,m,t)
+    \end{cases}\\
+\end{align*}
+
+\begin{definition}
+    Il cifrario $\mathcal{E}_{ME} = (E_{ME},D_{ME})$ costruito da una funzione \emph{PRF} $F$ e un \emph{MAC} $\mathcal{I}$, è AE-sicuro, assumendo che $\mathcal{I}$ sia un \emph{MAC} sicuro \emph{one-time} e $F$ sia una $PRF$ con $1/|\mathcal{X}|$ è trascurabile.
+\end{definition}
+
+%pag. 377 B.S.
