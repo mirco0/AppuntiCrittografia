@@ -166,10 +166,97 @@ Un altro errore è applicare il \emph{MAC} solo a parte del testo cifrato. Sia $
 \[
     (r,c) = e_k(m)
 \]
-Implementando un cifrario $\mathcal{E} = {E_{EM},D_{EM}}$ l'algoritmo di cifratura risulterà essere
+Implementando un cifrario $\mathcal{E} = (E_{EM},D_{EM})$ l'algoritmo di cifratura risulterà essere
 \[
     E_{EM}( (k_e,k_m),m) = \{ (r,t,c) \mid (r,c) = e_{k_e}(m), t = S(k_m,c)\}
 \]
 
 In questo caso $e_{k_e}(m)$ da come risultato una coppia $(r,c)$ ma l'algoritmo di firma $S$ è applicato solamente a $c$, IV non è protetto da \emph{MAC}, questo permette di sconfiggere l'integrità del messaggio cifrato:
+
+dato un messaggio cifrato $(r,c,t)$ un attaccante ha la possibilità di creare un nuovo messaggio cifrato valido $(r',c,t)$ con $r \neq r'$. La funzione di decifratura non nota il cambiamento del IV, e non darà \texttt{reject}, al contrario restituirà $d_{k_e}((r',c))$, questo tipo di avversario è capace di vincere il \emph{gioco CI}.
+
+In particolare $(r,c,t)$ è la cifratura di un messaggio $m$, passando da $(r,c,t)$ a $(r \oplus \Delta,c,t)$ per qualche $\Delta$, la decifratura $d_{k_e}(r \oplus \Delta, c)$ darà $m'$ tale che $m'[0] = m[0] \oplus \Delta$. Ovverso si ha la possibilità di cambiare il primo blocco di $m$ con un blocco arbitrario.
+
+\subsection{Padding oracle attack su SSL}
+\begin{definition}[Sistema MAC-then-encrypt]    
+    \emph{MAC-then-encrypt} non è generalmente AE-sicuro. Più precisamente sia $\mathcal{I} = (S,V)$ un \emph{MAC} definito su $(\mathcal{K}_m,\mathcal{M},\mathcal{T})$ e sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K}_e,\mathcal{E},\mathcal{D})$. Si definisce un sistema \emph{MAC-then-encrypt} $\mathcal{E}_{ME} = (E_{ME},D_{ME})$ definito come segue 
+    \begin{gather*}
+    E_{ME}((k_e,k_m),m) = t = S(k_m,m), \quad c = e_{k_e, (m,t)}\\
+    D_{ME}(k_e,k_m) = 
+    \begin{cases}
+        \texttt{reject} & \text{se $V(k_m,m,t) = \texttt{reject}$}\\
+        m \text{ t.c. } (m,t) = d_{k_e}(c) & \text{altrimenti}
+    \end{cases}
+\end{gather*}
+Inoltre il sistema $\mathcal{E}_{ME}$ è definito su $(\mathcal{K}_e \times \mathcal{K}_m, \mathcal{M},\mathcal{C})$. 
+
+\end{definition}
+
+\vspace{1em}\noindent
+Si presenta ora un esempio che mostra come il sistema $\mathcal{E}_{ME}$ non sia AE-sicuro. 
+
+\subsection{Attacco SSL 3.0}
+Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ un cifrario \emph{random CBC}, questo cifrario è CPA-sicuro, ma la combinazione di $\mathcal{L}$ con un \emph{MAC} sicuro come nello schema \emph{MAC-then-encrypt} non è sicuro, esiste difatti un attacco chiamato \textbf{POODLE}. Si assuma che il cifrario operi in blocchi di 16 byte, come in AES (si ricorda che nella modalità CBC si fa uso del padding per raggiungere una lunghezza dell'input corretta, aggiungendo $p-1$ byte, e un ultimo byte contenente il valore $p-1$). 
+
+\vspace{1em}\noindent
+Il cifrario ottenuto dalla combinazione \emph{MAC-then-ecnrypt} $\mathcal{E}_{ME} = (E_{ME},D_{ME})$ funziona come segue:
+\begin{itemize}
+    \item $E_{ME}((k_e,k_m),m)$: Si fa uso del \emph{MAC} per ottenere un tag $t= S(k_m,m)$. Successivamente si cifra $m \conc t$ con la cifratura CBC: si aggiunge il padding e si cifra con la chiave $k_e$ e un IV casuale.
+    \item $D_{ME}((k_e,k_m),c)$: Si esegue la decifratura per ottenere i dati, successivamente si rimuove il padding leggendo l'ultimo byte. Infine si verifica il \emph{MAC}, se valido si restituisce il testo.
+\end{itemize}
+È facile notare come il \emph{tag} non protegga anche il padding
+
+\paragraph{Descrizione dell'attacco}
+L'attacco è del tipo \emph{chosen ciphertext attack} e permette all'avversario di decifrare un qualsiasi testo cifrato. 
+
+Si supponga un avversario che intercette un testo cifrato valido $c = E_{ME}((k_e,k_m),m)$ per qualche messaggio $m$. La lunghezza di $m$ è tale che dopo che un \emph{tag} $t$ è aggiunto a $m$, $(m \conc t)$ è un multiplo di 16 byte. 
+
+Un avversario può ottenere informazioni riguardo $m[0]$, rompendo così la sicurezza semantica di $\mathcal{E}_{ME}$: l'attaccante prepare una query $\hat{c}$:
+
+% Immagine pagina 370 B.S.
+% \hat{c}[0] = c[0] 
+% \hat{c}[0] = c[1] 
+% ... 
+% \hat{c}[\ell -1] = c[\ell - 1] 
+% \hat{c}[\ell] = c[1]
+
+dalla decifratura CBC si ottiene che decifrando l'ultimo blocco di $\hat{c}$ restituisce il seguente blocco di testo
+\[
+    v = d_{k_e}(c[1]) \oplus c[\ell - 1] = m[0] \oplus c[0] \oplus c[\ell -1]
+\]
+
+Se l'ultimo byte di $v$ è 15 allora, durante la decifratura, l'intero ultimo blocco sarà trattato come blocco di padding e  quindi rimosso, al contrario la risposta sarà \texttt{reject}.
+
+Più generalmente se la risposta di una query di decifratura è diverso da \texttt{reject} allora l'attaccante scopre che l'ultimo byte di $m[0]$ è uguale all'ultimo byte di $u$
+\[
+    u = 15 \oplus c[0] \oplus c[\ell -1]
+\]
+nel caso contrario l'attaccante scopre che i due byte non combaciano. Questo rompe direttamente la sicurezza semantica del sistema $\mathcal{E}_{ME}$.
+
+Ora si supponga che l'attaccante ottenga un'altra cifratura $c'$ di $m$, facendo uso di un IV diverso. L'attaccandte può fare uso i testi cifrati $c$ e $c'$ per formare delle query utili di \emph{chosen ciphertext}: può sostituire gli ultimi blocchi di $c$ o $c'$ con $c[1]$ o $c'[1]$. Facendo le quattro query corrispendenti, si può ottenere qualche informazione
+\[
+    15 \oplus c[0] \oplus c[\ell - 1], \qquad 15 \oplus c[0] \oplus c'[\ell - 1], \qquad 15 \oplus c'[0] \oplus c[\ell - 1], \qquad 15 \oplus c'[0] \oplus c'[\ell - 1].
+\]
+
+Se i quattro valori corrispondenti sono diversi, l'attaccante ha quattro volte la possibilità di ottenere l'ultimo byte di $m[0]$. Inoltre i valori possibili sono 256, per cui, con altrettante query, non solo si rompe la sicurezza semantica, ma viene trovato un byte di testo. Infine, se l'attaccante ha anche la possibilità di fare una query su $m$ con applicato uno \emph{shift} a destra, una volta scoperto un blocco $c_1$, applicando $c_1[1]$ nell'ultimo blocco del testo cifrato, facendo delle query contenenti dati già ottenuti è possibile recuperare gli altri byte di $m[0]$, ripetendo più volte si può ottenere l'intero messaggio $m$.
+
+\paragraph{Rottura di SSL 3.0}
+Siano un server web vittima \texttt{bank.com} e un browser, quando un utente vistita \texttt{bank.com}, i dati vengono scambiati usando SSL 3.0. Il segreto condiviso è un cookie scambiato in ogni messaggio tra le due parti:
+\begin{center}
+    \fbox{GET \texttt{path} \quad cookie: \texttt{cookie}}
+\end{center}
+il parametro \texttt{path} è la risorsa richiesta dall'utente.
+
+Un attaccante modifica il browser dell'utente per far sì che il cookie venga inviato al server vittima con richieste del tipo:
+\begin{center}
+    \fbox{GET \texttt{/AA} \quad cookie: \texttt{cookie}}
+\end{center}
+il parametro \texttt{path} viene impostato al valore \texttt{/AA} per assicurarsi che la lunghezza del messaggio insieme al \emph{MAC} sia un multiplo di 16 byte. L'attaccante può ora intercettare la richiesta $c$ e attuare l'attacco di \emph{chosen ciphertext} per ottenere un byte del cookie. L'attaccante crea il messaggio $\hat{c}$ e lo invia al server vittima (\texttt{banks.com}), fino ad ottenere un byte di informazione. Una volta che l'attaccante ottiene un byte del cookie la richiesta effettuata cambia, applicando uno \emph{shift} a destra al cookie e cambiando il parametro \texttt{path} a \texttt{/AAA}
+\begin{center}
+    \fbox{GET \texttt{/AAA} \quad cookie: \texttt{cookie}}
+\end{center}
+Così facendo l'attaccante può ottenere un secondo byte di informazione, e continuando in questo modo ottenere tutti i byte del cookie.
+
+\vspace{1em}\noindent
+In generale questo tipo di attacchi sono possibili in quanto il server risponde con un codice errore che permette all'attaccante di determinare se l'attacco sta avendo successo. Nel caso di assenza di errori è anche possibile per l'attaccante fare attachi sul tempo di risposta del server.
 
