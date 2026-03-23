@@ -1,6 +1,6 @@
 Abbiamo mostrato sistemi che garantiscono segretezza e sistemi che permettono l'integrità dei dati, i sistemi che combinano le due forniscono la \emph{authenticated encryption}, chiamate \emph{AE-Secure}. Per creare un sistema AE ci sono due metodi, \textbf{composizione generica}, in cui si unisce un cifrario CPA-sicuro e un \emph{MAC} sicuro. 
 
-\vspace{1em}
+\subsection{Introduzione all'Authenticated Encrypt}
 Sia $(M, C, \mathcal{K}, \mathcal{E}, \mathcal{D})$ un cifrario e $I = (S,V)$ un \emph{MAC}, con $k_{\text{enc}} \in \mathcal{K}$ e $k_{\text{mac}}$ una chiave per MAC.
 Ci sono due modalità per creare un sistema: 
 \begin{definition}[Encrypt-then-MAC]
@@ -286,8 +286,14 @@ $D$ è definito in modo simile. Sia $\mathcal{I} = (S,V)$ un \emph{MAC} sicuro \
     \end{cases}\\
 \end{align*}
 
-\begin{definition}
-    Il cifrario $\mathcal{E}_{ME} = (E_{ME},D_{ME})$ costruito da una funzione \emph{PRF} $F$ e un \emph{MAC} $\mathcal{I}$, è AE-sicuro, assumendo che $\mathcal{I}$ sia un \emph{MAC} sicuro \emph{one-time} e $F$ sia una $PRF$ con $1/|\mathcal{X}|$ è trascurabile.
-\end{definition}
-
+\begin{theorem}
+    Il cifrario $\mathcal{E}_{ME} = (E_{ME},D_{ME})$, costruito da una funzione \emph{PRF} $F$ e un \emph{MAC} $\mathcal{I}$, è AE-sicuro, assumendo che $\mathcal{I}$ sia un \emph{MAC} sicuro \emph{one-time} e $F$ sia una $PRF$ con $1/|\mathcal{X}|$ è trascurabile.
+\end{theorem}
 %pag. 377 B.S.
+
+\vspace{1em}\noindent
+Una volta presentate le diverse modalità per ottenere un cifrario che fornisca authenticated encryption, è naturale discutere quali sono generalmente migliori:
+
+Si ricorda che \textbf{EM} è AE-sicuro, nel caso in cui, sia basato su un cifrario CPA-sicuro e un \emph{MAC} sicuro. \textbf{ME} non è generalmente sicuro come nel caso precedente, ma può essere sicuro in alcuni particolari casi; è inoltre delicato da implementare in quanto facilmente attaccabile.
+
+Esiste inoltre una terza modalità, non ancora discussa \textbf{Encrypt-and-MAC}, in ogni caso la migliore modalità in termini di sicurezza è proprio \textbf{EM}.
