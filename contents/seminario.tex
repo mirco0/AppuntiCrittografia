@@ -297,3 +297,101 @@ Una volta presentate le diverse modalità per ottenere un cifrario che fornisca 
 Si ricorda che \textbf{EM} è AE-sicuro, nel caso in cui, sia basato su un cifrario CPA-sicuro e un \emph{MAC} sicuro. \textbf{ME} non è generalmente sicuro come nel caso precedente, ma può essere sicuro in alcuni particolari casi; è inoltre delicato da implementare in quanto facilmente attaccabile.
 
 Esiste inoltre una terza modalità, non ancora discussa \textbf{Encrypt-and-MAC}, in ogni caso la migliore modalità in termini di sicurezza è proprio \textbf{EM}.
+
+% TODO: Controllare bene
+\subsection{Nonce-Based Authenticated encryption}
+Si estende la definizione di AE per rendere meglio il reale utilizzo di AE da un punto di vista pratico. Si aggiungono agli algoritmi di cifratura e decifratura dei dati univoci chiamati \emph{nonce}. 
+
+Inoltre per l'algoritmo di cifratura si aggiunge un altro messaggio in \emph{input}: \textbf{dati associati} di cui il messaggio cifrato ne protegge l'integrità ma non la segretezza. Aggiungere dei dati aggiuntivi da cifrare è utile in diverse applicazioni, come nella trasmissione di pacchetti di cui l'\emph{header} deve essere mandato in chiaro per poter trasmettere il pacchetto.
+
+\vspace{1em}
+Un cifrario con supporto ai dati associati è definito come segue:
+
+\begin{definition}[Cifrario AD]
+    Un cifrario con supporto ai dati associati $\mathcal{E} = (E,D)$ basato su $\mathcal{K},\mathcal{C},\mathcal{M},\mathcal{N},\mathcal{D}) $, chiamato \emph{cifrario AD}. Dove $\mathcal{N}$ è l'insieme dei \emph{nonce} e $\mathcal{D}$ è l'insieme dei dati associati, le funzioni di cifratura e decifratura sono definite come segue:
+    \begin{align*}
+        c = &E(k,m,d,\aleph) \\
+        &D(k,c,d,\aleph) = \begin{cases}
+            m \\
+            \texttt{reject}
+        \end{cases}
+    \end{align*}
+    con $d \in \mathcal{D}, \aleph \in \mathcal{N}$.
+
+    Il cifrario deve essere in grado di decifrare (correttamente) ogni messaggio cifrato dall'algoritmo $E$, attraverso l'algoritmo $D$, facendo uso dello stesso \emph{nonce} $\aleph \in \mathcal{N}$.
+\end{definition}
+
+\begin{definition}[Sicurezza CPA per \emph{nonce}]
+    La definizione di sicurezza CPA per un cifrario \emph{nonce-based} è simile alla definizione solita di sicurezza CPA. L'unica differenza è nelle query, nell'esperimento $b$, per $b = 0,1$:
+
+    \begin{itemize}
+        \item L' \emph{i-esima} query, per una coppia di messaggi $m_0,m_1 \in \mathcal{M}$ della stessa lunghezza, i dati associati $d_i \in \mathcal{D}$ e un \emph{nonce} unico $\aleph_i \in \mathcal{N} - \{\aleph_1,\dots,\aleph_{i-1}\}$. Lo sfindante calcola $c_i = E(k,m_{ib},d_i,\aleph_i)$ e lo invia all'avversario.
+    \end{itemize}
+    Rispetto alla definizione solita, c'è la presenza di $\aleph_i$, che comunque rimane sotto il controllo dell'avversario, per cui la definizione di vantaggio è:
+
+    \[
+        \text{nCPA}_{\text{ad}}\text{adv}[\mathcal{A},\mathcal{E}] = |\Pr[W_0] - \Pr[W_1]|.
+    \]
+
+    Il cifrario $\mathcal{E}$ è detto \emph{semanticamente sicuro contro attacchi chosen plaintext} se, per ogni avversario efficiente $\mathcal{A}$, il valore $\text{nCPA}_{\text{ad}}\text{adv}[\mathcal{A},\mathcal{E}]$ è trascurabile.
+\end{definition}
+
+\begin{definition}[Integrità dei messaggi cifrati per \emph{nonce}]
+    Un cifrario AD \emph{nonce based} fornisce integrità dei messaggi cifrati se, un attaccante capace di cifrare con una chiave $k$ a scelta e $\aleph$ a scelta non è capace di restituire una tripla $(c,d,\aleph)$ valida per l'algoritmo di decifratura.
+    %Modifica gioco d'attacco pagina 379
+    Il cifrario $\mathcal{E}$ fornisce \emph{integrità dei messaggi cifrati} se, per ogni avversario efficiente $\mathcal{A}$, il valore $\text{nCI}_{\text{ad}}\text{adv}[\mathcal{A},\mathcal{E}]$ è trascurabile.
+\end{definition}
+
+\begin{definition}[Cifrario \emph{nonce} AEAD]
+    Un cifrario AD $\mathcal{E} = (E,D)$ \emph{nonce-based} fornisce authenticated encryption, anche detto cifrario \emph{nonce-based AEAD} se $\mathcal{E}$ è CPA-sicuro e ha integrità dei messaggi cifrati.
+\end{definition}
+
+Si presenta ora una costruzione di un cifrario \emph{nonce-based} AEAD
+
+\paragraph{Composizione encrypt-then-MAC con \emph{nonce}}
+Sia $\mathcal{E} = (E_{EM},D_{EM})$ un cifrario AEAD, basato un cifrario $(E,D)$ \emph{CPA-sicuro} con un \emph{nonce-based MAC}  $ \mathcal{I} = (S,V)$ sicuro. Le funzioni di cifratura e decifratura sono descritte di seguito:
+
+\begin{gather*}
+    E_{EM}( (k_e,k_m),m,d,\aleph) = ( c = E(k_e,m,\aleph), \quad S(k_m,(c,d),\aleph))\\
+    D_{EM}((k_e,k_m),(c,t),d,\aleph) = \begin{cases}
+        \texttt{reject} & \text{se } V(k_m,(c,d),t,\aleph)\\
+        D(k_e,c,d,\aleph) & \text{altrimenti}
+    \end{cases}
+\end{gather*}
+
+\begin{theorem}
+    Sia $\mathcal{E} = (E,D)$ un cifrario \emph{nonce-based} e sia $\mathcal{I} = (S,V)$ un sistema \emph{MAC nonce-based}. Allora il cifrario $\mathcal{E}_{EM}$ è un cifrario \emph{nonce} AEAD, supponendo che $\mathcal{E}$ sia CPA-sicuro e $\mathcal{I}$ sia sicuro. 
+    %TODO: Dimostrazione teorema 9.2
+\end{theorem}
+
+Fino ad ora si ha aggiunto ai cifrari un valore \emph{nonce} e dei dati aggiuntivi. È possibile studiare i cifrari AD anche attraverso la definizione di sicurezza CCA, ma senza \emph{nonce}; si presenta la descrizione di un cifrario $\mathcal{E} = (E,D)$ AD senza \emph{nonce}, il processo di cifratura potrebbe anche fare uso di componente casuale:
+
+\begin{gather*}
+    c \xleftarrow{\text{R}} E(k, m, d)\\
+    D(k, c, d),
+\end{gather*}
+di cui $k \in \mathcal{K}, m \in \mathcal{M}, d \in \mathcal{D}$, il cifrario è detto essere su $(\mathcal{K},\mathcal{M},\mathcal{D},\mathcal{C})$
+
+\begin{definition}[CCA con dati associati]
+    La definizione di CCA si adatta bene ai cifrari AD. In particolare il gioco d'attacco si svolge nel seguente modo:
+
+    Per le query di cifratura, oltre a una coppia di messaggi $(m_{i0},m_{i1})$ l'avversario sceglie anche i dati associati $d_i$ e lo sfidante calcola $c_i \rightarrow{R} E(k,m_{ib},d_i)$. Per la query di decifratura oltre a un messaggio cifrato $\hat{c}_j$, l'avversario invia i dati associati $\hat{d}_j$, lo sfidante calcola $\hat{m}_j = D(k,\hat{c}_j,\hat{d}_j)$. La coppia $(\hat{c}_j,\hat{d}_j)$ non deve essere mai stata vista prima. Il vantaggio di un avversario $\mathcal{A}$ è denotato
+    \[
+        \text{CCA}_{\text{adv}}[\mathcal{A},\mathcal{E}],
+    \]
+    nel caso in cui il vantaggio sia trascurabile, il cifrario è detto essere CCA-sicuro. Nel caso in cui l'avversario sia a singola query di cifratura il vantaggio è $\text{1CCA}_{\text{adv}}[\mathcal{A},\mathcal{E}]$.
+\end{definition}
+
+Si mostra ora la costruzione di un cifrario AD 1CCA-sicuro. Sia un $\mathcal{E} = (ED)$ un cifrario semanticamente sicuro e sia $\mathcal{I} = (S,V)$ un \emph{MAC ont-time} sicuro, allora un cifraro $\mathcal{E} = (E_{EM},D_{EM})$ è definito come segue:
+
+\begin{gather*}
+    E_{EM}( (k_e,k_m),m,d) = ( c \rightarrow{R} E(k_e,m), \quad S(k_m,(c,d)))\\
+    D_{EM}((k_e,k_m),(c,t),d) = \begin{cases}
+        \texttt{reject} & \text{se } V(k_m,(c,d),t)\\
+        D(k_e,c,d) & \text{altrimenti}
+    \end{cases}
+\end{gather*}
+
+\begin{theorem}
+    Sia $\mathcal{E} = (E,D)$ un cifrario semanticamente sicuro e sia $\mathcal{I} = (S,V)$ un sistema \emph{MAC one-time} sicuro. Allora il cifrario $\mathcal{E}_{EM}$ è un cifrario AD \emph{1CCA-sicuro}.
+\end{theorem}
