@@ -352,7 +352,7 @@ Si presenta ora una costruzione di un cifrario \emph{nonce-based} AEAD
 Sia $\mathcal{E} = (E_{EM},D_{EM})$ un cifrario AEAD, basato un cifrario $(E,D)$ \emph{CPA-sicuro} con un \emph{nonce-based MAC}  $ \mathcal{I} = (S,V)$ sicuro. Le funzioni di cifratura e decifratura sono descritte di seguito:
 
 \begin{gather*}
-    E_{EM}( (k_e,k_m),m,d,\aleph) = ( c = E(k_e,m,\aleph), \quad S(k_m,(c,d),\aleph))\\
+    E_{EM}( (k_e,k_m),m,d,\aleph) = ( c = E(k_e, m,\aleph), \quad S(k_m,(c,d),\aleph))\\
     D_{EM}((k_e,k_m),(c,t),d,\aleph) = \begin{cases}
         \texttt{reject} & \text{se } V(k_m,(c,d),t,\aleph)\\
         D(k_e,c,d,\aleph) & \text{altrimenti}
@@ -395,3 +395,58 @@ Si mostra ora la costruzione di un cifrario AD 1CCA-sicuro. Sia un $\mathcal{E} 
 \begin{theorem}
     Sia $\mathcal{E} = (E,D)$ un cifrario semanticamente sicuro e sia $\mathcal{I} = (S,V)$ un sistema \emph{MAC one-time} sicuro. Allora il cifrario $\mathcal{E}_{EM}$ è un cifrario AD \emph{1CCA-sicuro}.
 \end{theorem}
+
+\subsection{Protocollo TLS 1.3}
+Il protocollo TLS (\emph{Transport Layer Security}) permette di ottenere un traffico sicuro in un canale di comunicazione non sicuro. 
+
+Il protocollo TLS nasce come standard che rende SSL più sicuro. La versione originale di SSL \emph(Secure Socket Layer), in particolare la versione SSLv2 è non sicura a causa di svariati problemi: come l'utilizzo della stessa chiave per \emph{MAC} e per la cifratura. 
+
+\paragraph{TLS 1.3} TLS può essere rappresentato in due componenti, il componente \emph{TLS session setup} si occupa della fase di \emph{setup}, in cui le due parti che vogliono mettersi in contatto si mettono in accordo riguardo il cifrario da utilizzare, in questa fase vegono definiti anche i segreti condivisi, derivati da un segreto comune chiamato \textbf{master-secret}. Il secondo componente è chiamato \emph{TLS record protocol} e si occupa dello scambio dei dati.
+
+\vspace{1em}
+Il \textbf{master-secret} è usato per derivare le chiavi utilizzate durante la comunicazione $k_{b \to s}$, $k_{s \to b}$ usate rispettivamente per cifrare i dati provenienti dalle due parti, generalmente da \emph{browser} a \emph{server} e viceversa. Le due chiavi sono conosciute da entrambe le parti. Le chiavi sono derivate dal valore del master-secret e altri elementi casuali come input per una funzione chiamata \emph{HKDF}.
+
+\vspace{1em}\noindent
+I dati inviati dal protocollo vengono divisi in parti di al massimo $2^{14}$ byte. E ogni parte mantiene un contatore di 64 bit chiamato \textbf{write sequence number} (numero di sequenza), inizializzato a 0 e incrementato per ogni record inviato. 
+
+TLS 1.3 fa uso di un cifrario AEAD \emph{nonce-based} per cifrare un record, il cifrario viene determinato nella prima fase. L'algoritmo di cifratura AEAD usa gli argomenti $k_{a\to b}$, messaggio $m $ tale che $|m| \leq 2^14$ bytes; i dati associati sono vuoti. I nonce sono di almeno 8 byte e vengono calcolati nel seguente modo
+
+\begin{enumerate}
+    \item Viene aggiunto un \emph{padding} a sinistra del numero di sequenza
+    \item La sequenza con il \emph{padding} viene unita con \texttt{XOR} con una stringa casuale \texttt{client\_write\_iv} o \texttt{server\_write\_iv} in base al mittente, entrambe sono derivate dal master-secret 
+\end{enumerate}
+
+Il nonce non viene impostato a 0 poiché il primo messaggio cifrato $c_0 = E(k,m_0,d,0)$, in cui un avversario in conoscenza $m$ messaggio e $d$ dati associati, ha la possibilità di effettuare un attacco per enumerazione; in cui avendo sufficiente spazio è ``facile'' recuperare la chiave $k$ da $c_0$ (con chiavi a 128 bit questo tipo di attacco potrebbe essere possibile anche in futuro).
+
+\vspace{1em}
+Il cifrario AEAD alla base del TLS quindi restituisce un record con questa struttura:
+
+\input{figures/tls_record.tex}
+
+\begin{itemize}
+    \item \texttt{tipo} è un campo da 1 byte che indica il tipo di record (handshake/data)
+    \item \texttt{versione} è un capo da 2 byte sempre impostato al valore \textit{0301}
+    \item \texttt{lunghezza} è un campo da 2 byte che indica la lunghezza del testo cifrato
+\end{itemize}
+
+Una volta ricevuto un record, la parte ricevente esegue l'algoritmo di decifratura per decifrare il campo $c$, in caso di fallimento viene inviato un messaggio di errore: \texttt{bad\_record\_mac} e la sessione viene terminata.
+
+\subsubsection{Altre caratteristiche TLS}
+\paragraph{Campo lunghezza}
+Il campo lunghezza, al momento (versione TLS 1.3) è inviato in chiaro. Attacchi basati sull'analisi del traffico permettono di dedurre informazioni riguardanti i dati scambiati. Il problema non ha una reale soluzione, per questo, spesso è ignorato. Inoltre il campo non è protetto da integrità dei dati poiché non può essere inserito nel campo dei dati aggiuntivi, dato il \emph{padding} variabile, la lunghezza del campo $c$ può non essere conosciuta prima della cifratura.
+
+\paragraph{Prevenzione di replay}
+Un attaccante potrebbe essere interessato a ripetere un messaggio precedente per ingannare il ricevente ad avere un determinato comportamento. Il contatore a 64 bit, di cui fa uso TLS, protegge da questo tipo di attacchi poiché il ricevente è gia a conoscenza del prossimo numero di sequenza da ricevere.
+
+\paragraph{Attacco cookie cutter}
+TLS fornisce un'interfaccia di streaming, nel quale i pacchetti sono inviati non appena pronti. Come discusso in precedenza gli attacchi \emph{replay} non sono possibili; tuttavia attacchi che mirano a ultimi pacchetti non sono difesi. Un attaccante ha la possibilità di chiudere una connessione durante uno scambio di messaggi, senza che i partecipanti vengano a conoscenza dell'attacco. Un attacco con il nome di \textbf{cookie-cutter} nasce da questa idea.
+
+\vspace{1em}
+Siano definite due vittime: un web browser e un server: la vittima visita un sito malevolo, che redireziona la connessione al sito \texttt{victim.com}. Ad esempio sia la seguente risposta del sito:
+
+\input{figures/tls_requests/1.tex}
+
+Le prime due righe indicano il tipo di risposta, di cui la seconda è copiata dalla richiesta del browser. La terza riga imposta un \emph{cookie} che verrà salvato sul browser vittima, di cui il comando \texttt{secure} indica che il cookie dovrà essere inviato esclusivamente a \texttt{victim.com} tramite una sessione cifrata. Infine l'ultima riga indica la fine della risposta. In questo caso non ci sono problemi, al contrario, nel caso in cui la richiesta sia troppo lunga, verrà divisa in due frame: 
+
+\input{figures/tls_requests/2.tex}
+In questo particolare caso, la sequenza che indica la fine della risposta è nel secondo frame; questo permette ad un attaccante di terminare la sessione una volta inviato il primo frame, in modo tale che il secondo frame non venga mai ricevuto. Il \emph{cookie} verrà, di conseguenza, segnato come non sicuro, lasciando all'attaccante la possibilità di redirezionare il browser verso una connessione non cifrata (connessione http) in cui il campo SID sarà leggibile in chiaro. Questo tipo di attacco è quindi possibile anche quando tutti i frame sono cifrati, non è però una debolezza del client, bensì è compito delle applicazioni la difesa da questi attacchi. 

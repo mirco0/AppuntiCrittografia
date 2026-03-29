@@ -1,0 +1,13 @@
+\begin{center}
+    \begin{tikzpicture}[
+        box/.style={draw, minimum height=0.6cm, font=\ttfamily, align=center}
+        ]
+        
+        \node[box] (type) {tipo};
+        \node[box, right=0 of type] (version) {versione};
+        \node[box, right=0 of version] (length) {lunghezza};
+        \node[box, right=0 of length] (ciphertext) {testo cifrato $c$};
+
+
+    \end{tikzpicture}
+\end{center}
