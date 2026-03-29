@@ -1,0 +1,24 @@
+\vspace{1em}
+\begin{algorithm}[H]
+
+    \SetAlgoVlined
+    \SetAlgoLined
+    \caption{Cifratura Autenticata con MAC Carter-Wegman}
+    \label{alg:carter_wegman_mac_clean}
+
+    \KwIn{chiave $k \in \mathcal{K}$, messaggio $m$, dati associati $d$, nonce $\aleph \in \{0, 1\}^{96}$}
+    \KwOut{testo cifrato $(c, t)$}
+    
+    $k_{\text{m}} \gets E(k, 0^{128})$\;
+    Calcola il valore iniziale del contatore:\;
+    \quad $x \gets (\mathcal{N} \parallel 0^{31}1) \in \{0, 1\}^{128}$\;
+    \quad $x' \gets x + 1$\;
+    $c \gets \{\text{cifra } m \text{ in modalità CTR a partire da } x'\}$\;
+    $d' \gets \{\text{padding di } d \text{ al multiplo di 128 bit più vicino}\}$\;
+    $c' \gets \{\text{padding di } c \text{ al multiplo di 128 bit più vicino}\}$\;
+    Calcola il MAC:\;
+    $h \gets \text{GHASH}\big(k_{\text{m}}, (d' \parallel c' \parallel \text{lunghezza}(d) \parallel \text{lunghezza}(c))\big) \in \{0, 1\}^{128}$\;
+    \quad $t \gets h \oplus E(k, x) \in \{0, 1\}^{128}$\;
+    \Return{$(c, t)$}\;
+\end{algorithm}
+\vspace{1em}

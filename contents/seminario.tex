@@ -396,6 +396,8 @@ Si mostra ora la costruzione di un cifrario AD 1CCA-sicuro. Sia un $\mathcal{E} 
     Sia $\mathcal{E} = (E,D)$ un cifrario semanticamente sicuro e sia $\mathcal{I} = (S,V)$ un sistema \emph{MAC one-time} sicuro. Allora il cifrario $\mathcal{E}_{EM}$ è un cifrario AD \emph{1CCA-sicuro}.
 \end{theorem}
 
+%TODO: Capire se mettere GCM qui
+
 \subsection{Protocollo TLS 1.3}
 Il protocollo TLS (\emph{Transport Layer Security}) permette di ottenere un traffico sicuro in un canale di comunicazione non sicuro. 
 
@@ -450,3 +452,33 @@ Le prime due righe indicano il tipo di risposta, di cui la seconda è copiata da
 
 \input{figures/tls_requests/2.tex}
 In questo particolare caso, la sequenza che indica la fine della risposta è nel secondo frame; questo permette ad un attaccante di terminare la sessione una volta inviato il primo frame, in modo tale che il secondo frame non venga mai ricevuto. Il \emph{cookie} verrà, di conseguenza, segnato come non sicuro, lasciando all'attaccante la possibilità di redirezionare il browser verso una connessione non cifrata (connessione http) in cui il campo SID sarà leggibile in chiaro. Questo tipo di attacco è quindi possibile anche quando tutti i frame sono cifrati, non è però una debolezza del client, bensì è compito delle applicazioni la difesa da questi attacchi. 
+
+%TODO: AGGIUNGERE 7.4 H_{poly}
+\subsection{Galois Counter Mode}
+GCM è un cifrario AEAD basato su nonce, reso standard nel 2007, è una costruzione del tipo encrypt-then-MAC che fa uso di un cifrario a blocchi CPA sicuro (solitamente AES) e un \emph{MAC} sicuro. Il MAC è una costruzione Carter-Wegman dato da una fuzione GHASH con chiave (variante della funzione $H_{\text{poly}}$). Nel caso di cifratura di un messaggio vuoto il cifrario prende il nome di \textbf{GMAC}. Con il processo di cifratura, il cifrario sottostante $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$, di cui $\mathcal{X} := \mathcal{M} = C$ e $\mathcal{X} = \{0,1\}^{128}$, la funzione di GHASH è definita su $(\mathcal{X},\mathcal{X}^{\leq \ell},\mathcal{X})$ con $\ell = 2^{32} - 1$. Il cifrario a blocchi è utilizzato sia per la cifratura che per il \emph{MAC},  in cui è possibile utilizzare nonce $\aleph$ di lunghezza variabile si mostra il processo di seguito con $|\aleph| = 96$:
+
+\input{algorithms/gcm_cipher.tex}
+Ogni parametro di lunghezza inserito nella funzione GHASH deve è un valore a 64 bit, che indica la lunghezza in byte dei campi corrispondenti. Nel caso in cui $\aleph$ non sia di 96 bit, viene aggiunto un padding per raggiungere la lunghezza corretta (multiplo di 128 bit). C'è anche la possibilità di troncare il tag di integrità $t$, ne segue che l'integrità risulterà più debole. I messaggi da cifrare devono necessariamente avere un numero di blocchi $\leq 2^{32}$, e la stessa chiave $k$ non deve essere utilizzata per cifrare più di $2^{32}$ messaggi. 
+
+\vspace{1em}
+L'algoritmo di decifratura GCM, prende in input una chiave $k \in \mathcal{K}$ e un testo cifrato $(c,t)$, dei dati associati $d$ e un nonce $\aleph$. Opera come in encrypt-then-MAC: deriva una chiave $k_{m} = E(k,0^{128})$ e controlla l'integrità del tag $t$, nel caso di validità resituisce il messaggio decifrato (la decifratura \emph{deve} essere atomica, e non deve avvenire nessuna decifratura prima della verifica del tag $t$).
+
+\paragraph{GHASH} 
+La funzione GHASH, come anticipato, è una funzione basata su $(\mathcal{X},\mathcal{X}^{\leq \ell},\mathcal{X})$. Per poter essere utilizzata in un MAC Carter-Wegman deve essere DUF, $H_{\text{xpoly}}$ è DUF:
+
+$H_{\text{xpoly}}(k,z)$ è definita come la valutazione di un polinomio $P$ derivante da $z$ in un punto $k$, in altre parole $P(k)$ per qualche $P \in \mathbb{Z}_{p}[z]$ con $p$ primo, in modo tale che sia possibile definire i blocchi di $z$ come elementi in $\mathbb{Z}_p$. 
+
+La funzione GHASH$: \mathcal{X} \mapsto \mathcal{X}$ è molto simile a $H_{\text{xpoly}}$, con la particolarità che $X = \{0,1\}^{128}$. Inoltre la proprietà DUF è mantenuta con l'operazione di \texttt{XOR}. È possibile costruire XOR-DUF con dei polinomi definiti in $\mathbb{F}_{2^{128}}$ (campo di Galois, da cui il cifrario prende il nome). 
+
+\vspace{1em}\noindent
+$\mathbb{F}_{2^{128}}$ è definito da un polinomio irriducibile $g(X) := X^{128} + X^7 + X^2 + X + 1$, e gli elementi in $\mathbb{F}_{2^{128}}$ sono polinomi $p \in \mathbb{F}_{2}[X]$ tale che $\deg{(p)} \leq 128$, inoltre $p$ è facilmente rappresentabile come vettore di 128 bit. L'addizione è il semplice \texttt{XOR}. Per un dato $k  \in \mathbb{F}_{2^{128}}$ e $z \in {(\mathbb{F}_{2^{128}})}^v$, la funzione GHASH$(k,z)$ è un polinomio in $\mathbb{F}_{2^{128}}$:
+
+\begin{equation*}
+    \text{GHASH}(k,z) = z[0]\cdot k^v + z[1] \cdot k^{v-1} +  \cdots + z[v-1]\cdot k
+\end{equation*}
+
+\paragraph{Sicurezza del sistema}
+La sicurezza del cifrario AEAD è banale, in quanto il cifrario fa uso di un cifrario CPA sicuro e un \emph{MAC} sicuro. Nonostante venga utilizzata una singola chiave $k$, da quest'ultima si ottiene $k_m = E(k,0^{128})$ per la chiave GHASH, $E(k,x)$ è il \emph{padding} usato per mascherare l'output della funzione GHASH. La counter mode iniza con il valore $x' = x + 1$ in modo tale che l'input della funzione PRF, usata per cifrare il messaggio, sia indipendente e diversa dall'input usato per derivare la chiave GHASH e il \emph{padding}. GCM non ha una resistenza nel caso in cui i valori di nonce $\aleph$ vengano ri-utilizzati, nel caso in cui la chiave $k_m$ venga rivelata si rischierebbe una rottura dell'integrità.
+
+%TODO: 
+% \paragraph{Ottimizzazioni}
