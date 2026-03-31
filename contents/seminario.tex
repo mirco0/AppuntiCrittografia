@@ -1,6 +1,6 @@
-Abbiamo mostrato sistemi che garantiscono segretezza e sistemi che permettono l'integrità dei dati, i sistemi che combinano le due forniscono la \emph{authenticated encryption}, chiamate \emph{AE-Secure}. Per creare un sistema AE ci sono due metodi, \textbf{composizione generica}, in cui si unisce un cifrario CPA-sicuro e un \emph{MAC} sicuro. 
+Abbiamo mostrato sistemi che garantiscono segretezza e sistemi che permettono l'integrità dei dati, i sistemi che combinano le due forniscono la \emph{authenticated encryption}, chiamate \emph{AE-Secure}. Per creare un sistema AE-sicuro ci sono due metodi, \textbf{composizione generica}, in cui si unisce un cifrario CPA-sicuro e un \emph{MAC} sicuro. 
 
-\subsection{Introduzione all'Authenticated Encrypt}
+\subsection{Introduzione all'Authenticated Encryption}
 Sia $(M, C, \mathcal{K}, \mathcal{E}, \mathcal{D})$ un cifrario e $I = (S,V)$ un \emph{MAC}, con $k_{\text{enc}} \in \mathcal{K}$ e $k_{\text{mac}}$ una chiave per MAC.
 Ci sono due modalità per creare un sistema: 
 \begin{definition}[Encrypt-then-MAC]
@@ -9,7 +9,7 @@ Ci sono due modalità per creare un sistema:
     $(c,\text{tag})$ è il messaggio con sicurezza AE.
 \end{definition}
 
-\begin{definition}[Mac-then-Encrypt]
+\begin{definition}[MAC-then-Encrypt]
     Sia $m$ un messaggio, si definisce $\text{tag} = S(k_{\text{mac}},m)$, infine il tag viene cifrato $c = e_{k_{\text{enc}}}((m,t))$
 \end{definition}
 \noindent
@@ -30,10 +30,10 @@ Solo \emph{encrypt-then-MAC} è sicuro tra i due, ed è utilizzato in TLS 1.2. I
     \end{itemize}
     Per $b = 0,1$ sia $W_b$ l'evento in cui $\mathcal{A}$ restituisca 1 nell'esperimento $b$, si definisce il vantaggio di $\mathcal{A}$ rispetto a $\mathcal{L}$ così:
     \[
-        \text{CPAadv}[\mathcal{A},\mathcal{L}] = |\Pr[W_0] - \Pr[W_1|
+        \text{CPA}_\text{adv}[\mathcal{A},\mathcal{L}] = |\Pr[W_0] - \Pr[W_1|
     \]
 
-    Un cifrario $\mathcal{L}$ è semanticamente sicuro contro l'attacco \emph{chosen plaintext}, se CPAadv$[\mathcal{A},\mathcal{L}]$ è trascurabile.
+    Un cifrario $\mathcal{L}$ è semanticamente sicuro contro l'attacco \emph{chosen plaintext}, se $\text{CPA}_\text{adv}[\mathcal{A},\mathcal{L}]$ è trascurabile.
 \end{definition}
 
 \begin{definition}[Integrità dei messaggi cifrati]
@@ -46,7 +46,7 @@ Solo \emph{encrypt-then-MAC} è sicuro tra i due, ed è utilizzato in TLS 1.2. I
         \item  Alla fine $\mathcal{A}$ restituisce un messaggio cifrato $c \in C$ mai visto prima, ovvero $c \not\in \{c_1,c_2,\dots\}$. 
     \end{itemize}
 
-    $\mathcal{A}$ vince il gioco se $c$ è un messaggio cifrato con chiave $k$, cioè $d_k(c) = m$ per qualche messaggio $m \in \mathcal{M}$. CIadv$[\mathcal{L},\mathcal{A}]$ è il vantaggio di $\mathcal{A}$ rispetto a $\mathcal{L}$ è definito come la probabilità che $\mathcal{A}$ vinca il gioco d'attacco. In particolare $\mathcal{A}$ è chiamato avversario a \textit{Q-query} se fa uso di al massimo $Q$ query.
+    $\mathcal{A}$ vince il gioco se $c$ è un messaggio cifrato con chiave $k$, cioè $d_k(c) = m$ per qualche messaggio $m \in \mathcal{M}$. $\text{CI}_\text{adv}[\mathcal{L},\mathcal{A}]$ è il vantaggio di $\mathcal{A}$ rispetto a $\mathcal{L}$ è definito come la probabilità che $\mathcal{A}$ vinca il gioco d'attacco. In particolare $\mathcal{A}$ è chiamato avversario a \textit{Q-query} se fa uso di al massimo $Q$ query.
 
     \vspace{1em}
     In altre parole l'integrità dei messaggi aiuta a definire quanto sia difficile determinare, da parte di un avversario $\mathcal{A}$, quali messaggi cifrati siano effettivamente validi (decifrabili).
@@ -65,7 +65,7 @@ Solo \emph{encrypt-then-MAC} è sicuro tra i due, ed è utilizzato in TLS 1.2. I
 \end{definition}
 
 \begin{definition}[Sicurezza messaggio cifrato one-time]
-    Un cifrario $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ ha integrità del messaggio cifrato one-time se per ogni avversario efficiente \emph{1-Query} $\mathcal{A}$, il valore di CIadv$[\mathcal{L},\mathcal{A}]$ è trascurabile. 
+    Un cifrario $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ ha integrità del messaggio cifrato one-time se per ogni avversario efficiente \emph{1-Query} $\mathcal{A}$, il valore di $\text{CI}_\text{adv}[\mathcal{L},\mathcal{A}]$ è trascurabile. 
 \end{definition}
 
 \begin{definition}[Sicurezza 1AE]
@@ -95,9 +95,9 @@ Sia ora $\mathcal{A}$ un avversario che ha l'obiettivo di inviare a Bob un messa
     \end{itemize}
     Alla fine del gioco $\mathcal{A}$ restituisce un bit $\hat{b} \in \{0,1\}$. Per $b = 0,1$ sia $W_b$ l'evento in cui $\mathcal{A}$ restituisca 1 nell'esperimento $b$, si definisce il vantaggio di $\mathcal{A}$ rispetto a $\mathcal{L}$ così:
     \[
-        \text{CCAadv}[\mathcal{A},\mathcal{L}] = |\Pr[W_0] - \Pr[W_1|
+        \text{CCA}_\text{adv}[\mathcal{A},\mathcal{L}] = |\Pr[W_0] - \Pr[W_1|
     \]
-    Un cifrario $\mathcal{L}$ è semanticamente sicuro contro l'attacco \emph{chosen ciphertext}, se CCAadv$[\mathcal{A},\mathcal{L}]$ è trascurabile.
+    Un cifrario $\mathcal{L}$ è semanticamente sicuro contro l'attacco \emph{chosen ciphertext}, se $\text{CCA}_\text{adv}[\mathcal{A},\mathcal{L}]$ è trascurabile.
 \end{definition}
 
 \begin{definition}[Sicurezza 1CCA]
@@ -108,7 +108,7 @@ Si mostra ora la relazione tra sicurezza CCA e sicurezza AE, il seguente teorema
 \begin{theorem}
     Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ e un dato avversario $\mathcal{A}$ CCA che fa uso di $Q_e$ Query di cifratura e $Q_d$ Query di decicfratura, allora esistono due avversari $\mathcal{B}_{\text{cpa}}$ e $\mathcal{B}_{\text{ci}}$ rispettivamente avversari per i giochi d'attacco CPA e CI. Tali che 
     \[
-        \text{CCAadv}[\mathcal{A},\mathcal{L}] = \text{CPAadv}[\mathcal{B}_{\text{cpa}}] + 2Q_{d} \cdot \text{CIadv}[\mathcal{B}_{\text{ci}},\mathcal{L}]
+        \text{CCA}_\text{adv}[\mathcal{A},\mathcal{L}] = \text{CPA}_\text{adv}[\mathcal{B}_{\text{cpa}}] + 2Q_{d} \cdot \text{CI}_\text{adv}[\mathcal{B}_{\text{ci}},\mathcal{L}]
     \]
 \end{theorem}
 
@@ -151,9 +151,9 @@ Il sistema $\mathcal{E}_{EM}$ è definito su $(\mathcal{K}_e \times \mathcal{K}_
     \end{itemize}
     Quando $\mathcal{A}$ restituirà $(c,t)$, $\mathcal{B}$ restituirà $(c,t)$
 
-    Con probabilità $\text{CIadv}[\mathcal{A},\mathcal{E}_{MC}]$ $\mathcal{A}$ vince il gioco e trova una coppia $(c,t)$ valida ($V(K_m,c,t) = \texttt{accept}$) allora $(c,t)$ permette anche a $\mathcal{B}$ di vincere il gioco d'attacco \emph{MAC} per cui
+    Con probabilità $\text{CI}_\text{adv}[\mathcal{A},\mathcal{E}_{MC}]$ $\mathcal{A}$ vince il gioco e trova una coppia $(c,t)$ valida ($V(K_m,c,t) = \texttt{accept}$) allora $(c,t)$ permette anche a $\mathcal{B}$ di vincere il gioco d'attacco \emph{MAC} per cui
     \[
-        \text{CIadv}[\mathcal{A},\mathcal{E}_{EM}] = \text{MACadv}[\mathcal{B},\mathcal{I}].
+        \text{CI}_\text{adv}[\mathcal{A},\mathcal{E}_{EM}] = \text{MAC}_\text{adv}[\mathcal{B},\mathcal{I}].
     \]
     Inoltre se $\mathcal{L}$ è CPA-sicuro anche $\mathcal{E}_{EM}$ lo è
     % pag 366 B.S. lasciato come esercizio
@@ -482,3 +482,4 @@ La sicurezza del cifrario AEAD è banale, in quanto il cifrario fa uso di un cif
 
 %TODO: 
 % \paragraph{Ottimizzazioni}
+\input{contents/CPAAdv.tex}

@@ -45,7 +45,7 @@ Prendendo una funzione casuale $e_{i} \in \mathcal{E}$ la permutazione $f_{i}$ d
 \vspace{0.2cm}\noindent Per definire la sicurezza si introduce un gioco d'attacco:
 
 \begin{definition}[Vantaggio Block Cipher]
-    Per un dato cifrario a blocchi $L = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$, con $X := M = C$ e per un dato avversario $\mathcal{A}$, definiamo due esperimenti:
+    Per un dato cifrario a blocchi $\mathcal{L} = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$, con $X := M = C$ e per un dato avversario $\mathcal{A}$, definiamo due esperimenti:
 
     \vspace{1em}
     \textbf{Esperimento} $b$:
@@ -55,9 +55,13 @@ Prendendo una funzione casuale $e_{i} \in \mathcal{E}$ la permutazione $f_{i}$ d
         \item L'avversario calcola e restituisce un bit $b \in \{0,1\}$. 
     \end{itemize} 
 
-    \vspace{0.2cm} \noindent Per $b=0,1$, $W_b$ è l'evento che $\mathcal{A}$ ritorna 1 nell'Esperimento $b$. \\ Definiamo il vantaggio di $A$ come \[BC_{adv}(\mathcal{A},L)=|Pr[W_0]-Pr[W_1]|.\]Infine diciamo che $\mathcal{A}$ è un avversario BC con Q-query se invia al massimo  Q query. 
+    \vspace{0.2cm} \noindent Per $b=0,1$, $W_b$ è l'evento che $\mathcal{A}$ ritorna 1 nell'Esperimento $b$. \\ Definiamo il vantaggio di $\mathcal{A}$ come 
+    \[
+        \text{BC}_{\text{adv}}(\mathcal{A},\mathcal{L})=|\Pr[W_0]-\Pr[W_1]|.
+    \]
+    Infine diciamo che $\mathcal{A}$ è un avversario BC con Q-query se invia al massimo  Q query. 
 
-    \vspace{0.2cm} \noindent Un cifrario a blocchi è sicuro, indistinguibile da una permutazione casuale, se per tutti gli avversari efficienti il valore $BC_{adv}$ è trascurabile. 
+    \vspace{0.2cm} \noindent Un cifrario a blocchi è sicuro, indistinguibile da una permutazione casuale, se per tutti gli avversari efficienti il valore $\text{BC}_{\text{adv}}[\mathcal{A},\mathcal{L}]$ è trascurabile. 
 
 \end{definition}
 

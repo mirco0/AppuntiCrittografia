@@ -46,7 +46,7 @@ Nel caso in cui il problema preimmagine sia difficile, la funzione $h$ è detta 
 \end{definition}
 
 \begin{definition}[Vantaggio resistenza alle collisioni]
-    In un gioco d'attacco con una funzione hash $h: \mathcal{X} \to \mathcal{Y}$, definiamo il vantaggio di un avversario $\mathcal{A}$ rispetto ad $h$, denotato $CR_{\text{adv}}[\mathcal{A},h]$ come la probabilità dell'avversario di risolvere il problema collisione \ref{def:collision}.
+    In un gioco d'attacco con una funzione hash $h: \mathcal{X} \to \mathcal{Y}$, definiamo il vantaggio di un avversario $\mathcal{A}$ rispetto ad $h$, denotato $\text{CR}_{\text{adv}}[\mathcal{A},h]$ come la probabilità dell'avversario di risolvere il problema collisione \ref{def:collision}.
 \end{definition}
 
 \noindent
@@ -190,7 +190,7 @@ in cui $\langle s \rangle$ è una stringa di bit che codifica il numero di blocc
     \label{teoremaMerkle}
     Sia $L$ un intero (valore di lunghezza), limitato da un polinomio e sia $h$ una funzione hash resistente alle collisioni definita su $(\mathcal{K} \times \mathcal{X}, \mathcal{Y})$. Allora, la funzione hash di Merkle-Damgard $H$ derivata da $h$, definita su $(\{0,1\}^{\leq L}, \mathcal{K})$ è resistente alle collisioni. \\ In particolare, per ogni avversario $\mathcal{A}$ capace di trovare una collisione su $H$, esiste un avversario $\mathcal{B}$ capace di trovare una collisione su $h$, formalmente: 
     \[
-        CR_{\text{adv}}[\mathcal{A}, H]=CR_{\text{adv}}[\mathcal{B}, h].
+        \text{CR}_{\text{adv}}[\mathcal{A}, H]= \text{CR}_{\text{adv}}[\mathcal{B}, h].
     \] 
 \end{theorem}
 
@@ -210,7 +210,7 @@ Nel caso in cui $t_{u-1} = t_{v-1}'$ e $m_u \neq m_v'$, deduciamo che $u=v$ e $M
 \]
 
 \noindent Come prima, si distinguono i due casi: il processo continua allo stesso modo, fino al primo blocco, finché non si trova una collisione. A questo punto, si ha $m_i=m_i'$ per $i=1, \dots, u$. Ma questo implica che $M=M'$ contraddicendo il fatto che $M$ e $M'$ siano una collisione per $H$. Quindi, poiché $M \neq M'$, il processo di scansione deve produrre una collisione su $h$. Si conclude che $\mathcal{B}$ rompe la collisione di $h$ come richiesto. \\ In sostanza, se $\mathcal{A}$ trova una collisione su $H$, allora $\mathcal{B}$ trova una collisione su $h$, e quindi   \[
-    CR_{\text{adv}}[\mathcal{A}, H]=CR_{\text{adv}}[\mathcal{B}, h]. 
+    \text{CR}_{\text{adv}}[\mathcal{A}, H]= \text{CR}_{\text{adv}}[\mathcal{B}, h]. 
     \]
 \end{proof}
 
@@ -221,7 +221,7 @@ Il teorema \ref{teoremaMerkle} mostra che è possibile costruire una funzione ha
     \item Fare uso della matematica per definire delle funzioni di compressione, la cui sicurezza è dimostrata, generalmente queste funzioni sono più lente.
 \end{itemize}
 
-Sia $L = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ un cifrario a blocchi con $\mathcal{X} = \{0,1\}^{n}$. La funzione di compressione di Davies-Meyer $h_{DM}$, associa un elemento in $(\mathcal{X} \times \mathcal{K})$ a un elemento in $\mathcal{X}$ come segue
+Sia $\mathcal{L} = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ un cifrario a blocchi con $\mathcal{X} = \{0,1\}^{n}$. La funzione di compressione di Davies-Meyer $h_{DM}$, associa un elemento in $(\mathcal{X} \times \mathcal{K})$ a un elemento in $\mathcal{X}$ come segue
 \[
     h_{DM}(x,y):= e_y(x) \oplus x
 \]
