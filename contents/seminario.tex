@@ -89,11 +89,11 @@ Sia ora $\mathcal{A}$ un avversario che ha l'obiettivo di inviare a Bob un messa
         \item Lo sfidante sceglie $k \in \mathcal{K}$ in modo casuale
         \item $\mathcal{A}$ fa delle query allo sfidante, le query possono essere di due tipi:
         \begin{itemize}
-            \item Query di cifratura: per $i = 1,2,\dots$ l'attaccante sceglie due messaggi $m_{i0}, m_{i1}$ e li invia allo sfindate. Lo sfidante calcola $c_i = e_k(m_{ib})$ e lo invia all'attaccante.
-            \item Query di decifratura: per $j = 1,2,\dots$ lo sfidante sceglie un testo cifrato $\hat{c}_j$ mai visto prima $\hat{c}_i \notin \{c_1,c_2\dots\}$
+            \item Query di cifratura: per $i = 1,2,\dots$ l'attaccante sceglie due messaggi $m_{i0}, m_{i1}$ e li invia allo sfidate. Lo sfidante calcola $c_i = e_k(m_{ib})$ e lo invia ad $\mathcal{A}$.
+            \item Query di decifratura: per $j = 1,2,\dots$ l'attaccante sceglie un testo cifrato $\hat{c}_j$ mai visto prima $\hat{c}_i \notin \{c_1,c_2\dots\}$, lo sfidante restituisce il messaggio corrispondente $\hat{m} = d_{k}(\hat{c}_j)$.
         \end{itemize}
     \end{itemize}
-    Alla fine del gioco $\mathcal{A}$ restituisce un bit $\hat{b} \in \{0,1\}$. Per $b = 0,1$ sia $W_b$ l'evento in cui $\mathcal{A}$ restituisca 1 nell'esperimento $b$, si definisce il vantaggio di $\mathcal{A}$ rispetto a $\mathcal{L}$ così:
+    Alla fine del gioco $\mathcal{A}$ restituisce un bit $\hat{b} \in \{0,1\}$. Per $b = 0,1$ sia $W_b$ l'evento in cui $\mathcal{A}$ restituisce 1 nell'esperimento $b$, si definisce il vantaggio di $\mathcal{A}$ rispetto a $\mathcal{L}$ nel seguente modo:
     \[
         \text{CCA}_\text{adv}[\mathcal{A},\mathcal{L}] = |\Pr[W_0] - \Pr[W_1|
     \]
@@ -101,12 +101,12 @@ Sia ora $\mathcal{A}$ un avversario che ha l'obiettivo di inviare a Bob un messa
 \end{definition}
 
 \begin{definition}[Sicurezza 1CCA]
-    Un cifrario $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ è \emph{1-CCA-sicuro} se è sicuro per un avversario efficiente $\mathcal{A}$ avente solo una query di cifratura disponibile.
+    Un cifrario $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ è \emph{1-CCA-sicuro} se, è CCA-sicuro per ogni avversario efficiente $\mathcal{A}$ avente solo una query di cifratura disponibile.
 \end{definition}
 
 Si mostra ora la relazione tra sicurezza CCA e sicurezza AE, il seguente teorema mostra come un cifrario AE-sicuro sia anche un cifrario CCA-sicuro.
 \begin{theorem}
-    Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ e un dato avversario $\mathcal{A}$ CCA che fa uso di $Q_e$ Query di cifratura e $Q_d$ Query di decicfratura, allora esistono due avversari $\mathcal{B}_{\text{cpa}}$ e $\mathcal{B}_{\text{ci}}$ rispettivamente avversari per i giochi d'attacco CPA e CI. Tali che 
+    Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ e un dato avversario $\mathcal{A}$ CCA che fa uso di $Q_e$ query di cifratura e $Q_d$ query di decifratura, allora esistono due avversari $\mathcal{B}_{\text{cpa}}$ e $\mathcal{B}_{\text{ci}}$ rispettivamente avversari per i giochi d'attacco CPA e CI. Tali che 
     \[
         \text{CCA}_\text{adv}[\mathcal{A},\mathcal{L}] = \text{CPA}_\text{adv}[\mathcal{B}_{\text{cpa}}] + 2Q_{d} \cdot \text{CI}_\text{adv}[\mathcal{B}_{\text{ci}},\mathcal{L}]
     \]
@@ -116,8 +116,8 @@ Si mostra ora la relazione tra sicurezza CCA e sicurezza AE, il seguente teorema
 %Dimostrazione omessa per ora B.S. 363
 
 \subsection{Creazione di cifrari attraverso la composizione}
-\paragraph{Enrypt then MAC}
-Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K}_e,\mathcal{E},\mathcal{D})$ e sia $\mathcal{I} = (S,V)$ un \emph{MAC} definito su $(\mathcal{K}_m,C,\mathcal{T})$. Si definisce un sistema $\mathcal{E}_{EM} = (E_{EM}, D_{EM})$ come di seguito:
+\paragraph{Encrypt-then-MAC}
+Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K}_e,\mathcal{E},\mathcal{D})$ un cifrario e sia $\mathcal{I} = (S,V)$ un \emph{MAC} definito su $(\mathcal{K}_m,C,\mathcal{T})$. Si definisce un sistema $\mathcal{E}_{EM} = (E_{EM}, D_{EM})$ come di seguito:
 
 \begin{gather*}
     E_{EM}((k_e,k_m),m) = (c,t) \quad c = e_{k_e}(m) \quad t = S(K_m,c)\\
@@ -128,10 +128,10 @@ Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K}_e,\mathcal{E},\mathcal{D})$ e sia 
     \end{cases}
 \end{gather*}
 
-Il sistema $\mathcal{E}_{EM}$ è definito su $(\mathcal{K}_e \times \mathcal{K}_m, \mathcal{M}, C \times \mathcal{T})$.
+Il sistema $\mathcal{E}_{EM}$ si dice essere definito su $(\mathcal{K}_e \times \mathcal{K}_m, \mathcal{M}, C \times \mathcal{T})$.
 
 \begin{theorem}[Il sistema $\mathcal{E}_{EM}$ è AE-sicuro]
-    Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K}_e,\mathcal{E},\mathcal{D})$ e sia $\mathcal{I} = (S,V)$ un \emph{MAC} definito su $(\mathcal{K}_m,C,\mathcal{T})$. Se $\mathcal{L}$ è CPA-sicuro e $\mathcal{I}$ è un sistema \emph{MAC} sicuro, allota il sistema $\mathcal{E}_{EM} = (E_{EM}, D_{EM})$ è AE-sicuro.
+    Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K}_e,\mathcal{E},\mathcal{D})$ un cifrario e sia $\mathcal{I} = (S,V)$ un \emph{MAC} definito su $(\mathcal{K}_m,C,\mathcal{T})$. Se $\mathcal{L}$ è CPA-sicuro e $\mathcal{I}$ è un sistema \emph{MAC} sicuro, allora il sistema $\mathcal{E}_{EM} = (E_{EM}, D_{EM})$ è AE-sicuro.
 \end{theorem}
 
 \begin{proof}
@@ -160,7 +160,7 @@ Il sistema $\mathcal{E}_{EM}$ è definito su $(\mathcal{K}_e \times \mathcal{K}_
 \end{proof}
 
 \vspace{1em}\noindent
-Un errore comune può essere la scelta delle due chiavi tali che $k_e = k_m$, in questa situazione il cifario risultante sarà AE-sicuro.
+Un errore comune può essere la scelta delle due chiavi tali che $k_e = k_m$, in questa situazione il cifrario risultante sarà AE-sicuro.
 
 Un altro errore è applicare il \emph{MAC} solo a parte del testo cifrato. Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ un cifrario CPA-sicuro \emph{random CBC} tale che, per un IV $r$ casuale  
 \[
@@ -175,7 +175,7 @@ In questo caso $e_{k_e}(m)$ da come risultato una coppia $(r,c)$ ma l'algoritmo 
 
 dato un messaggio cifrato $(r,c,t)$ un attaccante ha la possibilità di creare un nuovo messaggio cifrato valido $(r',c,t)$ con $r \neq r'$. La funzione di decifratura non nota il cambiamento del IV, e non darà \texttt{reject}, al contrario restituirà $d_{k_e}((r',c))$, questo tipo di avversario è capace di vincere il \emph{gioco CI}.
 
-In particolare $(r,c,t)$ è la cifratura di un messaggio $m$, passando da $(r,c,t)$ a $(r \oplus \Delta,c,t)$ per qualche $\Delta$, la decifratura $d_{k_e}(r \oplus \Delta, c)$ darà $m'$ tale che $m'[0] = m[0] \oplus \Delta$. Ovverso si ha la possibilità di cambiare il primo blocco di $m$ con un blocco arbitrario.
+In particolare $(r,c,t)$ è la cifratura di un messaggio $m$, passando da $(r,c,t)$ a $(r \oplus \Delta,c,t)$ per qualche $\Delta$, la decifratura $d_{k_e}(r \oplus \Delta, c)$ darà $m'$ tale che $m'[0] = m[0] \oplus \Delta$. Ovvero si ha la possibilità di cambiare il primo blocco di $m$ con un blocco arbitrario.
 
 \subsection{Padding oracle attack su SSL}
 \begin{definition}[Sistema MAC-then-encrypt]    
@@ -199,7 +199,7 @@ Si presenta ora un esempio che mostra come il sistema $\mathcal{E}_{ME}$ non sia
 Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$ un cifrario \emph{random CBC}, questo cifrario è CPA-sicuro, ma la combinazione di $\mathcal{L}$ con un \emph{MAC} sicuro come nello schema \emph{MAC-then-encrypt} non è sicuro, esiste difatti un attacco chiamato \textbf{POODLE}. Si assuma che il cifrario operi in blocchi di 16 byte, come in AES (si ricorda che nella modalità CBC si fa uso del padding per raggiungere una lunghezza dell'input corretta, aggiungendo $p-1$ byte, e un ultimo byte contenente il valore $p-1$). 
 
 \vspace{1em}\noindent
-Il cifrario ottenuto dalla combinazione \emph{MAC-then-ecnrypt} $\mathcal{E}_{ME} = (E_{ME},D_{ME})$ funziona come segue:
+Il cifrario ottenuto dalla combinazione \emph{MAC-then-encrypt} $\mathcal{E}_{ME} = (E_{ME},D_{ME})$ funziona come segue:
 \begin{itemize}
     \item $E_{ME}((k_e,k_m),m)$: Si fa uso del \emph{MAC} per ottenere un tag $t= S(k_m,m)$. Successivamente si cifra $m \conc t$ con la cifratura CBC: si aggiunge il padding e si cifra con la chiave $k_e$ e un IV casuale.
     \item $D_{ME}((k_e,k_m),c)$: Si esegue la decifratura per ottenere i dati, successivamente si rimuove il padding leggendo l'ultimo byte. Infine si verifica il \emph{MAC}, se valido si restituisce il testo.
@@ -211,7 +211,7 @@ L'attacco è del tipo \emph{chosen ciphertext attack} e permette all'avversario 
 
 Si supponga un avversario che intercette un testo cifrato valido $c = E_{ME}((k_e,k_m),m)$ per qualche messaggio $m$. La lunghezza di $m$ è tale che dopo che un \emph{tag} $t$ è aggiunto a $m$, $(m \conc t)$ è un multiplo di 16 byte. 
 
-Un avversario può ottenere informazioni riguardo $m[0]$, rompendo così la sicurezza semantica di $\mathcal{E}_{ME}$: l'attaccante prepare una query $\hat{c}$:
+Un avversario può ottenere informazioni riguardo $m[0]$, rompendo così la sicurezza semantica di $\mathcal{E}_{ME}$: l'attaccante prepara una query $\hat{c}$:
 
 % Immagine pagina 370 B.S.
 % \hat{c}[0] = c[0] 
@@ -233,7 +233,7 @@ Più generalmente se la risposta di una query di decifratura è diverso da \text
 \]
 nel caso contrario l'attaccante scopre che i due byte non combaciano. Questo rompe direttamente la sicurezza semantica del sistema $\mathcal{E}_{ME}$.
 
-Ora si supponga che l'attaccante ottenga un'altra cifratura $c'$ di $m$, facendo uso di un IV diverso. L'attaccandte può fare uso i testi cifrati $c$ e $c'$ per formare delle query utili di \emph{chosen ciphertext}: può sostituire gli ultimi blocchi di $c$ o $c'$ con $c[1]$ o $c'[1]$. Facendo le quattro query corrispendenti, si può ottenere qualche informazione
+Ora si supponga che l'attaccante ottenga un'altra cifratura $c'$ di $m$, facendo uso di un IV diverso. L'attaccante può fare uso i testi cifrati $c$ e $c'$ per formare delle query utili di \emph{chosen ciphertext}: può sostituire gli ultimi blocchi di $c$ o $c'$ con $c[1]$ o $c'[1]$. Facendo le quattro query corrispondenti, si può ottenere qualche informazione
 \[
     15 \oplus c[0] \oplus c[\ell - 1], \qquad 15 \oplus c[0] \oplus c'[\ell - 1], \qquad 15 \oplus c'[0] \oplus c[\ell - 1], \qquad 15 \oplus c'[0] \oplus c'[\ell - 1].
 \]
@@ -241,7 +241,7 @@ Ora si supponga che l'attaccante ottenga un'altra cifratura $c'$ di $m$, facendo
 Se i quattro valori corrispondenti sono diversi, l'attaccante ha quattro volte la possibilità di ottenere l'ultimo byte di $m[0]$. Inoltre i valori possibili sono 256, per cui, con altrettante query, non solo si rompe la sicurezza semantica, ma viene trovato un byte di testo. Infine, se l'attaccante ha anche la possibilità di fare una query su $m$ con applicato uno \emph{shift} a destra, una volta scoperto un blocco $c_1$, applicando $c_1[1]$ nell'ultimo blocco del testo cifrato, facendo delle query contenenti dati già ottenuti è possibile recuperare gli altri byte di $m[0]$, ripetendo più volte si può ottenere l'intero messaggio $m$.
 
 \paragraph{Rottura di SSL 3.0}
-Siano un server web vittima \texttt{bank.com} e un browser, quando un utente vistita \texttt{bank.com}, i dati vengono scambiati usando SSL 3.0. Il segreto condiviso è un cookie scambiato in ogni messaggio tra le due parti:
+Siano un server web vittima \texttt{bank.com} e un browser, quando un utente visita \texttt{bank.com}, i dati vengono scambiati usando SSL 3.0. Il segreto condiviso è un cookie scambiato in ogni messaggio tra le due parti:
 \begin{center}
     \fbox{GET \texttt{path} \quad cookie: \texttt{cookie}}
 \end{center}
@@ -251,17 +251,17 @@ Un attaccante modifica il browser dell'utente per far sì che il cookie venga in
 \begin{center}
     \fbox{GET \texttt{/AA} \quad cookie: \texttt{cookie}}
 \end{center}
-il parametro \texttt{path} viene impostato al valore \texttt{/AA} per assicurarsi che la lunghezza del messaggio insieme al \emph{MAC} sia un multiplo di 16 byte. L'attaccante può ora intercettare la richiesta $c$ e attuare l'attacco di \emph{chosen ciphertext} per ottenere un byte del cookie. L'attaccante crea il messaggio $\hat{c}$ e lo invia al server vittima (\texttt{banks.com}), fino ad ottenere un byte di informazione. Una volta che l'attaccante ottiene un byte del cookie la richiesta effettuata cambia, applicando uno \emph{shift} a destra al cookie e cambiando il parametro \texttt{path} a \texttt{/AAA}
+il parametro \texttt{path} viene impostato al valore \texttt{/AA} per assicurarsi che la lunghezza del messaggio insieme al \emph{MAC} sia un multiplo di 16 byte. L'attaccante può ora intercettare la richiesta $c$ e attuare l'attacco di \emph{chosen ciphertext} per ottenere un byte del cookie. L'attaccante crea il messaggio $\hat{c}$ e lo invia al server vittima (\texttt{bank.com}), fino ad ottenere un byte di informazione. Una volta che l'attaccante ottiene un byte del cookie la richiesta effettuata cambia, applicando uno \emph{shift} a destra al cookie e cambiando il parametro \texttt{path} a \texttt{/AAA}
 \begin{center}
     \fbox{GET \texttt{/AAA} \quad cookie: \texttt{cookie}}
 \end{center}
 Così facendo l'attaccante può ottenere un secondo byte di informazione, e continuando in questo modo ottenere tutti i byte del cookie.
 
 \vspace{1em}\noindent
-In generale questo tipo di attacchi sono possibili in quanto il server risponde con un codice errore che permette all'attaccante di determinare se l'attacco sta avendo successo. Nel caso di assenza di errori è anche possibile per l'attaccante fare attachi sul tempo di risposta del server.
+In generale questo tipo di attacchi sono possibili in quanto il server risponde con un codice errore che permette all'attaccante di determinare se l'attacco sta avendo successo. Nel caso di assenza di errori è anche possibile per l'attaccante fare attacchi sul tempo di risposta del server.
 
 \subsection{Costruzioni sicure MAC-then-encrypt}
-Nonostate la costruzione MAC-then-encrypt non sia sempre sicura (vengono quindi preferite costruzioni \emph{Encrypt-then-MAC}) esistono delle costruzioni \emph{ME} che sono sicure. In particolare nel caso un cifrario $\mathcal{E}$ implementi una \emph{randomized counter mode} allora $\mathcal{E}$ sarebbe AE-sicuro, anche nel caso \emph{MAC} abbia sicurezza \emph{one-time}.
+Nonostante la costruzione MAC-then-encrypt non sia sempre sicura (vengono quindi preferite costruzioni \emph{Encrypt-then-MAC}) esistono delle costruzioni \emph{ME} che sono sicure. In particolare nel caso un cifrario $\mathcal{E}$ implementi una \emph{randomized counter mode} allora $\mathcal{E}$ sarebbe AE-sicuro, anche nel caso \emph{MAC} abbia sicurezza \emph{one-time}.
 
 \vspace{1em}\noindent
 Sia $\mathcal{L} = (E,D)$ un cifrario AES, in \emph{randomized counter mode} costruito su una \emph{PRF} sicura $F$ definita su $(\mathcal{K}_e,\mathcal{X} \times \mathbb{Z}_{\ell}, \mathcal{Y})$ di cui $\mathcal{Y} = \{0,1\}^{n}$.
@@ -325,7 +325,7 @@ Un cifrario con supporto ai dati associati è definito come segue:
     La definizione di sicurezza CPA per un cifrario \emph{nonce-based} è simile alla definizione solita di sicurezza CPA. L'unica differenza è nelle query, nell'esperimento $b$, per $b = 0,1$:
 
     \begin{itemize}
-        \item L' \emph{i-esima} query, per una coppia di messaggi $m_0,m_1 \in \mathcal{M}$ della stessa lunghezza, i dati associati $d_i \in \mathcal{D}$ e un \emph{nonce} unico $\aleph_i \in \mathcal{N} - \{\aleph_1,\dots,\aleph_{i-1}\}$. Lo sfindante calcola $c_i = E(k,m_{ib},d_i,\aleph_i)$ e lo invia all'avversario.
+        \item L' \emph{i-esima} query, per una coppia di messaggi $m_0,m_1 \in \mathcal{M}$ della stessa lunghezza, i dati associati $d_i \in \mathcal{D}$ e un \emph{nonce} unico $\aleph_i \in \mathcal{N} - \{\aleph_1,\dots,\aleph_{i-1}\}$. Lo sfidante calcola $c_i = E(k,m_{ib},d_i,\aleph_i)$ e lo invia all'avversario.
     \end{itemize}
     Rispetto alla definizione solita, c'è la presenza di $\aleph_i$, che comunque rimane sotto il controllo dell'avversario, per cui la definizione di vantaggio è:
 
@@ -382,7 +382,7 @@ di cui $k \in \mathcal{K}, m \in \mathcal{M}, d \in \mathcal{D}$, il cifrario è
     nel caso in cui il vantaggio sia trascurabile, il cifrario è detto essere CCA-sicuro. Nel caso in cui l'avversario sia a singola query di cifratura il vantaggio è $\text{1CCA}_{\text{adv}}[\mathcal{A},\mathcal{E}]$.
 \end{definition}
 
-Si mostra ora la costruzione di un cifrario AD 1CCA-sicuro. Sia un $\mathcal{E} = (ED)$ un cifrario semanticamente sicuro e sia $\mathcal{I} = (S,V)$ un \emph{MAC ont-time} sicuro, allora un cifraro $\mathcal{E} = (E_{EM},D_{EM})$ è definito come segue:
+Si mostra ora la costruzione di un cifrario AD 1CCA-sicuro. Sia un $\mathcal{E} = (ED)$ un cifrario semanticamente sicuro e sia $\mathcal{I} = (S,V)$ un \emph{MAC one-time} sicuro, allora un cifrario $\mathcal{E} = (E_{EM},D_{EM})$ è definito come segue:
 
 \begin{gather*}
     E_{EM}( (k_e,k_m),m,d) = ( c \rightarrow{R} E(k_e,m), \quad S(k_m,(c,d)))\\
@@ -403,7 +403,7 @@ Il protocollo TLS (\emph{Transport Layer Security}) permette di ottenere un traf
 
 Il protocollo TLS nasce come standard che rende SSL più sicuro. La versione originale di SSL \emph(Secure Socket Layer), in particolare la versione SSLv2 è non sicura a causa di svariati problemi: come l'utilizzo della stessa chiave per \emph{MAC} e per la cifratura. 
 
-\paragraph{TLS 1.3} TLS può essere rappresentato in due componenti, il componente \emph{TLS session setup} si occupa della fase di \emph{setup}, in cui le due parti che vogliono mettersi in contatto si mettono in accordo riguardo il cifrario da utilizzare, in questa fase vegono definiti anche i segreti condivisi, derivati da un segreto comune chiamato \textbf{master-secret}. Il secondo componente è chiamato \emph{TLS record protocol} e si occupa dello scambio dei dati.
+\paragraph{TLS 1.3} TLS può essere rappresentato in due componenti, il componente \emph{TLS session setup} si occupa della fase di \emph{setup}, in cui le due parti che vogliono mettersi in contatto si mettono in accordo riguardo il cifrario da utilizzare, in questa fase vengono definiti anche i segreti condivisi, derivati da un segreto comune chiamato \textbf{master-secret}. Il secondo componente è chiamato \emph{TLS record protocol} e si occupa dello scambio dei dati.
 
 \vspace{1em}
 Il \textbf{master-secret} è usato per derivare le chiavi utilizzate durante la comunicazione $k_{b \to s}$, $k_{s \to b}$ usate rispettivamente per cifrare i dati provenienti dalle due parti, generalmente da \emph{browser} a \emph{server} e viceversa. Le due chiavi sono conosciute da entrambe le parti. Le chiavi sono derivate dal valore del master-secret e altri elementi casuali come input per una funzione chiamata \emph{HKDF}.
@@ -438,30 +438,30 @@ Una volta ricevuto un record, la parte ricevente esegue l'algoritmo di decifratu
 Il campo lunghezza, al momento (versione TLS 1.3) è inviato in chiaro. Attacchi basati sull'analisi del traffico permettono di dedurre informazioni riguardanti i dati scambiati. Il problema non ha una reale soluzione, per questo, spesso è ignorato. Inoltre il campo non è protetto da integrità dei dati poiché non può essere inserito nel campo dei dati aggiuntivi, dato il \emph{padding} variabile, la lunghezza del campo $c$ può non essere conosciuta prima della cifratura.
 
 \paragraph{Prevenzione di replay}
-Un attaccante potrebbe essere interessato a ripetere un messaggio precedente per ingannare il ricevente ad avere un determinato comportamento. Il contatore a 64 bit, di cui fa uso TLS, protegge da questo tipo di attacchi poiché il ricevente è gia a conoscenza del prossimo numero di sequenza da ricevere.
+Un attaccante potrebbe essere interessato a ripetere un messaggio precedente per ingannare il ricevente ad avere un determinato comportamento. Il contatore a 64 bit, di cui fa uso TLS, protegge da questo tipo di attacchi poiché il ricevente è già a conoscenza del prossimo numero di sequenza da ricevere.
 
 \paragraph{Attacco cookie cutter}
 TLS fornisce un'interfaccia di streaming, nel quale i pacchetti sono inviati non appena pronti. Come discusso in precedenza gli attacchi \emph{replay} non sono possibili; tuttavia attacchi che mirano a ultimi pacchetti non sono difesi. Un attaccante ha la possibilità di chiudere una connessione durante uno scambio di messaggi, senza che i partecipanti vengano a conoscenza dell'attacco. Un attacco con il nome di \textbf{cookie-cutter} nasce da questa idea.
 
 \vspace{1em}
-Siano definite due vittime: un web browser e un server: la vittima visita un sito malevolo, che redireziona la connessione al sito \texttt{victim.com}. Ad esempio sia la seguente risposta del sito:
+Siano definite due vittime: un web browser e un server: la vittima visita un sito malevolo, che re-direziona la connessione al sito \texttt{victim.com}. Ad esempio sia la seguente risposta del sito:
 
 \input{figures/tls_requests/1.tex}
 
 Le prime due righe indicano il tipo di risposta, di cui la seconda è copiata dalla richiesta del browser. La terza riga imposta un \emph{cookie} che verrà salvato sul browser vittima, di cui il comando \texttt{secure} indica che il cookie dovrà essere inviato esclusivamente a \texttt{victim.com} tramite una sessione cifrata. Infine l'ultima riga indica la fine della risposta. In questo caso non ci sono problemi, al contrario, nel caso in cui la richiesta sia troppo lunga, verrà divisa in due frame: 
 
 \input{figures/tls_requests/2.tex}
-In questo particolare caso, la sequenza che indica la fine della risposta è nel secondo frame; questo permette ad un attaccante di terminare la sessione una volta inviato il primo frame, in modo tale che il secondo frame non venga mai ricevuto. Il \emph{cookie} verrà, di conseguenza, segnato come non sicuro, lasciando all'attaccante la possibilità di redirezionare il browser verso una connessione non cifrata (connessione http) in cui il campo SID sarà leggibile in chiaro. Questo tipo di attacco è quindi possibile anche quando tutti i frame sono cifrati, non è però una debolezza del client, bensì è compito delle applicazioni la difesa da questi attacchi. 
+In questo particolare caso, la sequenza che indica la fine della risposta è nel secondo frame; questo permette ad un attaccante di terminare la sessione una volta inviato il primo frame, in modo tale che il secondo frame non venga mai ricevuto. Il \emph{cookie} verrà, di conseguenza, segnato come non sicuro, lasciando all'attaccante la possibilità di re-direzionare il browser verso una connessione non cifrata (connessione http) in cui il campo SID sarà leggibile in chiaro. Questo tipo di attacco è quindi possibile anche quando tutti i frame sono cifrati, non è però una debolezza del client, bensì è compito delle applicazioni la difesa da questi attacchi. 
 
 %TODO: AGGIUNGERE 7.4 H_{poly}
 \subsection{Galois Counter Mode}
-GCM è un cifrario AEAD basato su nonce, reso standard nel 2007, è una costruzione del tipo encrypt-then-MAC che fa uso di un cifrario a blocchi CPA sicuro (solitamente AES) e un \emph{MAC} sicuro. Il MAC è una costruzione Carter-Wegman dato da una fuzione GHASH con chiave (variante della funzione $H_{\text{poly}}$). Nel caso di cifratura di un messaggio vuoto il cifrario prende il nome di \textbf{GMAC}. Con il processo di cifratura, il cifrario sottostante $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$, di cui $\mathcal{X} := \mathcal{M} = C$ e $\mathcal{X} = \{0,1\}^{128}$, la funzione di GHASH è definita su $(\mathcal{X},\mathcal{X}^{\leq \ell},\mathcal{X})$ con $\ell = 2^{32} - 1$. Il cifrario a blocchi è utilizzato sia per la cifratura che per il \emph{MAC},  in cui è possibile utilizzare nonce $\aleph$ di lunghezza variabile si mostra il processo di seguito con $|\aleph| = 96$:
+GCM è un cifrario AEAD basato su nonce, reso standard nel 2007, è una costruzione del tipo encrypt-then-MAC che fa uso di un cifrario a blocchi CPA sicuro (solitamente AES) e un \emph{MAC} sicuro. Il MAC è una costruzione Carter-Wegman dato da una funzione GHASH con chiave (variante della funzione $H_{\text{poly}}$). Nel caso di cifratura di un messaggio vuoto il cifrario prende il nome di \textbf{GMAC}. Con il processo di cifratura, il cifrario sottostante $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$, di cui $\mathcal{X} := \mathcal{M} = C$ e $\mathcal{X} = \{0,1\}^{128}$, la funzione di GHASH è definita su $(\mathcal{X},\mathcal{X}^{\leq \ell},\mathcal{X})$ con $\ell = 2^{32} - 1$. Il cifrario a blocchi è utilizzato sia per la cifratura che per il \emph{MAC},  in cui è possibile utilizzare nonce $\aleph$ di lunghezza variabile si mostra il processo di seguito con $|\aleph| = 96$:
 
 \input{algorithms/gcm_cipher.tex}
 Ogni parametro di lunghezza inserito nella funzione GHASH deve è un valore a 64 bit, che indica la lunghezza in byte dei campi corrispondenti. Nel caso in cui $\aleph$ non sia di 96 bit, viene aggiunto un padding per raggiungere la lunghezza corretta (multiplo di 128 bit). C'è anche la possibilità di troncare il tag di integrità $t$, ne segue che l'integrità risulterà più debole. I messaggi da cifrare devono necessariamente avere un numero di blocchi $\leq 2^{32}$, e la stessa chiave $k$ non deve essere utilizzata per cifrare più di $2^{32}$ messaggi. 
 
 \vspace{1em}
-L'algoritmo di decifratura GCM, prende in input una chiave $k \in \mathcal{K}$ e un testo cifrato $(c,t)$, dei dati associati $d$ e un nonce $\aleph$. Opera come in encrypt-then-MAC: deriva una chiave $k_{m} = E(k,0^{128})$ e controlla l'integrità del tag $t$, nel caso di validità resituisce il messaggio decifrato (la decifratura \emph{deve} essere atomica, e non deve avvenire nessuna decifratura prima della verifica del tag $t$).
+L'algoritmo di decifratura GCM, prende in input una chiave $k \in \mathcal{K}$ e un testo cifrato $(c,t)$, dei dati associati $d$ e un nonce $\aleph$. Opera come in encrypt-then-MAC: deriva una chiave $k_{m} = E(k,0^{128})$ e controlla l'integrità del tag $t$, nel caso di validità restituisce il messaggio decifrato (la decifratura \emph{deve} essere atomica, e non deve avvenire nessuna decifratura prima della verifica del tag $t$).
 
 \paragraph{GHASH} 
 La funzione GHASH, come anticipato, è una funzione basata su $(\mathcal{X},\mathcal{X}^{\leq \ell},\mathcal{X})$. Per poter essere utilizzata in un MAC Carter-Wegman deve essere DUF, $H_{\text{xpoly}}$ è DUF:
@@ -478,7 +478,7 @@ $\mathbb{F}_{2^{128}}$ è definito da un polinomio irriducibile $g(X) := X^{128}
 \end{equation*}
 
 \paragraph{Sicurezza del sistema}
-La sicurezza del cifrario AEAD è banale, in quanto il cifrario fa uso di un cifrario CPA sicuro e un \emph{MAC} sicuro. Nonostante venga utilizzata una singola chiave $k$, da quest'ultima si ottiene $k_m = E(k,0^{128})$ per la chiave GHASH, $E(k,x)$ è il \emph{padding} usato per mascherare l'output della funzione GHASH. La counter mode iniza con il valore $x' = x + 1$ in modo tale che l'input della funzione PRF, usata per cifrare il messaggio, sia indipendente e diversa dall'input usato per derivare la chiave GHASH e il \emph{padding}. GCM non ha una resistenza nel caso in cui i valori di nonce $\aleph$ vengano ri-utilizzati, nel caso in cui la chiave $k_m$ venga rivelata si rischierebbe una rottura dell'integrità.
+La sicurezza del cifrario AEAD è banale, in quanto il cifrario fa uso di un cifrario CPA sicuro e un \emph{MAC} sicuro. Nonostante venga utilizzata una singola chiave $k$, da quest'ultima si ottiene $k_m = E(k,0^{128})$ per la chiave GHASH, $E(k,x)$ è il \emph{padding} usato per mascherare l'output della funzione GHASH. La counter mode inizia con il valore $x' = x + 1$ in modo tale che l'input della funzione PRF, usata per cifrare il messaggio, sia indipendente e diversa dall'input usato per derivare la chiave GHASH e il \emph{padding}. GCM non ha una resistenza nel caso in cui i valori di nonce $\aleph$ vengano riutilizzati, nel caso in cui la chiave $k_m$ venga rivelata si rischierebbe una rottura dell'integrità.
 
 %TODO: 
 % \paragraph{Ottimizzazioni}
