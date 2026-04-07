@@ -1,4 +1,4 @@
-Sono stati mostrati sistemi che garantiscono segretezza e sistemi che permettono l'integrità dei dati, esistono anche sistemi che nascono dalla combinazione, ovvero forniscono la cosiddetta \emph{authenticated encryption}, chiamati anche \emph{AE-Secure}. Per creare un sistema AE-sicuro ci sono due metodi, \textbf{composizione generica}, in cui si unisce un cifrario CPA-sicuro e un \emph{MAC} sicuro; il secondo metodo è chiamato \textbf{schema integrato}, consiste nel basare il sistema su un cifrario a blocchi o una PRF.
+Sono stati mostrati sistemi che garantiscono segretezza e sistemi che permettono l'integrità dei dati, esistono anche sistemi che nascono dalla combinazione, ovvero forniscono la cosiddetta \emph{authenticated encryption}; questi sistemi sono chiamati anche \emph{AE-Secure}. Per creare un sistema AE-sicuro ci sono due metodi, \textbf{composizione generica}, in cui si unisce un cifrario CPA-sicuro e un \emph{MAC} sicuro; il secondo metodo è chiamato \textbf{schema integrato}, consiste nel basare il sistema su un cifrario a blocchi o una PRF.
 
 Sia $\mathcal{L} = (\mathcal{M}, C, \mathcal{K}, \mathcal{E}, \mathcal{D})$ un cifrario e $\mathcal{I} = (S,V)$ un \emph{MAC}, con $k_{\text{enc}} \in \mathcal{K}$ e $k_{\text{mac}}$ una chiave per MAC.
 Ci sono due modalità per creare un sistema AE a \emph{composizione generica}: 
@@ -210,7 +210,7 @@ Il cifrario ottenuto dalla combinazione \emph{MAC-then-encrypt} $\mathcal{E}_{ME
 \paragraph{Descrizione dell'attacco}
 L'attacco è del tipo \emph{chosen ciphertext attack} e permette all'avversario di decifrare un qualsiasi testo cifrato. 
 
-Si supponga un avversario che intercette un testo cifrato valido $c = E_{ME}((k_e,k_m),m)$ per qualche messaggio $m$. La lunghezza di $m$ è tale che dopo che un \emph{tag} $t$ è aggiunto a $m$, $(m \conc t)$ è un multiplo di 16 byte. 
+Si supponga un avversario che intercette un testo cifrato valido $c = E_{ME}((k_e,k_m),m)$ per qualche messaggio $m$. La lunghezza di $m$ è tale che, dopo che un \emph{tag} $t$ è aggiunto a $m$, la stringa $(m \conc t)$ ha come lunghezza un multiplo di 16 byte. 
 
 \vspace{1em}
 Un avversario può ottenere informazioni riguardo $m[0]$, rompendo così la sicurezza semantica di $\mathcal{E}_{ME}$: l'attaccante prepara una query $\hat{c}$:
@@ -340,7 +340,7 @@ Un cifrario con supporto ai dati associati è definito come segue:
 \begin{definition}[Integrità dei messaggi cifrati per \emph{nonce}]
     Un cifrario AD \emph{nonce-based} fornisce integrità dei messaggi cifrati se, un attaccante capace di cifrare con una chiave $k$ a scelta e $\aleph$ a scelta non è capace di restituire una tripla $(c,d,\aleph)$ valida per l'algoritmo di decifratura.
     %Modifica gioco d'attacco pagina 379
-    Il cifrario $\mathcal{E}$ fornisce \emph{integrità dei messaggi cifrati} se, per ogni avversario efficiente $\mathcal{A}$, il valore $\text{nCI}_{\text{ad}}\text{adv}[\mathcal{A},\mathcal{E}]$ è trascurabile.
+    Il cifrario $\mathcal{E}$ fornisce \emph{integrità dei messaggi cifrati} se, per ogni avversario efficiente $\mathcal{A}$, il valore $\text{nCIad}_{\text{adv}}[\mathcal{A},\mathcal{E}]$ è trascurabile.
 \end{definition}
 
 \begin{definition}[Cifrario \emph{nonce} AEAD]
@@ -376,7 +376,7 @@ di cui $k \in \mathcal{K}, m \in \mathcal{M}, d \in \mathcal{D}$, il cifrario è
 \begin{definition}[CCA con dati associati]
     La definizione di CCA si adatta bene ai cifrari AD. In particolare il gioco d'attacco si svolge nel seguente modo:
 
-    Per le query di cifratura, oltre a una coppia di messaggi $(m_{i0},m_{i1})$ l'avversario sceglie anche i dati associati $d_i$ e lo sfidante calcola $c_i \rightarrow{R} E(k,m_{ib},d_i)$. Per la query di decifratura oltre a un messaggio cifrato $\hat{c}_j$, l'avversario invia i dati associati $\hat{d}_j$, lo sfidante calcola $\hat{m}_j = D(k,\hat{c}_j,\hat{d}_j)$. La coppia $(\hat{c}_j,\hat{d}_j)$ non deve essere mai stata vista prima. Il vantaggio di un avversario $\mathcal{A}$ è denotato
+    Per le query di cifratura, oltre a una coppia di messaggi $(m_{i0},m_{i1})$ l'avversario sceglie anche i dati associati $d_i$ e lo sfidante calcola $c_i \xrightarrow{\text{R}} E(k,m_{ib},d_i)$. Per la query di decifratura oltre a un messaggio cifrato $\hat{c}_j$, l'avversario invia i dati associati $\hat{d}_j$, lo sfidante calcola $\hat{m}_j = D(k,\hat{c}_j,\hat{d}_j)$. La coppia $(\hat{c}_j,\hat{d}_j)$ non deve essere mai stata vista prima. Il vantaggio di un avversario $\mathcal{A}$ è denotato
     \[
         \text{CCA}_{\text{adv}}[\mathcal{A},\mathcal{E}],
     \]
@@ -386,7 +386,7 @@ di cui $k \in \mathcal{K}, m \in \mathcal{M}, d \in \mathcal{D}$, il cifrario è
 Si mostra ora la costruzione di un cifrario AD 1CCA-sicuro. Sia un $\mathcal{E} = (ED)$ un cifrario semanticamente sicuro e sia $\mathcal{I} = (S,V)$ un \emph{MAC one-time} sicuro, allora un cifrario $\mathcal{E} = (E_{EM},D_{EM})$ è definito come segue:
 
 \begin{gather*}
-    E_{EM}( (k_e,k_m),m,d) = ( c \rightarrow{R} E(k_e,m), \quad S(k_m,(c,d)))\\
+    E_{EM}( (k_e,k_m),m,d) = ( c \xrightarrow{\text{R}} E(k_e,m), \quad S(k_m,(c,d)))\\
     D_{EM}((k_e,k_m),(c,t),d) = \begin{cases}
         \texttt{reject} & \text{se } V(k_m,(c,d),t)\\
         D(k_e,c,d) & \text{altrimenti}
@@ -412,7 +412,7 @@ Il \textbf{master-secret} è usato per derivare le chiavi utilizzate durante la 
 \vspace{1em}\noindent
 I dati inviati dal protocollo vengono divisi in parti di al massimo $2^{14}$ byte. E ogni parte mantiene un contatore di 64 bit chiamato \textbf{write sequence number} (numero di sequenza), inizializzato a 0 e incrementato per ogni record inviato. 
 
-TLS 1.3 fa uso di un cifrario AEAD \emph{nonce-based} per cifrare un record, il cifrario viene determinato nella prima fase. L'algoritmo di cifratura AEAD usa gli argomenti $k_{a\to b}$, messaggio $m $ tale che $|m| \leq 2^14$ bytes; i dati associati sono vuoti. I nonce sono di almeno 8 byte e vengono calcolati nel seguente modo
+TLS 1.3 fa uso di un cifrario AEAD \emph{nonce-based} per cifrare un record, il cifrario viene determinato nella prima fase. L'algoritmo di cifratura AEAD usa gli argomenti $k_{a\to b}$, messaggio $m $ tale che $|m| \leq 2^{14}$ bytes; i dati associati sono vuoti. I nonce sono di almeno 8 byte e vengono calcolati nel seguente modo
 
 \begin{enumerate}
     \item Viene aggiunto un \emph{padding} a sinistra del numero di sequenza
