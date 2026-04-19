@@ -169,7 +169,7 @@ Quindi, per opportune assunzioni, la proprietà di resistenza alle collisioni im
 \vspace{1em} \noindent Passiamo ora alla descrizione del paradigma di \emph{Merkle-Damgård}. 
 
 \subsection{Merkle-Damgård}
-Il paradigma Merkle Damgård permette di partire da funzioni hash $h: \mathcal{K} \times \mathcal{X} \to \mathcal{Y}$ con $\mathcal{X} = \{0,1\}^{\ell}$ e $\mathcal{K} = \mathcal{Y} = \{0,1\}^n$ con $\ell$ relativamente piccola. Partendo da una funzione $h$, come sopra, e definendo una funzione $H$ definita su $(\{0,1\}^{\leq L}, \mathcal{K})$ funziona come segue:
+Il paradigma Merkle Damgård permette di creare funzioni hash, resistenti alle collisioni, partendo da funzioni hash $h: \mathcal{K} \times \mathcal{X} \to \mathcal{Y}$ con $\mathcal{X} = \{0,1\}^{\ell}$ e $\mathcal{K} = \mathcal{Y} = \{0,1\}^n$ con $\ell$ relativamente piccola. Partendo da una funzione $h$, come sopra, e definendo una funzione $H$ definita su $(\{0,1\}^{\leq L}, \mathcal{K})$ funziona come segue:
 
 \input{algorithms/merkle_dam.tex}
 
@@ -258,7 +258,7 @@ Si passa ora ai \textit{Message Authentication Codes}, che permettono di firmare
 
 \subsection{MAC Message Authentication Code}
 
-I \emph{MAC} sono funzioni hash con chiave che soddisfano determinate proprietà di sicurezza, generalmente è possibile creare un \emph{MAC} aggiungendo a una funzione hash $h$ (senza  chiave) una chiave. L'operazione deve essere fatta con cautela per prevenire degli attacchi.
+I \emph{MAC} sono funzioni hash con chiave, che soddisfano determinate proprietà di sicurezza, generalmente è possibile creare un \emph{MAC} aggiungendo a una funzione hash $h$ (senza  chiave) una chiave. L'operazione deve essere fatta con cautela per prevenire degli attacchi.
 
 %6.1 B.S.
 \begin{definition}
@@ -280,13 +280,13 @@ I \emph{MAC} sono funzioni hash con chiave che soddisfano determinate proprietà
 
 \paragraph{Gioco d'attacco: Sicurezza \emph{MAC}} Per un dato sistema \emph{MAC} $\mathcal{I}=(S,V)$, definito su $(\mathcal{K},\mathcal{M},\mathcal{T})$, e un dato avversario $\mathcal{A}$, il gioco d'attacco funziona così:
 \begin{itemize}
-    \item Lo sfidante sceglie $k \in \emph{K}$ a caso
+    \item Lo sfidante sceglie $k \in \mathcal{K}$ a caso
     \item $\mathcal{A}$ interroga lo sfidante diverse volte. $\forall i=1, \dots$ la $i-$esima query di firma è un messaggio $m_i \in \mathcal{M}$. Dato $m_i$, calcola un tag $t_i = S(k,m)$ e manda $t_i$ ad $\mathcal{A}$.
-    \item  Alla fine $\mathcal{A}$ restituisce una coppia $(m,t) \in \emph{M} \times \emph{T}$ non ancora firmata, ovvero $(m,t) \not\in \{(m_1,t_1),\dots\}$. 
+    \item  Alla fine $\mathcal{A}$ restituisce una coppia $(m,t) \in \mathcal{M} \times \mathcal{T}$ non ancora firmata, ovvero $(m,t) \not\in \{(m_1,t_1),\dots\}$. 
 \end{itemize}
 \noindent $\mathcal{A}$ vince il gioco se $(m,t)$ è una coppia valida per la chiave $k$. $\emph{MAC}_{\text{adv}}\left[\mathcal{A},\mathcal{I}\;\right]$ è il vantaggio di $\mathcal{A}$, ovvero la probabilità che $\mathcal{A}$ vinca il gioco. 
 
-\vspace{0.2cm} \noindent Un sistema \textit{MAC} è sicuro se per tutti gli avversari efficienti $\mathcal{A}$, il valore $MAC_{\text{adv}}$ è trascurabile. 
+\vspace{0.2cm} \noindent Un sistema \textit{MAC} $\mathcal{I}$ è sicuro se per tutti gli avversari efficienti $\mathcal{A}$, il valore $MAC_{\text{adv}}[\mathcal{A},\mathcal{I}]$ è trascurabile. 
 
 \begin{example}[Length extension attack]
     \label{atk:extension}
@@ -358,7 +358,7 @@ Per studiare la sicurezza di un \emph{MAC} annidato si studiano le proprietà de
 \end{itemize}
 
 %Da controllare
-\begin{definition}[Attacco a little Mac]
+\begin{definition}[Attacco a little MAC]
     L'avversario $\mathcal{A}$ ha la possibilità di eseguire un \emph{chosen-plaintext-attack}, può quindi calcolare l'hash dei valori $y$ a scelta, con $h_L$, lo scopo dell'avversario è trovare una coppia valida $(y',z = h_L(y'))$ tale che $y'$ è un valore mai visto.
 \end{definition}
 

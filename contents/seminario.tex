@@ -73,7 +73,7 @@ Solo \emph{encrypt-then-MAC} è sicuro tra i due, ed è utilizzato in TLS 1.2.
 \end{definition}
 
 \subsection{Conseguenze dell' Authenticated Encryption}
-Si consideri un cifrario AE-sicuro $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$, e due protagonisti, Alice e Bob, che condividono una chiave segreta $k \in \mathcal{K}$. Alice invia una sequenza di messaggi cifrati $c_1,c_2,\dots$ tale che per ogni $i \quad c_i = e_k(m_i)$ per qualche messaggio $m_i$.
+Si consideri un cifrario AE-sicuro $\mathcal{L} = (\mathcal{M},C,\mathcal{K},\mathcal{E},\mathcal{D})$, e due protagonisti, Alice e Bob, che condividono una chiave segreta $k \in \mathcal{K}$. Alice invia una sequenza di messaggi cifrati $c_1,c_2,\dots$ tale che per ogni $i, \ c_i = e_k(m_i)$ per qualche messaggio $m_i$.
 
 Sia ora $\mathcal{A}$ un avversario che ha l'obiettivo di inviare a Bob un messaggio $m$, impersonando Alice. Sia $c$ un messaggio generico inviato da Alice a Bob tale che $c = e_k(m)$, L'obiettivo di $\mathcal{A}$ è quello di trovare $\hat{c}$, tale che, esiste un messaggio $\hat{m} = d_k(\hat{c})$. Se $\mathcal{A}$ fosse in grado di trovare $\hat{c}$ allora sarebbe anche capace di rompere l'integrità del messaggio cifrato (sarebbe in grado di vincere il gioco d'attacco \ref{def:ciphertext_integrity}), ma ciò non è possibile poiché $\mathcal{L}$ è AE-sicuro. Questo mostra che integrità del messaggio cifrato implica l'integrità del messaggio.
 
@@ -95,7 +95,7 @@ Sia ora $\mathcal{A}$ un avversario che ha l'obiettivo di inviare a Bob un messa
     \end{itemize}
     Alla fine del gioco $\mathcal{A}$ restituisce un bit $\hat{b} \in \{0,1\}$. Per $b = 0,1$ sia $W_b$ l'evento in cui $\mathcal{A}$ restituisce 1 nell'esperimento $b$, si definisce il vantaggio di $\mathcal{A}$ rispetto a $\mathcal{L}$ nel seguente modo:
     \[
-        \text{CCA}_\text{adv}[\mathcal{A},\mathcal{L}] = |\Pr[W_0] - \Pr[W_1|
+        \text{CCA}_\text{adv}[\mathcal{A},\mathcal{L}] = |\Pr[W_0] - \Pr[W_1]|
     \]
     Un cifrario $\mathcal{L}$ è semanticamente sicuro contro l'attacco \emph{chosen ciphertext}, se $\text{CCA}_\text{adv}[\mathcal{A},\mathcal{L}]$ è trascurabile.
 \end{definition}
@@ -114,7 +114,7 @@ Si mostra ora la relazione tra sicurezza CCA e sicurezza AE, il seguente teorema
 
 %TODO: Scrivere dimostrazione
 %Dimostrazione omessa per ora B.S. 363
-
+\newpage
 \subsection{Creazione di cifrari attraverso la composizione}
 \paragraph{Encrypt-then-MAC}
 Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K}_e,\mathcal{E},\mathcal{D})$ un cifrario e sia $\mathcal{I} = (S,V)$ un \emph{MAC} definito su $(\mathcal{K}_m,C,\mathcal{T})$. Si definisce un sistema $\mathcal{E}_{EM} = (E_{EM}, D_{EM})$ come di seguito:
@@ -123,7 +123,7 @@ Sia $\mathcal{L} = (\mathcal{M},C,\mathcal{K}_e,\mathcal{E},\mathcal{D})$ un cif
     E_{EM}((k_e,k_m),m) = (c,t) \quad c = e_{k_e}(m) \quad t = S(K_m,c)\\
     D_{EM}( (k_e,k_m), (c,t)) = 
     \begin{cases}
-        \texttt{reject} & \text{se $V(k_m,c,t) = \texttt{reject}$}\\
+        \emph{rifiuta} & \text{se $V(k_m,c,t) = \emph{rifiuta}$}\\
         d_{k_e}(c) & \text{altrimenti}
     \end{cases}
 \end{gather*}
@@ -151,7 +151,7 @@ Il sistema $\mathcal{E}_{EM}$ si dice essere definito su $(\mathcal{K}_e \times 
     \end{itemize}
     Quando $\mathcal{A}$ restituirà $(c,t)$, $\mathcal{B}$ restituirà $(c,t)$
 
-    Con probabilità $\text{CI}_\text{adv}[\mathcal{A},\mathcal{E}_{EM}]$ $\mathcal{A}$ vince il gioco e trova una coppia $(c,t)$ valida ($V(K_m,c,t) = \texttt{accept}$) allora $(c,t)$ permette anche a $\mathcal{B}$ di vincere il gioco d'attacco \emph{MAC} per cui
+    Con probabilità $\text{CI}_\text{adv}[\mathcal{A},\mathcal{E}_{EM}]$ $\mathcal{A}$ vince il gioco e trova una coppia $(c,t)$ valida ($V(K_m,c,t) = \emph{accetta}$) allora $(c,t)$ permette anche a $\mathcal{B}$ di vincere il gioco d'attacco \emph{MAC} per cui
     \[
         \text{CI}_\text{adv}[\mathcal{A},\mathcal{E}_{EM}] = \text{MAC}_\text{adv}[\mathcal{B},\mathcal{I}].
     \]
@@ -215,6 +215,7 @@ Si supponga un avversario che intercette un testo cifrato valido $c = E_{ME}((k_
 \vspace{1em}
 Un avversario può ottenere informazioni riguardo $m[0]$, rompendo così la sicurezza semantica di $\mathcal{E}_{ME}$: l'attaccante prepara una query $\hat{c}$:
 
+%TODO: Studiare da libro
 % Immagine pagina 370 B.S.
 % \hat{c}[0] = c[0] 
 % \hat{c}[0] = c[1] 
@@ -238,7 +239,7 @@ Ora si supponga che l'attaccante ottenga un'altra cifratura $c'$ di $m$, facendo
     15 \oplus c[0] \oplus c[\ell - 1], \qquad 15 \oplus c[0] \oplus c'[\ell - 1], \qquad 15 \oplus c'[0] \oplus c[\ell - 1], \qquad 15 \oplus c'[0] \oplus c'[\ell - 1].
 \]
 
-Se i quattro valori corrispondenti sono diversi, l'attaccante ha quattro volte la possibilità di ottenere l'ultimo byte di $m[0]$. Inoltre i valori possibili sono 256, per cui, con altrettante query, non solo si rompe la sicurezza semantica, ma viene trovato un byte di testo. Infine, se l'attaccante ha anche la possibilità di fare una query su $m$ con applicato uno \emph{shift} a destra, una volta scoperto un blocco $c_1$, applicando $c_1[1]$ nell'ultimo blocco del testo cifrato, facendo delle query contenenti dati già ottenuti è possibile recuperare gli altri byte di $m[0]$, ripetendo più volte si può ottenere l'intero messaggio $m$.
+Se i quattro valori corrispondenti sono diversi, l'attaccante ha quattro volte la possibilità di ottenere l'ultimo byte di $m[0]$. Inoltre i valori possibili sono 256, per cui, con altrettante query, non solo si rompe la sicurezza~semantica, ma viene trovato un byte di testo. Infine, se l'attaccante ha anche la possibilità di fare una query su $m$ con applicato uno \emph{shift} a destra, una volta scoperto un blocco $c_1$, applicando $c_1[1]$ nell'ultimo blocco del testo cifrato, facendo delle query contenenti dati già ottenuti è possibile recuperare gli altri byte di $m[0]$, ripetendo più volte si può ottenere l'intero messaggio $m$.
 
 \paragraph{Rottura di SSL 3.0}
 Siano due vittime, un server web \texttt{bank.com} e un browser, quando un utente visita \texttt{bank.com}, i dati vengono scambiati usando SSL 3.0. Il segreto condiviso è un cookie scambiato in ogni messaggio tra le due parti:
@@ -303,7 +304,7 @@ Esiste inoltre una terza modalità, non ancora discussa \textbf{Encrypt-and-MAC}
 \subsection{Nonce-Based Authenticated encryption}
 Si estende la definizione di AE per rendere meglio il reale utilizzo di AE da un punto di vista pratico. Si aggiungono agli algoritmi di cifratura e decifratura dei dati univoci chiamati \emph{nonce}. 
 
-Inoltre per l'algoritmo di cifratura si aggiunge un altro messaggio in \emph{input}: \textbf{dati associati} di cui il messaggio cifrato ne protegge l'integrità ma non la segretezza. Aggiungere dei dati aggiuntivi da cifrare è utile in diverse applicazioni, come nella trasmissione di pacchetti di cui l'\emph{header} deve essere mandato in chiaro per poter trasmettere il pacchetto.
+Inoltre, per l'algoritmo di cifratura si aggiunge un altro messaggio in \emph{input}: \textbf{dati associati} di cui il messaggio cifrato ne protegge l'integrità ma non la segretezza. Inserire dei dati aggiuntivi non cifrati è utile in diverse applicazioni, come nella trasmissione di pacchetti di cui l'\emph{header} deve essere mandato in chiaro per poter trasmettere il pacchetto.
 
 \vspace{1em}
 Un cifrario con supporto ai dati associati è definito come segue:
@@ -402,7 +403,7 @@ Si mostra ora la costruzione di un cifrario AD 1CCA-sicuro. Sia un $\mathcal{E} 
 \subsection{Protocollo TLS 1.3}
 Il protocollo TLS (\emph{Transport Layer Security}) permette di ottenere un traffico sicuro in un canale di comunicazione non sicuro. 
 
-Il protocollo TLS nasce come standard che rende SSL più sicuro. La versione originale di SSL \emph(Secure Socket Layer), in particolare la versione SSLv2 è non sicura a causa di svariati problemi: come l'utilizzo della stessa chiave per \emph{MAC} e per la cifratura. 
+Il protocollo TLS nasce come standard che rende SSL più sicuro. La versione originale di SSL (\emph{Secure Socket Layer}), in particolare la versione SSLv2 è non sicura a causa di svariati problemi: come l'utilizzo della stessa chiave per \emph{MAC} e per la cifratura. 
 
 \paragraph{TLS 1.3} TLS può essere rappresentato in due componenti, il componente \emph{TLS session setup} si occupa della fase di \emph{setup}, in cui le due parti che vogliono mettersi in contatto si mettono in accordo riguardo il cifrario da utilizzare, in questa fase vengono definiti anche i segreti condivisi, derivati da un segreto comune chiamato \textbf{master-secret}. Il secondo componente è chiamato \emph{TLS record protocol} e si occupa dello scambio dei dati.
 
@@ -419,7 +420,7 @@ TLS 1.3 fa uso di un cifrario AEAD \emph{nonce-based} per cifrare un record, il 
     \item La sequenza con il \emph{padding} viene unita con \texttt{XOR} con una stringa casuale \texttt{client\_write\_iv} o \texttt{server\_write\_iv} in base al mittente, entrambe sono derivate dal master-secret 
 \end{enumerate}
 
-Il nonce non viene impostato a 0 poiché il primo messaggio cifrato $c_0 = E(k,m_0,d,0)$, in cui un avversario in conoscenza $m$ messaggio e $d$ dati associati, ha la possibilità di effettuare un attacco per enumerazione; in cui avendo sufficiente spazio è ``facile'' recuperare la chiave $k$ da $c_0$ (con chiavi a 128 bit questo tipo di attacco potrebbe essere possibile anche in futuro).
+Il nonce non viene impostato a 0 poiché il primo messaggio cifrato $c_0 = E(k,m_0,d,0)$, in cui, un avversario in conoscenza di $m$ messaggio e $d$ dati associati, ha la possibilità di effettuare un attacco per enumerazione (attraverso le rainbow tables); in cui avendo sufficiente spazio è ``facile'' recuperare la chiave $k$ da $c_0$ (con chiavi a 128 bit questo tipo di attacco potrebbe essere possibile anche in futuro).
 
 \vspace{1em}
 Il cifrario AEAD alla base del TLS quindi restituisce un record con questa struttura:
