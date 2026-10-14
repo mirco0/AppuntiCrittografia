@@ -46,7 +46,7 @@ Nel caso in cui il problema preimmagine sia difficile, la funzione $h$ è detta 
 \end{definition}
 
 \begin{definition}[Vantaggio resistenza alle collisioni]
-    In un gioco d'attacco con una funzione hash $h: \mathcal{X} \to \mathcal{Y}$, definiamo il vantaggio di un avversario $\mathcal{A}$ rispetto ad $h$, denotato $CR_{\text{adv}}[\mathcal{A},h]$ come la probabilità dell'avversario di risolvere il problema collisione \ref{def:collision}.
+    In un gioco d'attacco con una funzione hash $h: \mathcal{X} \to \mathcal{Y}$, definiamo il vantaggio di un avversario $\mathcal{A}$ rispetto ad $h$, denotato $\text{CR}_{\text{adv}}[\mathcal{A},h]$ come la probabilità dell'avversario di risolvere il problema collisione \ref{def:collision}.
 \end{definition}
 
 \noindent
@@ -169,7 +169,7 @@ Quindi, per opportune assunzioni, la proprietà di resistenza alle collisioni im
 \vspace{1em} \noindent Passiamo ora alla descrizione del paradigma di \emph{Merkle-Damgård}. 
 
 \subsection{Merkle-Damgård}
-Il paradigma Merkle Damgård permette di partire da funzioni hash $h: \mathcal{K} \times \mathcal{X} \to \mathcal{Y}$ con $\mathcal{X} = \{0,1\}^{\ell}$ e $\mathcal{K} = \mathcal{Y} = \{0,1\}^n$ con $\ell$ relativamente piccola. Partendo da una funzione $h$, come sopra, e definendo una funzione $H$ definita su $(\{0,1\}^{\leq L}, \mathcal{K})$ funziona come segue:
+Il paradigma Merkle Damgård permette di creare funzioni hash, resistenti alle collisioni, partendo da funzioni hash $h: \mathcal{K} \times \mathcal{X} \to \mathcal{Y}$ con $\mathcal{X} = \{0,1\}^{\ell}$ e $\mathcal{K} = \mathcal{Y} = \{0,1\}^n$ con $\ell$ relativamente piccola. Partendo da una funzione $h$, come sopra, e definendo una funzione $H$ definita su $(\{0,1\}^{\leq L}, \mathcal{K})$ funziona come segue:
 
 \input{algorithms/merkle_dam.tex}
 
@@ -190,7 +190,7 @@ in cui $\langle s \rangle$ è una stringa di bit che codifica il numero di blocc
     \label{teoremaMerkle}
     Sia $L$ un intero (valore di lunghezza), limitato da un polinomio e sia $h$ una funzione hash resistente alle collisioni definita su $(\mathcal{K} \times \mathcal{X}, \mathcal{Y})$. Allora, la funzione hash di Merkle-Damgard $H$ derivata da $h$, definita su $(\{0,1\}^{\leq L}, \mathcal{K})$ è resistente alle collisioni. \\ In particolare, per ogni avversario $\mathcal{A}$ capace di trovare una collisione su $H$, esiste un avversario $\mathcal{B}$ capace di trovare una collisione su $h$, formalmente: 
     \[
-        CR_{\text{adv}}[\mathcal{A}, H]=CR_{\text{adv}}[\mathcal{B}, h].
+        \text{CR}_{\text{adv}}[\mathcal{A}, H]= \text{CR}_{\text{adv}}[\mathcal{B}, h].
     \] 
 \end{theorem}
 
@@ -210,7 +210,7 @@ Nel caso in cui $t_{u-1} = t_{v-1}'$ e $m_u \neq m_v'$, deduciamo che $u=v$ e $M
 \]
 
 \noindent Come prima, si distinguono i due casi: il processo continua allo stesso modo, fino al primo blocco, finché non si trova una collisione. A questo punto, si ha $m_i=m_i'$ per $i=1, \dots, u$. Ma questo implica che $M=M'$ contraddicendo il fatto che $M$ e $M'$ siano una collisione per $H$. Quindi, poiché $M \neq M'$, il processo di scansione deve produrre una collisione su $h$. Si conclude che $\mathcal{B}$ rompe la collisione di $h$ come richiesto. \\ In sostanza, se $\mathcal{A}$ trova una collisione su $H$, allora $\mathcal{B}$ trova una collisione su $h$, e quindi   \[
-    CR_{\text{adv}}[\mathcal{A}, H]=CR_{\text{adv}}[\mathcal{B}, h]. 
+    \text{CR}_{\text{adv}}[\mathcal{A}, H]= \text{CR}_{\text{adv}}[\mathcal{B}, h]. 
     \]
 \end{proof}
 
@@ -221,7 +221,7 @@ Il teorema \ref{teoremaMerkle} mostra che è possibile costruire una funzione ha
     \item Fare uso della matematica per definire delle funzioni di compressione, la cui sicurezza è dimostrata, generalmente queste funzioni sono più lente.
 \end{itemize}
 
-Sia $L = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ un cifrario a blocchi con $\mathcal{X} = \{0,1\}^{n}$. La funzione di compressione di Davies-Meyer $h_{DM}$, associa un elemento in $(\mathcal{X} \times \mathcal{K})$ a un elemento in $\mathcal{X}$ come segue
+Sia $\mathcal{L} = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ un cifrario a blocchi con $\mathcal{X} = \{0,1\}^{n}$. La funzione di compressione di Davies-Meyer $h_{DM}$, associa un elemento in $(\mathcal{X} \times \mathcal{K})$ a un elemento in $\mathcal{X}$ come segue
 \[
     h_{DM}(x,y):= e_y(x) \oplus x
 \]
@@ -258,7 +258,7 @@ Si passa ora ai \textit{Message Authentication Codes}, che permettono di firmare
 
 \subsection{MAC Message Authentication Code}
 
-I \emph{MAC} sono funzioni hash con chiave che soddisfano determinate proprietà di sicurezza, generalmente è possibile creare un \emph{MAC} aggiungendo a una funzione hash $h$ (senza  chiave) una chiave. L'operazione deve essere fatta con cautela per prevenire degli attacchi.
+I \emph{MAC} sono funzioni hash con chiave, che soddisfano determinate proprietà di sicurezza, generalmente è possibile creare un \emph{MAC} aggiungendo a una funzione hash $h$ (senza  chiave) una chiave. L'operazione deve essere fatta con cautela per prevenire degli attacchi.
 
 %6.1 B.S.
 \begin{definition}
@@ -280,13 +280,13 @@ I \emph{MAC} sono funzioni hash con chiave che soddisfano determinate proprietà
 
 \paragraph{Gioco d'attacco: Sicurezza \emph{MAC}} Per un dato sistema \emph{MAC} $\mathcal{I}=(S,V)$, definito su $(\mathcal{K},\mathcal{M},\mathcal{T})$, e un dato avversario $\mathcal{A}$, il gioco d'attacco funziona così:
 \begin{itemize}
-    \item Lo sfidante sceglie $k \in \emph{K}$ a caso
+    \item Lo sfidante sceglie $k \in \mathcal{K}$ a caso
     \item $\mathcal{A}$ interroga lo sfidante diverse volte. $\forall i=1, \dots$ la $i-$esima query di firma è un messaggio $m_i \in \mathcal{M}$. Dato $m_i$, calcola un tag $t_i = S(k,m)$ e manda $t_i$ ad $\mathcal{A}$.
-    \item  Alla fine $\mathcal{A}$ restituisce una coppia $(m,t) \in \emph{M} \times \emph{T}$ non ancora firmata, ovvero $(m,t) \not\in \{(m_1,t_1),\dots\}$. 
+    \item  Alla fine $\mathcal{A}$ restituisce una coppia $(m,t) \in \mathcal{M} \times \mathcal{T}$ non ancora firmata, ovvero $(m,t) \not\in \{(m_1,t_1),\dots\}$. 
 \end{itemize}
-\noindent $\mathcal{A}$ vince il gioco se $(m,t)$ è una coppia valida per la chiave $k$. $MAC_{\text{adv}}\left[\mathcal{A},\emph{I}\;\right]$ è il vantaggio di $\mathcal{A}$, ovvero la probabilità che $\mathcal{A}$ vinca il gioco. 
+\noindent $\mathcal{A}$ vince il gioco se $(m,t)$ è una coppia valida per la chiave $k$. $\emph{MAC}_{\text{adv}}\left[\mathcal{A},\mathcal{I}\;\right]$ è il vantaggio di $\mathcal{A}$, ovvero la probabilità che $\mathcal{A}$ vinca il gioco. 
 
-\vspace{0.2cm} \noindent Un sistema \textit{MAC} è sicuro se per tutti gli avversari efficienti $\mathcal{A}$, il valore $MAC_{\text{adv}}$ è trascurabile. 
+\vspace{0.2cm} \noindent Un sistema \textit{MAC} $\mathcal{I}$ è sicuro se per tutti gli avversari efficienti $\mathcal{A}$, il valore $MAC_{\text{adv}}[\mathcal{A},\mathcal{I}]$ è trascurabile. 
 
 \begin{example}[Length extension attack]
     \label{atk:extension}
@@ -358,7 +358,7 @@ Per studiare la sicurezza di un \emph{MAC} annidato si studiano le proprietà de
 \end{itemize}
 
 %Da controllare
-\begin{definition}[Attacco a little Mac]
+\begin{definition}[Attacco a little MAC]
     L'avversario $\mathcal{A}$ ha la possibilità di eseguire un \emph{chosen-plaintext-attack}, può quindi calcolare l'hash dei valori $y$ a scelta, con $h_L$, lo scopo dell'avversario è trovare una coppia valida $(y',z = h_L(y'))$ tale che $y'$ è un valore mai visto.
 \end{definition}
 

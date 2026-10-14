@@ -366,3 +366,32 @@ ovvero l'insieme di tutti i possibili messaggi cifrati in cui $k$ è la chiave u
 %     per una $\varepsilon$ appropriata.
 % \end{definition}
 % \vspace{1cm}
+% Per la sicurezza semantica si definisce un gioco d'attacco specifico.
+% \begin{definition}[Vantaggio di sicurezza semantica]
+%     Per un dato cifrario $\mathcal{L} = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ e un dato avversario $\mathcal{A}$ si definiscono due diversi esperimenti $b = 0,1$.
+
+%     \vspace{1em}
+%     \noindent
+%     \textbf{Esperimento} $b$:
+%         \begin{itemize}
+%             \item L'avversario sceglie due messaggi $x_0,x_1 \in M$ e li manda allo sfidante;
+%             \item Lo sfidante sceglie $K \in \mathcal{K}$ e calcola $y = e_K(x_b)$, e manda $y$ all'avversario;
+%             \item L'avversario restituisce $\hat{b} \in \{0,1\}$.
+%         \end{itemize}
+
+%         Per $b = 0,1$ si definisce $W_b$ come l'evento in cui $\mathcal{A}$ restituisce \texttt{1} nell'esperimento $b$.
+
+%     Infine si definisce il vantaggio di sicurezza semantica di $\mathcal{A}$ rispetto a $\mathcal{L}$ come
+%     \[
+%         \text{SS}_\text{adv}[\mathcal{A},\mathcal{L}] = \big| \Pr[W_0] - \Pr[W_1] \big|.
+%     \]
+% \end{definition}
+
+% \begin{definition}[Sicurezza semantica]
+%     Un cifrario $\mathcal{L} = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ è detto sicuro semanticamente se, per tutti gli avversari efficienti $\mathcal{A}$, il vantaggio di sicurezza semantica è trascurabile
+%     \[
+%         \text{SS}_\text{adv}[\mathcal{A},\mathcal{L}] = \big| \Pr[W_0] - \Pr[W_1] \big| \leq \varepsilon
+%     \]
+%     per una $\varepsilon$ appropriata.
+% \end{definition}
+% \vspace{1cm}
