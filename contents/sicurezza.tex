@@ -19,11 +19,13 @@ $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ in cui
 \begin{align*}
     &\forall K \in \mathcal{K},\
     e_K \in \mathcal{E},\ d_K \in \mathcal{D}\\
-    e_K &: M \to C \qquad \text{regola di cifratura}\\
+    e_K &: M \to C \qquad \text{regola di cifratura\footnotemark}\\
     d_K &: C \to M \qquad \text{regola di decifratura}\\[1em]
     &\underbrace{d_K(e_K(m))=m}_{\text{Proprietà di \textbf{correttezza}}}
     \qquad \forall m \in M,\ \forall K \in \mathcal{K}.
 \end{align*}
+
+\footnotetext{ La funzione di cifratura $e_K$ deve essere rigorosamente \textbf{iniettiva}. Se $e_K$ non lo fosse, esisterebbero due messaggi distinti $m_1,m_2\in\mathcal{M}$ tali che $e_K(m_1)=e_K(m_2)$. Di conseguenza, entrambi produrrebbero lo stesso testo cifrato e il destinatario, conoscendo la chiave, non potrebbe determinare con certezza quale dei due messaggi sia stato inviato. Inoltre, se $\lvert\mathcal{M}\rvert=\lvert\mathcal{C}\rvert$ e gli insiemi sono finiti, l'iniettività implica anche la biettività.}
 
 \end{definition}
 
@@ -43,21 +45,21 @@ nel 1976, utilizza una \underline{chiave pubblica} e una \underline{chiave priva
 \noindent La prima permette di cifrare e può esser posseduta da chiunque; al contrario, la chiave privata, utilizzata per decifrare, deve essere posseduta esclusivamente dal destinatario. Questo approccio consente di comunicare senza dover accordare
 preventivamente una chiave segreta tra le parti tramite un canale sicuro.
 \vspace{1em}
-\hrule
-\vspace{1em}
-\noindent Per parlare di sicurezza effettiva è necessario un modo per definire attacchi non solo teorici, ma anche pratici: attacchi che nel mondo reale siano realizzabili con risorse e tempo limitati, ovvero \emph{computazionalmente ragionevoli}. Questo approccio costituisce la base per definire
-formalmente diverse nozioni di sicurezza, tra cui la
-\textbf{sicurezza semantica}. Si considerano pertanto sistemi
-crittografici le cui operazioni di cifratura e decifratura
-sono eseguite mediante algoritmi efficienti, generalmente
-modellati come algoritmi a tempo polinomiale.
+% \hrule
+% \vspace{1em}
+% \noindent Per parlare di sicurezza effettiva è necessario un modo per definire attacchi non solo teorici, ma anche pratici: attacchi che nel mondo reale siano realizzabili con risorse e tempo limitati, ovvero \emph{computazionalmente ragionevoli}. Questo approccio costituisce la base per definire
+% formalmente diverse nozioni di sicurezza. Pertanto si considerano sistemi crittografici le cui operazioni di cifratura e decifratura
+% sono eseguite mediante algoritmi efficienti, generalmente
+% modellati come algoritmi a tempo polinomiale.
 
-%B.S. Definizione  2.2.1
-\begin{definition}[Cifrario Computazionale]
-    Un cifrario computazionale $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ è un cifrario in cui $\mathcal{E},\mathcal{D}$ sono \emph{algoritmi efficienti} per le regole di cifratura e decifratura, definite, come prima, sullo spazio di messaggi in chiaro $M$, spazio delle chiavi $\mathcal{K}$ e spazio dei messaggi cifrati $C$.
-    %Salto la parte probabilistica y \stackrel{R}{\gets} e_k(x)
-\end{definition}
+% %B.S. Definizione  2.2.1
+% \begin{definition}[Cifrario Computazionale]
+%     Un cifrario computazionale $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$ è un cifrario in cui $\mathcal{E},\mathcal{D}$ sono \emph{algoritmi efficienti} per le regole di cifratura e decifratura, definite, come prima, sullo spazio di messaggi in chiaro $M$, spazio delle chiavi $\mathcal{K}$ e spazio dei messaggi cifrati $C$.
+%     %Salto la parte probabilistica y \stackrel{R}{\gets} e_k(x)
+% \end{definition}
+% \hrule
 
+\newpage
 \subsection{Sicurezza}
 In un sistema crittografico, la ``sicurezza'' permette di definire quanto un sistema sia resistente ad attacchi. In crittografia la sicurezza coinvolge tre diversi aspetti:
 \begin{itemize}
