@@ -1,4 +1,4 @@
-\vspace{0.2cm} \noindent I cifrari a blocchi sono i cifrari usati al giorno d'oggi, fanno uno di una sequenza di \emph{permutazioni} e \emph{sostituzioni}, spesso implementati sotto forma di cifrari iterati. Un cifrario iterato lavora su $\mathcal{N}$ ``round'', per cui è necessario definire una \emph{funzione round} e una \emph{key-schedule} (una tupla delle chiavi relative ai round). La funzione del round $g$ ha due input, la chiave relativa al round $K_r$ e uno \emph{stato corrente} $w_{r-1}$. Lo \emph{stato successivo} è $w_r=g(w_{r-1},K_r)$, ovvero:
+\vspace{0.2cm} \noindent I cifrari a blocchi sono i cifrari usati al giorno d'oggi. Essi fanno uso di una sequenza di \emph{permutazioni} e \emph{sostituzioni} e spesso sono implementati sotto forma di cifrari iterati. Un \textbf{cifrario iterato} lavora su $\mathcal{N}$ \textit{round}, per cui è necessario definire una \emph{funzione round} e un \emph{key-schedule} (una tupla delle chiavi relative ai round). La funzione del round $g$ ha due input, la chiave relativa al round $K_r$ e uno \emph{stato corrente} $w_{r-1}$. Lo \emph{stato successivo} è $w_r=g(w_{r-1},K_r)$, ovvero:
 \[
 \begin{array}{c c}
 \begin{aligned}
@@ -23,178 +23,288 @@ x       &\leftarrow w_0
 
 \noindent È facile intuire che $g$ debba essere biettiva rispetto alla chiave, ovvero $\exists g^{-1} \mid g^{-1}(g(w,y),y)=w \quad \forall\, w,y$.
 
-\vspace{0.5cm} \noindent
-È anche possibile avere una visione alternativa di un cifrario a blocchi, si consideri l'insieme $X := M = C$ di un cifrario $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$
+% \vspace{0.5cm} \noindent
+% È anche possibile avere una visione alternativa di un cifrario a blocchi, si consideri l'insieme $X := M = C$ di un cifrario $(M,C,\mathcal{K},\mathcal{E},\mathcal{D})$
 
-\vspace{1em}\noindent
-Prendendo $e_K \in \mathcal{E}$, una funzione di cifratura fissata, possiamo definire $f_K=e_K(\cdot)$, cioè $f_K:X \to X$, ovvero una permutazione su $X$, inoltre esiste una funzione $d_K$ permutazione inversa $f_K^{-1}$. 
+% \vspace{1em}\noindent
+% Prendendo $e_K \in \mathcal{E}$, una funzione di cifratura fissata, possiamo definire $f_K=e_K(\cdot)$, cioè $f_K:X \to X$, ovvero una permutazione su $X$, inoltre esiste una funzione $d_K$ permutazione inversa $f_K^{-1}$. 
 
-Prendendo una funzione casuale $e_{i} \in \mathcal{E}$ la permutazione $f_{i}$ dovrebbe "apparire" come una permutazione casuale. (Se si prendono tutti possibili blocchi di \emph{plaintext} e li si cifra con la stessa chiave, si otterranno tutti i possibili blocchi di \emph{ciphertext}, ma rimescolati).
+% Prendendo una funzione casuale $e_{i} \in \mathcal{E}$ la permutazione $f_{i}$ dovrebbe "apparire" come una permutazione casuale. (Se si prendono tutti possibili blocchi di \emph{plaintext} e li si cifra con la stessa chiave, si otterranno tutti i possibili blocchi di \emph{ciphertext}, ma rimescolati).
 
-\vspace{0.2cm}\noindent La definizione di sicurezza per un cifrario a blocchi è formulata come un ``test a scatola nera'', basata sull'indistinguibilità: un avversario interagisce con la scatola, contente una permutazione $f$ su $X$. \\ $f$ è generabile in 2 modi: \begin{enumerate}
-    \item scegliere $f$ attraverso una funzione $e_i$, con $i$ scelta casualmente;
-    \item scegliere $f$ come una permutazione casuale, scelta uniformemente su tutte le possibili permutazioni. 
-\end{enumerate} L'avversario, non conoscendo il contenuto della scatola, pone quindi varie domande, fornendo un valore $x \in X$ e ricevendo $y=f(x) \in X$.
+% \vspace{0.2cm}\noindent La definizione di sicurezza per un cifrario a blocchi è formulata come un ``test a scatola nera'', basata sull'indistinguibilità: un avversario interagisce con la scatola, contente una permutazione $f$ su $X$. \\ $f$ è generabile in 2 modi: \begin{enumerate}
+%     \item scegliere $f$ attraverso una funzione $e_i$, con $i$ scelta casualmente;
+%     \item scegliere $f$ come una permutazione casuale, scelta uniformemente su tutte le possibili permutazioni. 
+% \end{enumerate} L'avversario, non conoscendo il contenuto della scatola, pone quindi varie domande, fornendo un valore $x \in X$ e ricevendo $y=f(x) \in X$.
 
-\vspace{0.2cm} \noindent (Le domande dell'avversario possono essere adattive: può guardare il risultato di $y_{i-1}$ ancor prima di decidere quale $x_i$ inviare.) 
+% \vspace{0.2cm} \noindent (Le domande dell'avversario possono essere adattive: può guardare il risultato di $y_{i-1}$ ancor prima di decidere quale $x_i$ inviare.) 
 
-\vspace{0.2cm}\noindent La sicurezza richiede che l'avversario efficiente, con una potenza di calcolo realistica quindi, non sia in grado di distinguere quale dei due casi sopra: in altre parole, un cifrario a blocchi deve essere \textbf{computazionalmente indistinguibile} da una permutazione casuale. 
+% \vspace{0.2cm}\noindent La sicurezza richiede che l'avversario efficiente, con una potenza di calcolo realistica quindi, non sia in grado di distinguere quale dei due casi sopra: in altre parole, un cifrario a blocchi deve essere \textbf{computazionalmente indistinguibile} da una permutazione casuale. 
 
-\vspace{0.2cm} \noindent Sia $Perms[X]$ l'insieme di tutte le permutazioni su $X$. Si noti che $|Perms[X]|=|X|!$ 
+% \vspace{0.2cm} \noindent Sia $Perms[X]$ l'insieme di tutte le permutazioni su $X$. Si noti che $|Perms[X]|=|X|!$ 
 
-\vspace{0.2cm}\noindent Per definire la sicurezza si introduce un gioco d'attacco:
+% \vspace{0.2cm}\noindent Per definire la sicurezza si introduce un gioco d'attacco:
 
-\begin{definition}[Vantaggio Block Cipher]
-    Per un dato cifrario a blocchi $\mathcal{L} = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$, con $X := M = C$ e per un dato avversario $\mathcal{A}$, definiamo due esperimenti:
+% \begin{definition}[Vantaggio Block Cipher]
+%     Per un dato cifrario a blocchi $\mathcal{L} = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$, con $X := M = C$ e per un dato avversario $\mathcal{A}$, definiamo due esperimenti:
 
-    \vspace{1em}
-    \textbf{Esperimento} $b$:
-    \begin{itemize} 
-        \item Lo sfidante seleziona $f$: \\ Se $b=0$: sceglie casualmente $i$, di conseguenza la funzione $e_i$; altrimenti per $b=1$ sceglie casualmente la permutazione; 
-        \item L'avversario invia una sequenza di query allo sfidante: in cui l'$i$-esima query è un blocco $x_i \in X$. Lo sfidante calcola $y_i=f(x_i)$ e lo dà all'avversario. 
-        \item L'avversario calcola e restituisce un bit $b \in \{0,1\}$. 
-    \end{itemize} 
+%     \vspace{1em}
+%     \textbf{Esperimento} $b$:
+%     \begin{itemize} 
+%         \item Lo sfidante seleziona $f$: \\ Se $b=0$: sceglie casualmente $i$, di conseguenza la funzione $e_i$; altrimenti per $b=1$ sceglie casualmente la permutazione; 
+%         \item L'avversario invia una sequenza di query allo sfidante: in cui l'$i$-esima query è un blocco $x_i \in X$. Lo sfidante calcola $y_i=f(x_i)$ e lo dà all'avversario. 
+%         \item L'avversario calcola e restituisce un bit $b \in \{0,1\}$. 
+%     \end{itemize} 
 
-    \vspace{0.2cm} \noindent Per $b=0,1$, $W_b$ è l'evento che $\mathcal{A}$ ritorna 1 nell'Esperimento $b$. \\ Definiamo il vantaggio di $\mathcal{A}$ come 
-    \[
-        \text{BC}_{\text{adv}}(\mathcal{A},\mathcal{L})=|\Pr[W_0]-\Pr[W_1]|.
-    \]
-    Infine diciamo che $\mathcal{A}$ è un avversario BC con Q-query se invia al massimo  Q query. 
+%     \vspace{0.2cm} \noindent Per $b=0,1$, $W_b$ è l'evento che $\mathcal{A}$ ritorna 1 nell'Esperimento $b$. \\ Definiamo il vantaggio di $\mathcal{A}$ come 
+%     \[
+%         \text{BC}_{\text{adv}}(\mathcal{A},\mathcal{L})=|\Pr[W_0]-\Pr[W_1]|.
+%     \]
+%     Infine diciamo che $\mathcal{A}$ è un avversario BC con Q-query se invia al massimo  Q query. 
 
-    \vspace{0.2cm} \noindent Un cifrario a blocchi è sicuro, indistinguibile da una permutazione casuale, se per tutti gli avversari efficienti il valore $\text{BC}_{\text{adv}}[\mathcal{A},\mathcal{L}]$ è trascurabile. 
+%     \vspace{0.2cm} \noindent Un cifrario a blocchi è sicuro, indistinguibile da una permutazione casuale, se per tutti gli avversari efficienti il valore $\text{BC}_{\text{adv}}[\mathcal{A},\mathcal{L}]$ è trascurabile. 
 
-\end{definition}
+% \end{definition}
 
-\vspace{0.2cm} \noindent Un cifrario a blocchi sicuro è imprevedibile, e ciò implica che sia sicuro contro \emph{recovery key}. Ma allora $|\mathcal{K}|$ deve esser grande: con un attacco per enumerazione, l'avversario vincerebbe il gioco con probabilità \textit{quasi} certa, ma con un tempo di esecuzione lineare in $|\mathcal{K}|$, motivo per cui lo spazio delle chiavi deve esser ampio. 
+% \vspace{0.2cm} \noindent Un cifrario a blocchi sicuro è imprevedibile, e ciò implica che sia sicuro contro \emph{recovery key}. Ma allora $|\mathcal{K}|$ deve esser grande: con un attacco per enumerazione, l'avversario vincerebbe il gioco con probabilità \textit{quasi} certa, ma con un tempo di esecuzione lineare in $|\mathcal{K}|$, motivo per cui lo spazio delle chiavi deve esser ampio. 
 
-\vspace{0.2cm}
+% \vspace{0.2cm}
 
 %S.P. 4.5
 \subsection{Substitution-Permutation Network}
 Il cifrario \emph{SPN} è una modifica di un cifrario iterato in cui i \emph{plaintext} e \emph{ciphertext} sono divisi in $m$ blocchi lunghi $\ell$. L'algoritmo è semplice ed efficiente sia in \textit{hardware} che in \textit{software}.
 \begin{definition}[SPN]
-    Siano $\ell,m, \mathcal{N}$ interi positivi, $M = C = \{0,1\}^{\ell m}$, e $\pi_S, \pi_P$ funzioni di permutazione:
+    Siano $\ell,m, \mathcal{N}$ interi positivi, $M = C = \{0,1\}^{\ell m}=(\mathbb{F}_2)^{\ell m}$, e $\pi_S, \pi_P$ funzioni di permutazione:
     \begin{align*}
-        \pi_S: \{0,1\}^{\ell} &\to \{0,1\}^{\ell} \qquad \text{\underline{S} = \underline{S}ubstitution = \underline{S}-box}\\
+        \pi_S: (\mathbb{F}_2)^{\ell} &\to (\mathbb{F}_2)^{\ell} \qquad \text{\underline{S} = \underline{S}ubstitution = \underline{S}-box}\\
         \pi_P: \{1,\dots,\ell m\} &\to \{1,\dots, \ell m\} \qquad \text{\underline{P}=\underline{P}ermutation}
     \end{align*}
-    con $\mathcal{K} \subseteq (\{0,1\}^{\ell m})^{\mathcal{N}+1}$ i \emph{key-schedule} possibili derivati da una chiave iniziale $K$.
+    con $\mathcal{K} \subseteq ((\mathbb{F}_2)^{\ell m})^{\mathcal{N}+1}$ i \emph{key-schedule} possibili derivati da una chiave iniziale $K$.
 
-    \noindent La funzione di cifratura è descritta dall'algoritmo \ref{alg:spn}, e l'\textit{i-esimo} blocco è descritto come $x_{<i>}$ per $i = 1,\dots,m$
+    \noindent La funzione di cifratura è descritta dall'algoritmo \ref{alg:spn}, e l'\textit{i-esimo} blocco è descritto come $x_{<i>}$ per $i = 1,\dots,m$.
 \end{definition}
 
 \input{algorithms/spn} 
-\noindent L'algoritmo \ref{alg:spn} consiste di $\mathcal{N}$ round; per ciascun round vengono incorporate le \emph{round key} attraverso lo \texttt{xor} e successivamente si eseguono $m$ sostituzioni con $\pi_S$ e una permutazione finale con $\pi_P$. 
-\begin{itemize}
-    \item $u_i$ è l'\emph{input} delle S-box
-    \item $v_i$ è l'\emph{output} delle S-box
-    \item $w_i = \pi_P(v_i)$ la sostituzione applicata a ogni blocco 
-    \item $u_{i+1} = w_i \oplus K_{i+1}$ $w_i$ in \texttt{xor} con la chiave del round 
-\end{itemize}
-\noindent Si presenta una figura di esempio:
+\noindent L'algoritmo \ref{alg:spn} consiste di $\mathcal{N}$ round, in cui:
+\begin{enumerate}
+    \item Si applica la chiave $K$ al vettore iniziale: $u_1=x \oplus K$ ($u_i$ è l'\emph{input} delle S-box);
+    \item $\pi_s$: $v_1=\pi_s(u_1)$ ($v_i$ è l'\emph{output} delle S-box);
+    \item $\pi_p$: $w_1=\pi_p(v_1)$. 
+\end{enumerate} 
+
+In particolare  $u_{i+1} = w_i \oplus K_{i+1}$. 
+
+In ogni round, ad eccezione dell'ultimo, si eseguono $m$ sostituzioni usando $\pi_s$ e una permutazione con $\pi_p$. 
+
+\newpage Si presenta una figura di esempio:
 \input{figures/spn.tex}
 
 \paragraph{Osservazione} La memoria richiesta dalle S-box è $\ell \cdot 2^{\ell}$ bit. \\ S-box piccole occupano meno memoria, ma rendono SPN vulnerabile ad attacchi per enumerazione, quindi non sono molto sicure; S-box più grandi, più round, una chiave più lunga aumentano sicurezza, ma anche la memoria (AES). 
 
+\subsubsection{Crittoanalisi differenziale}
+La crittoanalisi differenziale si interessa alla \underline{distribuzione differenziale}, ovvero studia come una differenza in input si propaga, attraverso i vari \textit{round} del cifrario, fino a produrre una certa differenza in output.  \\ L'attacco riguarda un \textit{chosen-plaintext attack}.\\ (Se il cifrario fosse perfettamente casuale, le differenze tra input e output sarebbero difficili da prevedere. Tuttavia, in alcuni cifrari e in alcune S-box, determinate differenze si propagano con una probabilità maggiore rispetto ad altre. Questa regolarità può essere sfruttata per recuperare alcuni bit della chiave).
 
-\subsection{Feistel Network e Data Encryption Standard}
-Il cifrario \emph{DES} è un caso particolare del \textbf{cifrario} iterato \textbf{di Feistel}.
+\vspace{1em} \noindent  L'avversario raccoglie numerose tuple $(x,x^*, y, y^*)$ in cui $x'=x\oplus x^*$ è un valore \textbf{fissato}. \\Gli elementi del \textit{plaintext}, $x, x^*$, sono cifrati usando la stessa chiave $K$, ottenendo, rispettivamente, i \textit{ciphertext} $y, y^*$. 
 
-\noindent Nel cifrario di Feistel ogni stato $u_i$ è diviso in due metà uguali, ovvero $u_i=(L_i,R_i)$, dove $L_i$ è la metà sinistra e $R_i$ la destra. Invece la funzione del round $g$ ha la seguente forma: $g(L_{i-1},R_{i-1},K_{i}) = (L_i,R_i)$ in cui 
-\begin{align*}
-    L_i &= R_{i-1}\\
-    R_i &= L_{i-1} \oplus f(R_{i-1},K_i).
-\end{align*}
-In altre parole, la funzione $g$ prende la metà destra del round precedente come metà sinistra del round corrente. Come parte destra del round corrente imposta una combinazione della parte sinistra del round precedente con una funzione $f$. \\ Le relazioni inverse per determinare lo stato precedente sono inoltre banali: non è necessaria la proprietà di iniettività per $f$ poiché ogni round è sempre invertibile grazie allo \texttt{xor} (se si conosce $K_i$, si può risalire allo stato precedente con $L_{i-1}=R_i \oplus f(L_i,K_i)$ e $R_{i-1}=L_i$). 
-
-\input{figures/feistel_round_function.tex}
-
-\begin{definition}[Data Encryption Standard]
-    \emph{DES} è un Cifrario di Feistel con $\mathcal{N} = 16$ round, $\ell = 64$ lunghezza dei blocchi e le chiavi $\mathcal{K} \in \{0,1\}^{56}$ di 56 bit. 
-    
-    \vspace{0.2cm} \noindent Prima dei 16 round, si applica una funzione di permutazione iniziale ($IP$) al \emph{plaintext} $x$: \\  $IP(x)=L_0R_0$ dove $L_0$ e $R_0$ sono le due metà da 32bit ciascuna. 
-
-    \vspace{0.2cm} \noindent  Invece dopo i 16 round, le 2 metà $R_{16}$ e $L_{16}$ vengono scambiate e si applica la permutazione inversa $(IP^{-1})$: $y=IP^{-1}(R_{16}L_{16})$. 
-
-    \vspace{0.2cm}
-    \noindent $L_i, R_i \in \{0,1\}^{32}$, ovvero sono stringhe a 32 bit. Il \emph{key-schedule} $K = (K_1\dots,K_{16})$ è composto da permutazioni di $\mathcal{K}$. \\ Poiché ogni round di DES trasforma $(L_{i-1}, R_{i-1})$ in $(L_i,R_i)$ tramite la funzione $f$
-    e la chiave del round $K_i$ si ha che $f:\{0,1\}^{32} \times \{0,1\}^{48} \to \{0,1\}^{32}$, ovvero $f: R_i \times K_i \to \{0,1\}^{32}= f(R_i,K_i)=f(A,K)$. 
-
-    \vspace{1em}
-    \noindent
-    Per calcolare $f(A,K)$ è necessario definire delle funzioni. Sia $E: \{0,1\}^{32} \to \{0,1\}^{48}$ una funzione di espansione che duplica 16 bit dalla stringa originale, delle funzioni di sostituzione $S_i : \{0,1\}^6 \to \{0,1\}^4$ per $i = 1,\dots,8$ che sostituiscono blocchi di 6 bit con blocchi di 4 bit e una funzione di permutazione $P: \{1,\dots,32\} \to \{1,\dots,32\}$.
-    La funzione $f(A,K)$ è calcolata nel seguente modo:
-    \begin{enumerate}
-        \item Viene calcolato $E(A)$, ``espandendo'' così $A$ a 48 bit
-        \item Si calcola $B_1B_2\dots B_8 = E(A) \oplus K$, una stringa di 8 blocchi con 6 bit ciascuno
-        \item Si applicano le 8 S-box: $C_i = S_i(B_i)$ per $i = 1,\dots,8$, ogni blocco viene ridotto a 4 bit, ottenendo così $C_1\dots C_8$
-        \item Infine si permuta la stringa $C$, ovvero $P(C)=f(A,K)$.
-    \end{enumerate} 
-\end{definition}
-
-\subsubsection{Ricerca Esaustiva su DES}
-Un attacco a ricerca esaustiva su \emph{DES}, sperimentato negli anni, è condotto nel modello di
-\emph{known-plaintext attack}, in cui è disponibile una sequenza di messaggi $(x_1,\dots,x_Q) \quad x_i \in M$ per $i = 1,\dots, Q$, e la corrispondente sequenza di messaggi cifrati, tutti con la stessa chiave $K \in \mathcal{K}$.
-
-\noindent Lo scopo dell'attaccante è determinare una chiave $k_0$ che permetta di decifrare l'intera sequenza di messaggi cifrati ($\forall i \quad d_{k_0}(y_i) = x_i$). 
-
-\vspace{1em}\noindent
-Nei cifrari a blocchi come \emph{DES}, solitamente, è sufficiente una coppia di 3 \emph{plaintext}/\emph{ciphertext} per essere certi che la chiave sia unica. Negli anni le chiavi a 56 bit del cifrario, si sono dimostrate inadeguate contro attacchi simili (nel 1999 \emph{DES} è stato rotto in ben 22 ore).
-
-\noindent Nonostante però il cifrario non sia sicuro contro gli attacchi per enumerazione, \emph{DES} è resistente ad attacchi più sofisticati. In un tentativo di rendere lo spazio delle chiavi più grande nasce \emph{3DES}.
-
-\begin{definition}[\emph{3DES}]
-    Sia $\emph{DES} = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$, si definisce il cifrario $\emph{3DES} = (M,C,\mathcal{K}^3,\mathcal{E}_3,\mathcal{D}_3)$ in cui le regole di cifratura, quindi decifratura, sono le seguenti (si indicano $e^3$ gli elementi di $\mathcal{E}_3$)
-    \[
-        e^{3}_{(k_{1},k_{2},k_{3})}(x) = e_{k_3}\left(d_{k_2}\left(e_{k_1}\left(x\right)\right)\right)
-    \]
-    con $k_1,k_2,k_3 \in \mathcal{K}$ e $x \in M$.
-\end{definition}
-
-\vspace{1em}\noindent Tale cifrario prende chiavi lunghe $3 \cdot 56= 168$ bit e ha $\mathcal{N}=16 \cdot 3 =48$ round. Ovviamente ha prestazioni 3 volte più lente di un singolo \emph{DES}.  
-
-\vspace{1em}\noindent Allora perché non usare \emph{2DES}? Ha chiavi lunghe $2 \cdot 56= 112$ bit, $\mathcal{N}=2 \cdot 16= 32$ round e ha prestazioni migliori di \emph{3DES}. Nonostante ciò non è più sicuro di un cifrario \emph{DES} e lo si mostra con una strategia d'attacco detta \textbf{meet in the middle}. 
-
-\vspace{0.2cm} \noindent Si supponga la funzione di cifratura in \textit{2DES} come segue 
-\[
-    e^2_{(k_1,k_2)}(x) = e_{k_2}(e_{k_1}(x))
+\vspace{1em}  \noindent 
+Sia $\pi_s:(\mathbb{F}_2)^m \to (\mathbb{F}_2)^n$ un \textit{S-box}. 
+Si considerano coppie ordinate di $m$ bit: $(x, x^*)$. Si ha:
+\[x'=x \oplus x^*  \ \text{ (l'\textbf{input} dell'\textit{S-box}= differenza in entrata)},
 \]
-e un attacco \textit{known-plaintext} come in \emph{DES}, in cui si è a conoscenza di una sequenza di \emph{plaintext} $(x_1,\dots,x_Q)$ e relativi \emph{ciphertext}, cifrati tutti con la stessa chiave $(k_1,k_2) \in \mathcal{K}^2$ (supponendo di voler trovare $y = e^{2}_{(k_1,k_2)}(x)$). \\ Si mostra come recuperare la chiave $(k_1, k_2)$ in tempo proporzionale a $|K|$, nonostante lo spazio delle chiavi sia $|K^2|$. \\ Meet in the middle opera nel seguente modo:
+\[\pi_s(x) \oplus \pi_s(x^*) \ \text{(l'\textbf{output} dell'\textit{S-box}=differenza in uscita)}.
+\]
+
+
+\vspace{1em} \noindent 
+Per ogni $x' \in (\mathbb{F}_2)^m$, l'insieme $\Delta(x')$ è definito come:
+\[
+\Delta(x') = \{(x, x^*) : x \oplus x^* = x'\}.
+\]
+$\Delta(x')$ consiste dunque di tutte le coppie ordinate $(x, x^*)$ che hanno la differenza in input all'\textit{S-box} pari a $x'$. \\ La cardinalità di tale insieme è $|\Delta(x')|=2^m$. 
+
+
+\vspace{1em} \noindent  La coppia $(x',y')$ è detta \textbf{differenziale}.
+\[
+    N_D(x',y')=|\{(x,x^*) \in \Delta(x'):\pi_s(x) \oplus \pi_s(x^*)=y'\}|. 
+\]
+
+\noindent Conta quindi il numero di coppie che ha input dell'\textit{S-box} pari a $x'$ e output pari a $y'$.\\ I valori $N_D(x',y')$ vengono organizzati nella \underline{Difference Distribution Table} (DDT), nella quale:
+\begin{itemize}
+    \item ogni riga corrisponde a una differenza in ingresso;
+    \item ogni colonna corrisponde a una differenza in uscita;
+    \item ogni cella contiene il conteggio $N_D(x',y')$.
+\end{itemize}
+
+\noindent Una distribuzione non uniforme indica che alcune differenze in uscita si verificano più frequentemente di altre. 
+
+\vspace{1em}\noindent Il \textbf{propagation ratio}, o rapporto di propagazione, è definito come
+\[
+R_p(x',y') = \frac{N_D(x',y')}{2^m} =
+\Pr\left[
+\text{differenza in uscita}=y'
+\mid
+\text{differenza in ingresso}=x'
+\right]
+.
+\]
+
+\noindent Un rapporto elevato indica che una determinata transizione differenziale
+è relativamente frequente, mentre un rapporto nullo indica che tale
+transizione non può verificarsi per la \textit{S-box} considerata.
+
+\paragraph{Propagazione delle differenze nei round}
+
+In un cifrario a più round:
+
+\[
+u_i^r = w_i^{r-1} \oplus K_i^r,
+\]
+\[
+(u_i^r)^* = (w_i^{r-1})^* \oplus K_i^r.
+\]
+
+Dunque:
+\[
+\begin{aligned}
+(u_i^r)'
+&= u_i^r \oplus (u_i^r)^*\\
+&= (w_i^{r-1} \oplus K_i^r)
+   \oplus ((w_i^{r-1})^* \oplus K_i^r) \ \text{(\underline{stessa chiave})}\\
+&= w_i^{r-1} \oplus (w_i^{r-1})^*, \\
+&= (w_i^{r-1})'.
+\end{aligned}
+\]
+
+\noindent La differenza non viene quindi modificata dall'aggiunta della stessa sottochiave a entrambi gli input. Di conseguenza, la differenza in
+ingresso alla S-box del round corrente coincide con la differenza
+della corrispondente porzione dello stato proveniente dal round precedente. \\ Le S-box possono invece trasformare una differenza in ingresso in
+diverse possibili differenze in uscita, ciascuna caratterizzata da
+una determinata probabilità.\\ Le permutazioni riordinano le posizioni dei bit e, di conseguenza,
+riordinano anche i bit della differenza. La combinazione di queste
+trasformazioni determina la propagazione delle differenze attraverso
+i round del cifrario.
+
+\paragraph{Differential trail} Le transizioni che descrivono una differenza in ingresso a una S-box verso la corrispondente differenza in uscita costituiscono il \textbf{differential trial}. \\ Una traccia con probabilità sufficientemente elevata può essere
+sfruttata per individuare regolarità statistiche nella propagazione
+delle differenze e costruire un attacco al cifrario, che si basa sui seguenti passaggi:
+
 \begin{enumerate}
-    \item \emph{Fase Forward}: prova tutte le possibili chiavi $k_i \in \mathcal{K}$ per cui $e_{k_i}(x) = z_i$, salvando tutti i valori di $z_i$ in una tabella
-    \item \emph{Fase Backward}: prova tutte le possibili chiavi $k_j \in \mathcal{K}$ per cui $z'_j = d_{k_j}(y)$ 
-    \item \emph{Matching}: verifica se $z'_j$ è presente nella tabella: se esiste una corrispondenza $z'_j = z_i$ la coppia $(k_i,k_j)$ è una chiave candidata per la decifratura in \emph{2DES}.
+    \item    L'attaccante sceglie coppie di \textit{plaintext} con differenza $x'$ fissata e raccoglie i corrispondenti testi cifrati, ottenendo $\mathcal{T}=\{(x,x^*,y,y^*)\}$;
+    \item (\textit{Filtering operation}) Si eliminano le tuple che non soddisfano alcune condizioni necessarie, selezionando solo le \textit{right pairs};
+    \item Si considerano tutte le possibili combinazioni dei bit della
+    sottochiave dell'ultimo round che si intende recuperare;
+    \item Per ciascuna sottochiave candidata ($L_1, L_2$), si invertono le trasformazioni pertinenti dell'ultimo round, applicando le S-box inverse quando necessario;
+    \item Si calcolano le differenze ricostruite e si verifica se
+    corrispondono a quelle previste dal \textit{differential trail};
+    \item Ogni volta che una sottochiave candidata soddisfa le condizioni richieste, si incrementa il suo contatore.
 \end{enumerate}
 
-\input{figures/mitm.tex}
-\begin{theorem}[\emph{2DES} non è più sicuro di \emph{DES}]
-    Sia $\emph{2DES} = (M,C,\mathcal{K}^2,\mathcal{E}_2,\mathcal{D}_2)$. Esiste un algoritmo $\mathcal{A}$ che prende in input una sequenza di \emph{plaintext} $\bar{x} = (x_1,\dots,x_Q)$ e una sequenza di corrispondenti \emph{ciphertext} $\bar{y} = (y_1,\dots,y_Q)$, cifrati con la stessa chiave $(k_1,k_2) \in \mathcal{K}^2$. 
+\noindent Al termine dell'attacco, si confrontano i contatori e si seleziona la sottochiave candidata con il conteggio più elevato. \\ L'idea è che la sottochiave corretta tenda a produrre più frequentemente
+le differenze previste dalla traccia, mentre le sottochiavi errate
+tendono a generare corrispondenze casuali.\\ Il metodo è di natura statistica e non garantisce il successo in ogni
+esecuzione.
+
+\input{algorithms/differential_attack.tex}
+
+
+% \subsection{Feistel Network e Data Encryption Standard}
+% Il cifrario \emph{DES} è un caso particolare del \textbf{cifrario} iterato \textbf{di Feistel}.
+
+% \noindent Nel cifrario di Feistel ogni stato $u_i$ è diviso in due metà uguali, ovvero $u_i=(L_i,R_i)$, dove $L_i$ è la metà sinistra e $R_i$ la destra. Invece la funzione del round $g$ ha la seguente forma: $g(L_{i-1},R_{i-1},K_{i}) = (L_i,R_i)$ in cui 
+% \begin{align*}
+%     L_i &= R_{i-1}\\
+%     R_i &= L_{i-1} \oplus f(R_{i-1},K_i).
+% \end{align*}
+% In altre parole, la funzione $g$ prende la metà destra del round precedente come metà sinistra del round corrente. Come parte destra del round corrente imposta una combinazione della parte sinistra del round precedente con una funzione $f$. \\ Le relazioni inverse per determinare lo stato precedente sono inoltre banali: non è necessaria la proprietà di iniettività per $f$ poiché ogni round è sempre invertibile grazie allo \texttt{xor} (se si conosce $K_i$, si può risalire allo stato precedente con $L_{i-1}=R_i \oplus f(L_i,K_i)$ e $R_{i-1}=L_i$). 
+
+% \input{figures/feistel_round_function.tex}
+
+% \begin{definition}[Data Encryption Standard]
+%     \emph{DES} è un Cifrario di Feistel con $\mathcal{N} = 16$ round, $\ell = 64$ lunghezza dei blocchi e le chiavi $\mathcal{K} \in \{0,1\}^{56}$ di 56 bit. 
     
-    \noindent Il tempo d'esecuzione per restituire la coppia $(k_1,k_2)$ valuta $O(2Q \cdot |\mathcal{K}|)$ funzioni in $\mathcal{E}_2,\mathcal{D}_2$.
-\end{theorem}
+%     \vspace{0.2cm} \noindent Prima dei 16 round, si applica una funzione di permutazione iniziale ($IP$) al \emph{plaintext} $x$: \\  $IP(x)=L_0R_0$ dove $L_0$ e $R_0$ sono le due metà da 32bit ciascuna. 
 
-\begin{proof}
-    Per $\bar{x}$ e $\bar{y}$ si possono riscrivere le $Q$ relazioni come 
-    \[
-        \bar{y} = e^{2}_{(k_1,k_2)}(\bar{x}) = e_{k_2}(e_{k_1}(\bar{x}))
-    \]
-    in modo equivalente
-    \begin{align}        
-        \label{eq3}
-        d_{k_2}(\bar{y}) = e_{k_1}(\bar{x})
-    \end{align}
+%     \vspace{0.2cm} \noindent  Invece dopo i 16 round, le 2 metà $R_{16}$ e $L_{16}$ vengono scambiate e si applica la permutazione inversa $(IP^{-1})$: $y=IP^{-1}(R_{16}L_{16})$. 
 
-    Per trovare una coppia $(k_1, k_2)$ che soddisfi (\ref{eq3}), l'algoritmo $\mathcal{A}$:
-    \begin{enumerate}
-        \item costruisce una tabella $T$ contente tutte le coppie $(k_1,z_i)$ con $z_i = e_{k_1}(\bar{x}) \ \forall k_1 \in \mathcal{K}$
-        \item $\forall k_2 \in \mathcal{K}$ calcola $z_j = d_{k_2}(\bar{y})$: se in $T$ appare una coppia $(k_1,z_j)$, restituisce $(k_1,k_2)$ e si ferma.
-    \end{enumerate}
-    L'attacco è presentato in figura \ref{fig:mitm}, l'output soddisfa $d_{k_2}(\bar{y}) = e_{k_1}(\bar{x})$.
+%     \vspace{0.2cm}
+%     \noindent $L_i, R_i \in \{0,1\}^{32}$, ovvero sono stringhe a 32 bit. Il \emph{key-schedule} $K = (K_1\dots,K_{16})$ è composto da permutazioni di $\mathcal{K}$. \\ Poiché ogni round di DES trasforma $(L_{i-1}, R_{i-1})$ in $(L_i,R_i)$ tramite la funzione $f$
+%     e la chiave del round $K_i$ si ha che $f:\{0,1\}^{32} \times \{0,1\}^{48} \to \{0,1\}^{32}$, ovvero $f: R_i \times K_i \to \{0,1\}^{32}= f(R_i,K_i)=f(A,K)$. 
+
+%     \vspace{1em}
+%     \noindent
+%     Per calcolare $f(A,K)$ è necessario definire delle funzioni. Sia $E: \{0,1\}^{32} \to \{0,1\}^{48}$ una funzione di espansione che duplica 16 bit dalla stringa originale, delle funzioni di sostituzione $S_i : \{0,1\}^6 \to \{0,1\}^4$ per $i = 1,\dots,8$ che sostituiscono blocchi di 6 bit con blocchi di 4 bit e una funzione di permutazione $P: \{1,\dots,32\} \to \{1,\dots,32\}$.
+%     La funzione $f(A,K)$ è calcolata nel seguente modo:
+%     \begin{enumerate}
+%         \item Viene calcolato $E(A)$, ``espandendo'' così $A$ a 48 bit
+%         \item Si calcola $B_1B_2\dots B_8 = E(A) \oplus K$, una stringa di 8 blocchi con 6 bit ciascuno
+%         \item Si applicano le 8 S-box: $C_i = S_i(B_i)$ per $i = 1,\dots,8$, ogni blocco viene ridotto a 4 bit, ottenendo così $C_1\dots C_8$
+%         \item Infine si permuta la stringa $C$, ovvero $P(C)=f(A,K)$.
+%     \end{enumerate} 
+% \end{definition}
+
+% \subsubsection{Ricerca Esaustiva su DES}
+% Un attacco a ricerca esaustiva su \emph{DES}, sperimentato negli anni, è condotto nel modello di
+% \emph{known-plaintext attack}, in cui è disponibile una sequenza di messaggi $(x_1,\dots,x_Q) \quad x_i \in M$ per $i = 1,\dots, Q$, e la corrispondente sequenza di messaggi cifrati, tutti con la stessa chiave $K \in \mathcal{K}$.
+
+% \noindent Lo scopo dell'attaccante è determinare una chiave $k_0$ che permetta di decifrare l'intera sequenza di messaggi cifrati ($\forall i \quad d_{k_0}(y_i) = x_i$). 
+
+% \vspace{1em}\noindent
+% Nei cifrari a blocchi come \emph{DES}, solitamente, è sufficiente una coppia di 3 \emph{plaintext}/\emph{ciphertext} per essere certi che la chiave sia unica. Negli anni le chiavi a 56 bit del cifrario, si sono dimostrate inadeguate contro attacchi simili (nel 1999 \emph{DES} è stato rotto in ben 22 ore).
+
+% \noindent Nonostante però il cifrario non sia sicuro contro gli attacchi per enumerazione, \emph{DES} è resistente ad attacchi più sofisticati. In un tentativo di rendere lo spazio delle chiavi più grande nasce \emph{3DES}.
+
+% \begin{definition}[\emph{3DES}]
+%     Sia $\emph{DES} = (M,C,\mathcal{K},\mathcal{E},\mathcal{D})$, si definisce il cifrario $\emph{3DES} = (M,C,\mathcal{K}^3,\mathcal{E}_3,\mathcal{D}_3)$ in cui le regole di cifratura, quindi decifratura, sono le seguenti (si indicano $e^3$ gli elementi di $\mathcal{E}_3$)
+%     \[
+%         e^{3}_{(k_{1},k_{2},k_{3})}(x) = e_{k_3}\left(d_{k_2}\left(e_{k_1}\left(x\right)\right)\right)
+%     \]
+%     con $k_1,k_2,k_3 \in \mathcal{K}$ e $x \in M$.
+% \end{definition}
+
+% \vspace{1em}\noindent Tale cifrario prende chiavi lunghe $3 \cdot 56= 168$ bit e ha $\mathcal{N}=16 \cdot 3 =48$ round. Ovviamente ha prestazioni 3 volte più lente di un singolo \emph{DES}.  
+
+% \vspace{1em}\noindent Allora perché non usare \emph{2DES}? Ha chiavi lunghe $2 \cdot 56= 112$ bit, $\mathcal{N}=2 \cdot 16= 32$ round e ha prestazioni migliori di \emph{3DES}. Nonostante ciò non è più sicuro di un cifrario \emph{DES} e lo si mostra con una strategia d'attacco detta \textbf{meet in the middle}. 
+
+% \vspace{0.2cm} \noindent Si supponga la funzione di cifratura in \textit{2DES} come segue 
+% \[
+%     e^2_{(k_1,k_2)}(x) = e_{k_2}(e_{k_1}(x))
+% \]
+% e un attacco \textit{known-plaintext} come in \emph{DES}, in cui si è a conoscenza di una sequenza di \emph{plaintext} $(x_1,\dots,x_Q)$ e relativi \emph{ciphertext}, cifrati tutti con la stessa chiave $(k_1,k_2) \in \mathcal{K}^2$ (supponendo di voler trovare $y = e^{2}_{(k_1,k_2)}(x)$). \\ Si mostra come recuperare la chiave $(k_1, k_2)$ in tempo proporzionale a $|K|$, nonostante lo spazio delle chiavi sia $|K^2|$. \\ Meet in the middle opera nel seguente modo:
+% \begin{enumerate}
+%     \item \emph{Fase Forward}: prova tutte le possibili chiavi $k_i \in \mathcal{K}$ per cui $e_{k_i}(x) = z_i$, salvando tutti i valori di $z_i$ in una tabella
+%     \item \emph{Fase Backward}: prova tutte le possibili chiavi $k_j \in \mathcal{K}$ per cui $z'_j = d_{k_j}(y)$ 
+%     \item \emph{Matching}: verifica se $z'_j$ è presente nella tabella: se esiste una corrispondenza $z'_j = z_i$ la coppia $(k_i,k_j)$ è una chiave candidata per la decifratura in \emph{2DES}.
+% \end{enumerate}
+
+% \input{figures/mitm.tex}
+% \begin{theorem}[\emph{2DES} non è più sicuro di \emph{DES}]
+%     Sia $\emph{2DES} = (M,C,\mathcal{K}^2,\mathcal{E}_2,\mathcal{D}_2)$. Esiste un algoritmo $\mathcal{A}$ che prende in input una sequenza di \emph{plaintext} $\bar{x} = (x_1,\dots,x_Q)$ e una sequenza di corrispondenti \emph{ciphertext} $\bar{y} = (y_1,\dots,y_Q)$, cifrati con la stessa chiave $(k_1,k_2) \in \mathcal{K}^2$. 
     
-    \vspace{1em} \noindent Inoltre nel passo 1 vengono calcolate $Q \cdot |\mathcal{K}|$ funzioni in $\mathcal{E}$, nel passo 2 vengono calcolate $Q \cdot |\mathcal{K}|$ funzioni in $\mathcal{D}$, per cui il numero totale di funzioni valutate è $2Q \cdot |\mathcal{K}|$.
+%     \noindent Il tempo d'esecuzione per restituire la coppia $(k_1,k_2)$ valuta $O(2Q \cdot |\mathcal{K}|)$ funzioni in $\mathcal{E}_2,\mathcal{D}_2$.
+% \end{theorem}
 
-\end{proof}
+% \begin{proof}
+%     Per $\bar{x}$ e $\bar{y}$ si possono riscrivere le $Q$ relazioni come 
+%     \[
+%         \bar{y} = e^{2}_{(k_1,k_2)}(\bar{x}) = e_{k_2}(e_{k_1}(\bar{x}))
+%     \]
+%     in modo equivalente
+%     \begin{align}        
+%         \label{eq3}
+%         d_{k_2}(\bar{y}) = e_{k_1}(\bar{x})
+%     \end{align}
 
+%     Per trovare una coppia $(k_1, k_2)$ che soddisfi (\ref{eq3}), l'algoritmo $\mathcal{A}$:
+%     \begin{enumerate}
+%         \item costruisce una tabella $T$ contente tutte le coppie $(k_1,z_i)$ con $z_i = e_{k_1}(\bar{x}) \ \forall k_1 \in \mathcal{K}$
+%         \item $\forall k_2 \in \mathcal{K}$ calcola $z_j = d_{k_2}(\bar{y})$: se in $T$ appare una coppia $(k_1,z_j)$, restituisce $(k_1,k_2)$ e si ferma.
+%     \end{enumerate}
+%     L'attacco è presentato in figura \ref{fig:mitm}, l'output soddisfa $d_{k_2}(\bar{y}) = e_{k_1}(\bar{x})$.
+    
+%     \vspace{1em} \noindent Inoltre nel passo 1 vengono calcolate $Q \cdot |\mathcal{K}|$ funzioni in $\mathcal{E}$, nel passo 2 vengono calcolate $Q \cdot |\mathcal{K}|$ funzioni in $\mathcal{D}$, per cui il numero totale di funzioni valutate è $2Q \cdot |\mathcal{K}|$.
+
+% \end{proof}
+
+\newpage
 \subsection{Advanced Encryption Standard}
 \emph{AES} nasce dalla necessità di avere un cifrario libero globalmente e con una sicurezza migliore di \emph{DES}, che supportasse una lunghezza dei blocchi a 128,192 e 256 bit. Il nome originale dell'algoritmo era \emph{Rijndael} prima di essere selezionato come standard, utilizzato ancora oggi. 
 % \newpage
@@ -306,80 +416,80 @@ Ciò permette all'avversario di calcolare l'ultimo byte $x_1$ facilmente, $x_1 =
 
 \vspace{0.2cm} \noindent Perché funziona? Poiché CBC combina \texttt{xor} col blocco precedente, modificando il \emph{ciphertext} precedente si controlla il \emph{plaintext} del blocco successivo, pur non conoscendo la chiave.
 
-\subsection{Attacchi lineari a Cifrari a blocchi}
-L'idea dell'analisi lineare è basata sul trovare una relazione probabilistica tra un sottoinsieme di bit nel \emph{plaintext} e un sottoinsieme di bit nel \emph{ciphertext} che precede la permutazione dell'ultimo round. Assumendo di avere a disposizione un grande numero di coppie, per un attacco \emph{known-plaintext}, per ogni coppia si cerca di decifrare l'ultimo round, e per ogni chiave provata si calcolano le relazioni tra i bit rilevanti, si cerca di capire quanto la relazione ideata si verifica per ogni chiave provata, alla fine del processo si spera di trovare una chiave per cui la relazione si applica almeno a $1/2$ bit della relazione. 
+% \subsection{Attacchi lineari a Cifrari a blocchi}
+% L'idea dell'analisi lineare è basata sul trovare una relazione probabilistica tra un sottoinsieme di bit nel \emph{plaintext} e un sottoinsieme di bit nel \emph{ciphertext} che precede la permutazione dell'ultimo round. Assumendo di avere a disposizione un grande numero di coppie, per un attacco \emph{known-plaintext}, per ogni coppia si cerca di decifrare l'ultimo round, e per ogni chiave provata si calcolano le relazioni tra i bit rilevanti, si cerca di capire quanto la relazione ideata si verifica per ogni chiave provata, alla fine del processo si spera di trovare una chiave per cui la relazione si applica almeno a $1/2$ bit della relazione. 
 
-Si introducono delle variabili aleatorie, siano $X_1,X_2,\dots$ le variabili indipendenti uniformi, assumenti i valori $0,1$, per cui $\Pr[X_i = 0] = p_i$ e $\Pr[X_i = 1] = 1-p_i$, allora per $i\neq j$ si ha:
-\begin{gather*}
-    \Pr[X_i \oplus X_j = 0] = p_i p_j + (1-p_1)(1-p_j)\\
-    \Pr[X_i \oplus X_j = 1] = p_i (1-p_j) + (1-p_1)p_j\\
-\end{gather*}
+% Si introducono delle variabili aleatorie, siano $X_1,X_2,\dots$ le variabili indipendenti uniformi, assumenti i valori $0,1$, per cui $\Pr[X_i = 0] = p_i$ e $\Pr[X_i = 1] = 1-p_i$, allora per $i\neq j$ si ha:
+% \begin{gather*}
+%     \Pr[X_i \oplus X_j = 0] = p_i p_j + (1-p_1)(1-p_j)\\
+%     \Pr[X_i \oplus X_j = 1] = p_i (1-p_j) + (1-p_1)p_j\\
+% \end{gather*}
 
-sia definito $\varepsilon := p_i - \frac{1}{2}$ il valore chiamato \emph{bias} di $X_i$.
+% sia definito $\varepsilon := p_i - \frac{1}{2}$ il valore chiamato \emph{bias} di $X_i$.
 
-\begin{theorem}[Piling up lemma]
-    Sia $X_{i1} \oplus X_{i2} \oplus \dots \oplus X_{ik}$ una variabile aleatoria composta da variabili $X_i$ indipendenti, allora il suo bias è
-    \[
-        \varepsilon_{i1,i2,\dots,ik} = 2^{k-1}\prod^{k}_{j = 1}\varepsilon_{ij}
-    \]
-\end{theorem}
-Si procede alla dimostrazione per induzione su $k$,
-\begin{proof}
-    Per $k = 1$, chiaramente vero. 
+% \begin{theorem}[Piling up lemma]
+%     Sia $X_{i1} \oplus X_{i2} \oplus \dots \oplus X_{ik}$ una variabile aleatoria composta da variabili $X_i$ indipendenti, allora il suo bias è
+%     \[
+%         \varepsilon_{i1,i2,\dots,ik} = 2^{k-1}\prod^{k}_{j = 1}\varepsilon_{ij}
+%     \]
+% \end{theorem}
+% Si procede alla dimostrazione per induzione su $k$,
+% \begin{proof}
+%     Per $k = 1$, chiaramente vero. 
     
-    \vspace{1em}
-    Per $k = 2$ 
-    \begin{align*}        
-        X_1 \oplus X_2 &= \Pr[X_{i1} \oplus X_{i2}] =\\
-        & \left(\frac{1}{2} + \varepsilon_{i1}\right)\left(\frac{1}{2} + \varepsilon_{i2}\right) +  \left(\frac{1}{2}- \varepsilon_{i1}\right)\left(\frac{1}{2} - \varepsilon_{i2}\right) \\
-        & = \frac{1}{2} + 2{\varepsilon_{i1}\varepsilon_{i2}}.
-    \end{align*}
+%     \vspace{1em}
+%     Per $k = 2$ 
+%     \begin{align*}        
+%         X_1 \oplus X_2 &= \Pr[X_{i1} \oplus X_{i2}] =\\
+%         & \left(\frac{1}{2} + \varepsilon_{i1}\right)\left(\frac{1}{2} + \varepsilon_{i2}\right) +  \left(\frac{1}{2}- \varepsilon_{i1}\right)\left(\frac{1}{2} - \varepsilon_{i2}\right) \\
+%         & = \frac{1}{2} + 2{\varepsilon_{i1}\varepsilon_{i2}}.
+%     \end{align*}
 
-    Ora supponendo vero $k= \ell$ con $\ell > 2$:
-    la variabile $X_{i1} \oplus \dots \oplus X_{i\ell + 1}$ è scritta come:
+%     Ora supponendo vero $k= \ell$ con $\ell > 2$:
+%     la variabile $X_{i1} \oplus \dots \oplus X_{i\ell + 1}$ è scritta come:
 
-    \begin{align*}
-        (X_{i1} \oplus \dots \oplus X_{i\ell}) \oplus X_{i\ell +1}\\
-        \varepsilon_{i1,\dots,\ell} = 2^{\ell -1 }\prod_{j = 1}^{\ell}\varepsilon_{ij}\\
-    \end{align*}
+%     \begin{align*}
+%         (X_{i1} \oplus \dots \oplus X_{i\ell}) \oplus X_{i\ell +1}\\
+%         \varepsilon_{i1,\dots,\ell} = 2^{\ell -1 }\prod_{j = 1}^{\ell}\varepsilon_{ij}\\
+%     \end{align*}
 
-    Il bias di $X_{i1} \oplus \dots \oplus X_{i\ell + 1}$ è scritto come:
-    \[
-        2 \cdot \left( 2^{\ell -1 }\prod_{j=1}^{\ell} \varepsilon_{ij} \right) \cdot \varepsilon_{i\ell +1} = 2^{\ell} \prod_{j=1}^{\ell + 1}\varepsilon_{ij}.
-    \]
+%     Il bias di $X_{i1} \oplus \dots \oplus X_{i\ell + 1}$ è scritto come:
+%     \[
+%         2 \cdot \left( 2^{\ell -1 }\prod_{j=1}^{\ell} \varepsilon_{ij} \right) \cdot \varepsilon_{i\ell +1} = 2^{\ell} \prod_{j=1}^{\ell + 1}\varepsilon_{ij}.
+%     \]
 
-\end{proof}
+% \end{proof}
 
-\begin{corollary}
-    Sia $X_{i1} \oplus X_{i2} \oplus \dots \oplus X_{ik}$ una variabile aleatoria composta da variabili $X_i$ indipendenti, di cui un bias $\varepsilon_{ij} = 0$ allora il bias $\varepsilon_{i1,\dots,ik} = 0$ 
-\end{corollary}
+% \begin{corollary}
+%     Sia $X_{i1} \oplus X_{i2} \oplus \dots \oplus X_{ik}$ una variabile aleatoria composta da variabili $X_i$ indipendenti, di cui un bias $\varepsilon_{ij} = 0$ allora il bias $\varepsilon_{i1,\dots,ik} = 0$ 
+% \end{corollary}
 
-\paragraph{Approssimazione lineare delle S-box}
-Sia $\pi_S: \{0,1\}^m \to \{0,1\}^n$ una S-box, per una tupla $X = (x_1,\dots,x_m)$ scelta in modo uniforme casuale, anche tutti i suoi componenti $x_i$ sono scelti in modo uniforme casuale (sono inoltre indipendenti) definiscono delle variabili aleatorie $X_i$ con bias $\varepsilon_i = 0$. Sia $Y = (y_1,\dots,y_n)$ una tupla scelta in modo uniforme casuale, che definisce delle variabili aleatorie $Y_i$, allora se $\pi(X) \neq Y$:
-\[
-    \Pr[X_1 = x_1\dots X_m = x_m, Y_1 = y_1 \dots, Y_n = y_n] = 0,
-\] 
-al contrario se $\pi(X) = Y$
-\begin{gather*}    
-    \Pr[X_1 = x_1\dots X_m = x_m, Y_1 = y_1 \dots, Y_n = y_n] = 2^{-m}\\
-    \Pr[X_1 = x_1\dots X_m = x_m] = 2^{-m},
-\end{gather*}
+% \paragraph{Approssimazione lineare delle S-box}
+% Sia $\pi_S: \{0,1\}^m \to \{0,1\}^n$ una S-box, per una tupla $X = (x_1,\dots,x_m)$ scelta in modo uniforme casuale, anche tutti i suoi componenti $x_i$ sono scelti in modo uniforme casuale (sono inoltre indipendenti) definiscono delle variabili aleatorie $X_i$ con bias $\varepsilon_i = 0$. Sia $Y = (y_1,\dots,y_n)$ una tupla scelta in modo uniforme casuale, che definisce delle variabili aleatorie $Y_i$, allora se $\pi(X) \neq Y$:
+% \[
+%     \Pr[X_1 = x_1\dots X_m = x_m, Y_1 = y_1 \dots, Y_n = y_n] = 0,
+% \] 
+% al contrario se $\pi(X) = Y$
+% \begin{gather*}    
+%     \Pr[X_1 = x_1\dots X_m = x_m, Y_1 = y_1 \dots, Y_n = y_n] = 2^{-m}\\
+%     \Pr[X_1 = x_1\dots X_m = x_m] = 2^{-m},
+% \end{gather*}
 
-invece
-\[    
-    \Pr[Y_1 = y_1 \dots, Y_n = y_n | X_1 = x_1\dots X_m = x_m] = 1.  
-\]
-è facile calcolare il bias della variabile $X_{i1} \oplus \dots X_{im} \oplus Y_{j1} \oplus \dots \oplus Y_{jn}$.
+% invece
+% \[    
+%     \Pr[Y_1 = y_1 \dots, Y_n = y_n | X_1 = x_1\dots X_m = x_m] = 1.  
+% \]
+% è facile calcolare il bias della variabile $X_{i1} \oplus \dots X_{im} \oplus Y_{j1} \oplus \dots \oplus Y_{jn}$.
 
 
-\begin{definition}
-    Per una variabile aleatoria con un vettore $a = (a_1,a_2,a_3,a_4)$ in input e un vettore $b = (b_1,b_2,b_3,b_4)$ in output, si definisce $N_L(a,b)$ come il numero di vettori $(x_1,x_2,x_3,x_4,y_1,y_2,y_3,y_4)$ tale che 
-    \begin{gather*}
-        \pi_S(x_1,x_2,x_3,x_4) = (y_1,y_2,y_3,y_4)\\    
-        \left(\bigoplus_{i=1}^{4}a_i x_i\right) \oplus \left(\bigoplus_{i=1}^{4}b_i y_i\right) = 0 
-    \end{gather*}
-    questo equivale selezionare le variabili $X_i$ di input in cui $a_i = 1$, e le variabili in output $Y_i$ per cui $b_i = 1$. Inoltre il bias della variabile descritta dai due vettori $a$ e $b$ è esprimibile attraverso il valore $N_L(a,b)$ definito: $\varepsilon = \frac{N_L(a,b) - 8}{16}$.
-\end{definition}
+% \begin{definition}
+%     Per una variabile aleatoria con un vettore $a = (a_1,a_2,a_3,a_4)$ in input e un vettore $b = (b_1,b_2,b_3,b_4)$ in output, si definisce $N_L(a,b)$ come il numero di vettori $(x_1,x_2,x_3,x_4,y_1,y_2,y_3,y_4)$ tale che 
+%     \begin{gather*}
+%         \pi_S(x_1,x_2,x_3,x_4) = (y_1,y_2,y_3,y_4)\\    
+%         \left(\bigoplus_{i=1}^{4}a_i x_i\right) \oplus \left(\bigoplus_{i=1}^{4}b_i y_i\right) = 0 
+%     \end{gather*}
+%     questo equivale selezionare le variabili $X_i$ di input in cui $a_i = 1$, e le variabili in output $Y_i$ per cui $b_i = 1$. Inoltre il bias della variabile descritta dai due vettori $a$ e $b$ è esprimibile attraverso il valore $N_L(a,b)$ definito: $\varepsilon = \frac{N_L(a,b) - 8}{16}$.
+% \end{definition}
 
-% L'esempio non è necessario: pagina 94 S.P.
-\input{contents/esempio_approssimazione_lineare.tex}
+% % L'esempio non è necessario: pagina 94 S.P.
+% \input{contents/esempio_approssimazione_lineare.tex}

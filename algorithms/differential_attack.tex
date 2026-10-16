@@ -1,0 +1,70 @@
+\begin{algorithm}[H]
+\caption{\textsc{DifferentialAttack}$(\mathcal{T},T,\pi_S^{-1})$}
+
+\For{$(L_1,L_2)\leftarrow(0,0)$ \KwTo $(F,F)$}{
+    $\operatorname{Count}[L_1,L_2]\leftarrow 0$\;
+}
+
+\ForEach{$(x,y,x^*,y^*)\in\mathcal{T}$}{
+    \If{$(y_{\langle 1\rangle}=(y_{\langle 1\rangle})^*)$
+    \textbf{and}
+    $(y_{\langle 3\rangle}=(y_{\langle 3\rangle})^*)$}{
+
+        \For{$(L_1,L_2)\leftarrow(0,0)$ \KwTo $(F,F)$}{
+
+            $v_{\langle 2\rangle}^{4}\leftarrow
+            L_1\oplus y_{\langle 2\rangle}$\;
+
+            $v_{\langle 4\rangle}^{4}\leftarrow
+            L_2\oplus y_{\langle 4\rangle}$\;
+
+            $u_{\langle 2\rangle}^{4}\leftarrow
+            \pi_S^{-1}(v_{\langle 2\rangle}^{4})$\;
+
+            $u_{\langle 4\rangle}^{4}\leftarrow
+            \pi_S^{-1}(v_{\langle 4\rangle}^{4})$\;
+
+            $(v_{\langle 2\rangle}^{4})^*
+            \leftarrow L_1\oplus(y_{\langle 2\rangle})^*$\;
+
+            $(v_{\langle 4\rangle}^{4})^*
+            \leftarrow L_2\oplus(y_{\langle 4\rangle})^*$\;
+
+            $(u_{\langle 2\rangle}^{4})^*
+            \leftarrow \pi_S^{-1}((v_{\langle 2\rangle}^{4})^*)$\;
+
+            $(u_{\langle 4\rangle}^{4})^*
+            \leftarrow \pi_S^{-1}((v_{\langle 4\rangle}^{4})^*)$\;
+
+            $(u_{\langle 2\rangle}^{4})'
+            \leftarrow u_{\langle 2\rangle}^{4}
+            \oplus (u_{\langle 2\rangle}^{4})^*$\;
+
+            $(u_{\langle 4\rangle}^{4})'
+            \leftarrow u_{\langle 4\rangle}^{4}
+            \oplus (u_{\langle 4\rangle}^{4})^*$\;
+
+            \If{$(u_{\langle 2\rangle}^{4})'=0110$
+            \textbf{and}
+            $(u_{\langle 4\rangle}^{4})'=0110$}{
+                $\operatorname{Count}[L_1,L_2]
+                \leftarrow \operatorname{Count}[L_1,L_2]+1$\;
+            }
+        }
+    }
+}
+
+$\operatorname{max}\leftarrow -1$\;
+
+\For{$(L_1,L_2)\leftarrow(0,0)$ \KwTo $(F,F)$}{
+    \If{$\operatorname{Count}[L_1,L_2]>\operatorname{max}$}{
+        $\operatorname{max}\leftarrow
+        \operatorname{Count}[L_1,L_2]$\;
+
+        $\operatorname{maxkey}\leftarrow(L_1,L_2)$\;
+    }
+}
+
+\KwOut{$\operatorname{maxkey}$}\
+
+\end{algorithm}
