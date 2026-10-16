@@ -70,10 +70,11 @@ x       &\leftarrow w_0
 % \vspace{0.2cm}
 
 %S.P. 4.5
-\subsection{Substitution-Permutation Network}
+\subsection{\textit{Substitution-Permutation Network}}
 Il cifrario \emph{SPN} è una modifica di un cifrario iterato in cui i \emph{plaintext} e \emph{ciphertext} sono divisi in $m$ blocchi lunghi $\ell$. L'algoritmo è semplice ed efficiente sia in \textit{hardware} che in \textit{software}.
-\begin{definition}[SPN]
-    Siano $\ell,m, \mathcal{N}$ interi positivi, $M = C = \{0,1\}^{\ell m}=(\mathbb{F}_2)^{\ell m}$, e $\pi_S, \pi_P$ funzioni di permutazione:
+% \begin{definition}[SPN]
+
+\vspace{1em} \noindent   Siano $\ell,m, \mathcal{N}$ interi positivi, $M = C = \{0,1\}^{\ell m}=(\mathbb{F}_2)^{\ell m}$, e $\pi_S, \pi_P$ funzioni di permutazione:
     \begin{align*}
         \pi_S: (\mathbb{F}_2)^{\ell} &\to (\mathbb{F}_2)^{\ell} \qquad \text{\underline{S} = \underline{S}ubstitution = \underline{S}-box}\\
         \pi_P: \{1,\dots,\ell m\} &\to \{1,\dots, \ell m\} \qquad \text{\underline{P}=\underline{P}ermutation}
@@ -81,7 +82,7 @@ Il cifrario \emph{SPN} è una modifica di un cifrario iterato in cui i \emph{pla
     con $\mathcal{K} \subseteq ((\mathbb{F}_2)^{\ell m})^{\mathcal{N}+1}$ i \emph{key-schedule} possibili derivati da una chiave iniziale $K$.
 
     \noindent La funzione di cifratura è descritta dall'algoritmo \ref{alg:spn}, e l'\textit{i-esimo} blocco è descritto come $x_{<i>}$ per $i = 1,\dots,m$.
-\end{definition}
+% \end{definition}
 
 \input{algorithms/spn} 
 \noindent L'algoritmo \ref{alg:spn} consiste di $\mathcal{N}$ round, in cui:
@@ -98,6 +99,7 @@ In ogni round, ad eccezione dell'ultimo, si eseguono $m$ sostituzioni usando $\p
 \newpage Si presenta una figura di esempio:
 \input{figures/spn.tex}
 
+\vspace{1em}
 \paragraph{Osservazione} La memoria richiesta dalle S-box è $\ell \cdot 2^{\ell}$ bit. \\ S-box piccole occupano meno memoria, ma rendono SPN vulnerabile ad attacchi per enumerazione, quindi non sono molto sicure; S-box più grandi, più round, una chiave più lunga aumentano sicurezza, ma anche la memoria (AES). 
 
 \subsubsection{Crittoanalisi differenziale}
@@ -305,11 +307,10 @@ esecuzione.
 % \end{proof}
 
 \newpage
-\subsection{Advanced Encryption Standard}
+\subsection{\textit{Advanced Encryption Standard}}
 \emph{AES} nasce dalla necessità di avere un cifrario libero globalmente e con una sicurezza migliore di \emph{DES}, che supportasse una lunghezza dei blocchi a 128,192 e 256 bit. Il nome originale dell'algoritmo era \emph{Rijndael} prima di essere selezionato come standard, utilizzato ancora oggi. 
-% \newpage
-\begin{definition}[Advanced Encryption Standard]
-    \emph{AES} è un cifrario iterato, in cui il numero di round dipende dalla lunghezza della chiave:  
+
+\vspace{1em}  \noindent \emph{AES} è un cifrario iterato di $128$ bit, in cui il numero di round dipende dalla lunghezza della chiave:  
     \begin{table}[h]
         \centering
         \begin{tabular}{c|c}
@@ -320,17 +321,36 @@ esecuzione.
             256 & 14\\
         \end{tabular}
     \end{table}
-\end{definition}
 
-\noindent In $\emph{AES}$ si usa una permutazione fissata $\Pi_{AES}$ biettiva su $\{0,1\}^{128}$ che non dipende dalla chiave. 
+\noindent L'algoritmo di \textit{AES}:
+\begin{enumerate}
+    \item Dato il \textit{plaintext} $x=x_0, \dots, x_{15}$, costituto da $16$byte (organizzati in una matrice $4 \times 4$ detta \textbf{State}), si esegue l'operazione \textbf{AddRoundKey}, ovvero $\textit{State}=\textit{State} \oplus \text{RoundKey}$;
+    \item Per $N-1$ round, esegue le operazioni $\underbrace{\textbf{SubBytes} \circ \textbf{ShiftRows} \circ \textbf{MixColumns}}_{\Pi_{\text{AES}}}$, \textbf{AddRoundKey};
+    \item Nell'$N-$esimo round, usa $\bar{\Pi}_{AES}$, che è uguale a $\Pi_{AES}$ senza MixColumns;
+    \item $y$ è definito come lo \textit{State} finale.
+\end{enumerate}
 
-\vspace{0.2cm} \noindent L'ultimo step di ogni round è lo \texttt{xor} tra la chiave del round corrente e l'output di $\Pi_{AES}$, ad eccezione dell'ultimo round dove si usa una permutazione leggermente modificata, $\bar{\Pi}_{AES}$ . 
+\vspace{0.2cm} \noindent La permutazione $\Pi_{AES}$ è costituita dalle 3 operazioni invertibili su $(\mathbb{F}_2)^{128}$ sopra indicate. \\ Sono entrambi funzioni biettive che non dipendono dalla chiave. \\(Ogni step è dunque invertibile, permettendo la decifratura applicando le trasformazioni inverse.)
 
-\vspace{0.2cm} \noindent I 128 bit sono organizzati in una matrice $4 \times 4$, in cui ogni cella contiene $8$ bit. 
+\paragraph{SubBytes} Sia $\pi_s: (\mathbb{F}_2)^8 \to (\mathbb{F}_2) ^8$ l'\textit{S-box} applicata a ciascun byte. 
+% \\ È progettata per non avere né \textit{fixed point} né \textit{inverse fixed point}, ovvero $\pi_S(x) \neq x \ \forall x \in \{0,1\}^8$  e $\pi_s(x) \neq \bar{x}$ con $\bar{x}$ complemento bit a bit di $x$. Ciò per requisiti di sicurezza. 
+L'\textit{S-box} di \textit{AES} sono definite algebricamente come operazioni nel campo finito:
+\[
+\mathbb{F}_{2^8}=\mathbb{Z}_2[x]/(x^8+x^4+x^3+x+1). 
+\]
 
-\vspace{0.2cm} \noindent La permutazione $\Pi_{AES}$ è costituita da 3 operazioni invertibili su $\{0,1\}^{128}$, eseguite una dopo l'altra: SubBytes, ShiftRows e MixColumns.
+\noindent In particolare:
+\begin{itemize}
+    \item \emph{FieldInv} denota l'inversa moltiplicativa di un elemento del campo;
+    \item \emph{BinaryToField} converte un byte in un elemento del campo;
+    \item \emph{FieldToBinary} converte un elemento del campo in un byte.
+\end{itemize}
 
-\paragraph{SubBytes} Sia $S: \{0,1\}^8 \to \{0,1\} ^8$ la permutazione fissata applicata a ciascuna delle 16 celle, una alla volta. \\ È progettata per non avere fixed point, ovvero $S(x) \neq x \ \forall x \in \{0,1\}^8$ e non avere inverse fixed point, ovvero $S(x) \neq \bar{x}$ con $\bar{x}$ complemento bit a bit di $x$. Ciò per requisiti di sicurezza. 
+\noindent Ciò è possibile poiché ogni elemento del campo finito $\mathbb{F}_{2^8}$ può essere rappresentato come un polinomio di grado inferiore a $8$:
+\[
+a(x) = \sum_{i=0}^{7} a_i x^i = a_7 x^7 + a_6 x^6 + a_5 x^5 + a_4 x^4 + a_3 x^3 + a_2 x^2 + a_1 x + a_0 \ (a_i \in \mathbb{F}_2)
+\]
+i cui elementi corrispondono esattamente ai singoli bit del byte $a_7 a_6 a_5 a_4 a_3 a_2 a_1 a_0$.
 
 \paragraph{ShiftRows} Applica uno shift ciclico alle 4 righe della matrice:
 \begin{itemize}
@@ -341,16 +361,35 @@ esecuzione.
 \end{itemize}
 \input{figures/ShiftRows.tex}
 
-\paragraph{MixColumns} La matrice $4 \times 4$ viene moltiplicata da una matrice fissata invertibile (A), i cui elementi sono interpretati come elementi di $GF(2^8)$ con $x^8+x^4+x^3+x+1$ come polinomio irriducibile. 
+\paragraph{MixColumns} La matrice $4 \times 4$ viene moltiplicata da una matrice fissata invertibile ($A$):
 \input{figures/MixColumns.tex}
 
-\noindent Nella matrice A, gli scalari sono interpretati come elementi di $GF(2^8)$ usando la loro rappresentazione binaria ($03$ rappresenta $x+1$ in $GF(2^8)$).
+\paragraph{Key schedule} Durante la cifratura, \textit{AES} non usa la stessa chiave per ogni \textit{round}, ma la chiave iniziale viene espansa per generare una sequenza di sottochiavi, detta \textbf{expandend key}.  
+
+\vspace{1em} \noindent Nel caso di \textit{AES-128}, la chiave iniziale è a $128$ bit, ovvero $4$ \textbf{word}. Ogni sottochiave è a sua volta costituita da $4$ word e per $10$ \textit{round} servono $11$ word. \\ Le prime $4$ \textit{word} corrispondo direttamente a quella iniziale, mentre le successive vengono calcolate ricorsivamente:
+\begin{itemize}
+    \item \textbf{RotWord}$(B_0, B_1, B_2, B_3) =(B_1, B_2, B_3, B_0)$: ruota ciclicamente di un byte una \textit{word};
+    \item \textbf{SubWord}$(B_0, B_1, B_2, B_3)=(\pi_s(B_0),\pi_s(B_1),\pi_s(B_2),\pi_s(B_3))$: applica l'\textit{S-box AES} indipendentemente a ciascuno dei $4$ byte. 
+\end{itemize}
+
+Per evitare che la generazione delle sottochiavi segua una semplice ripetizione regolare, si usa:
+
+\[
+w[i] =
+\begin{cases}
+w[i-4] \oplus
+\operatorname{SubWord}\bigl(\operatorname{RotWord}(w[i-1])\bigr)
+\oplus \operatorname{RCon}[i/4],
+& \text{se } i \equiv 0 \pmod{4}, \\[6pt]
+w[i-4] \oplus w[i-1],
+& \text{altrimenti}.
+\end{cases}
+\]
+
+($RCon$ è un array di costanti inziamente definite.) 
 
 
-\vspace{0.5cm} \noindent  Nell'ultimo round, AES usa $\bar{\Pi}_{AES}$, che è uguale a $\Pi_{AES}$ senza MixColumns. 
-
-\vspace{0.2cm} \noindent Poiché ogni step di $\Pi_{AES}$ è invertibile, l'intera permutazione lo è, quindi è possibile decifrare applicando le trasformazioni inverse in ordine inverso.
-
+\newpage
 \subsubsection{Modalità di operazione di AES}
 \begin{itemize}
     \item ECB  =``Electronic codebook mode''
