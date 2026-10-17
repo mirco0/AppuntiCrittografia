@@ -397,9 +397,9 @@ w[i-4] \oplus w[i-1],
     \item CTR = ``Counter mode''
 \end{itemize}
 
-\paragraph{ECB} Corrisponde a usare un cifrario a blocchi: data una sequenza $x_1 \dots x$ di plaintext, ogni $x_i$ è cifrata con la \textbf{stessa} chiave $K$, producendo il \emph{ciphertext} $Y_1 \dots $. Quindi la cifratura di blocchi di \emph{plaintext} identici produce blocchi di \emph{ciphertext} identici: rappresenta una debolezza, motivo per cui non viene usato (Caso estremo: blocchi di plaintext di tutti $0$ o $1$).
+\paragraph{ECB} Corrisponde a usare un cifrario a blocchi: data una sequenza $x_1x_2 \dots $ di \textit{plaintext}, ogni $x_i$ è cifrata con la \textbf{stessa} chiave $K$, producendo il \emph{ciphertext} $y_1y_2 \dots $. Quindi la cifratura di blocchi di \emph{plaintext} identici produce blocchi di \emph{ciphertext} identici: rappresenta una debolezza, motivo per cui non viene usato (Caso estremo: blocchi di plaintext di tutti $0$ o $1$).
 
-\paragraph{CBC} Sia $y_0=$ IV (ha la stessa lunghezza di un blocco di plaintext). $\forall i=1, \dots $ 
+\paragraph{CBC} Sia $y_0=$ l'\textit{IV}, ovvero l'\textit{Inizialization vector} (ha la stessa lunghezza di un blocco di plaintext). $\forall i=1, \dots $ 
 
  \[ \text{Cifratura} \ 
 y_i=e_K(y_{i-1} \oplus x_i). 
@@ -409,9 +409,9 @@ y_i=e_K(y_{i-1} \oplus x_i).
 x_i=d_K(y_i) \oplus {y_{i-1}}.
 \] 
 
-\noindent Se un blocco di plaintext $x_i$ cambia, allora $y_i$ e tutti i successivi blocchi cambiano. È quindi utile per l'autenticazione, più precisamente per produrre un MAC
+\noindent Se un blocco di plaintext $x_i$ cambia, allora $y_i$ e tutti i successivi blocchi cambiano. È quindi utile per l'autenticazione, più precisamente per produrre un MAC.
 
-\paragraph{CTR} (Modalità analoga ad uno stream cipher) Si sceglie un counter, \textit{ctr}, che è una sottostringa di lunghezza $m$. Si costruisce una sequenza come segue: 
+\paragraph{CTR} (Modalità analoga ad uno stream cipher (OFB)) Si sceglie un counter, \textit{ctr}, che è una sottostringa di lunghezza $m$. Si costruisce una sequenza come segue: 
 \[
 T_i=ctr+i-1 \pmod 2^m \ \forall i\geq 1.
 \]
@@ -421,39 +421,130 @@ T_i=ctr+i-1 \pmod 2^m \ \forall i\geq 1.
 y_i=x_i \oplus e_K(T_i) \ \forall i \geq 1. 
 \]
 
-\noindent La keystream in CTR si ottiene cifrando la sequenza di \textit{ctr} usando la chiave $K$. \\ La keystream può essere costruita indipendentemente dal plaintext. Inoltre, la generazione della keystream può essere implementata in modo più efficiente, in parallelo, rispetto a OFB, poiché gli elementi della keystream sono indipendenti tra di loro e quindi non si calcolano le keystream in funzione delle precedenti.
+\noindent Il keystream in CTR si ottiene cifrando la sequenza di \textit{ctr} usando la chiave $K$. \\ Il keystream può essere costruita indipendentemente dal \textit{plaintext}. Inoltre, la generazione del keystream può essere implementata in modo più efficiente, in parallelo, rispetto a OFB, poiché gli elementi della keystream sono indipendenti tra di loro e quindi non si calcolano le keystream in funzione delle precedenti.
 
-\paragraph{Padding Oracle Attack su CBC}
-Il padding oracle attack fa uso del padding aggiunto al \textit{plaintext} affinché il messaggio possa essere diviso in blocchi. \\ Usiamo un cifrario a blocchi con blocchi di $128$ bit= $16$ byte. Il padding è inserito nell'ultimo blocco.
+\subsubsection{\textit{Padding Oracle Attack} su CBC}
+Quando il \textit{plaintext} non ha una lunghezza multipla della dimensione del blocco ($128$ bit), è necessario aggiungere dei byte di \textbf{padding} per completare l'ultimo blocco.
 
-\vspace{0.2cm} \noindent Lo schema di padding descritto è $\text{PKCS}\#7$, che usa notazione esadecimale, funziona così: 
+\vspace{1em} \noindent Nello schema di padding PKCS\#7, che usa notazione esadecimale, se la dimensione del blocco è di $b$ byte
+e occorre aggiungere $p$ byte, ciascuno dei byte aggiunti assume il valore $p$. Pertanto, il padding è composto da $p$ copie del byte che rappresenta il numero di byte aggiunti.
+
+\vspace{1em}\noindent Nel caso di \textit{AES}, in cui $b=16$, si hanno i seguenti esempi:
+
 \begin{itemize}
-    \item $15$ byte di dati è aggiunto un padding di un byte $01$;
-    \item $14$ byte di dati è aggiunto un padding di 2 byte $02$;
-    \item $13$ byte di dati è aggiunto un padding di 3 byte $03$;
+    \item Se manca 1 byte, si aggiunge \texttt{01};
+    \item Se mancano 2 byte, si aggiunge \texttt{02 02};
+    \item Se mancano 3 byte, si aggiunge
+    \texttt{03 03 03};
+    \item \dots
+    \item Se il messaggio ha già una lunghezza multipla di 16 byte,
+    si aggiunge un intero blocco di padding composto da 16 copie
+    del byte \texttt{10} esadecimale.
 \end{itemize}
-e così via, per $1$ byte di dati ci sono 15 byte $0F$.
 
-Se il blocco è già pieno, si aggiunge un blocco intero di padding $10$. 
-
-\vspace{0.2cm} \noindent Supponiamo avere una sequenza di blocchi di \emph{ciphertext} $y_0, \dots, y_n$, con $y_0=$IV. Si verifica quindi che nell'ultimo blocco ci sia un padding corretto. Se sì, il padding viene scartato, altrimenti verrà generato un errore. 
-
-\vspace{0.2cm} \noindent Un \textit{padding oracle attack} si riferisce a un modello di attacco in cui l'avversario può sottoporre il \emph{ciphertext} a un \emph{oracolo}.\\ Matematicamente, l'oracolo è una funzione $\mathcal{O}(y_0, y_1, \dots, y_n)$  che restituisce \textit{true}, se il \emph{plaintext} contiene un padding corretto, \textit{false} altrimenti. \\ Sia $y_1$ il primo blocco del \emph{ciphertext} ($y_0$ è l'IV). Ricaviamo il rispettivo \emph{plaintext} $x_1$ calcolando: 
+\noindent Nella modalità CBC, si ha:
 \[
-    x_1=d_K(y_1) \oplus y_0.
+    x_i = D_K(y_i) \oplus y_{i-1}.
 \]
 
-\noindent L'avversario può scegliere qualsiasi valore per $y_0$, che appunto, denotiamo $y_0'$. Pensiamo $y_0'=r_1 r_2 \dots r_{16}$, ovvero la concatenazione di 16 byte. \\ I primi 15 byte sono scelti casualmente e $r_{16}$ assume uno dei 256 possibili valori $\texttt{00}, \dots, \texttt{FF}$. Ora, se l'avversario invoca l'oracolo per calcolare $\mathcal{O}(y_0', y_1)$ per i vari possibili valori di $y_0'$, con alta probabilità, ci sarà esattamente un valore di $r_{16}$ che avrà nell'ultimo byte di $d_K(y_1) \oplus y_0'$ il valore \texttt{01}.
 
-Ciò permette all'avversario di calcolare l'ultimo byte $x_1$ facilmente, $x_1 = r_{16} \oplus \texttt{01}$. Dunque l'avversario è in grado di calcolare l'ultimo byte di $x_1$ dopo un massimo di $256$ chiamate all'oracolo. 
+\noindent Questa proprietà è fondamentale:
+modificando un byte del blocco precedente al blocco che si vuole
+decifrare, è possibile modificare il byte corrispondente del
+plaintext risultante. \\ Infatti, se si sostituisce $y_{i-1}$ con un blocco modificato
+$y'_{i-1}$, mantenendo invariato $y_i$, si ottiene:
 
-\vspace{0.2cm} \noindent Si procede ora, calcolando il penultimo byte di $x_1$. \\ L'avversario, deve ``forzare il padding'', modificando il messaggio già scoperto: si incrementa $r_{16}$ di $1$ e si denotano i risultanti 16 byte con $y_0''$. L'ultimo byte di $d_K(y_1) \oplus y_0''$ sarà uguale a \texttt{02}, il padding è valido se anche il penultimo byte è $02$. Quindi la strategia è considerare tutti i 256 possibili valori per il penultimo byte di $y_0''$, denotato con $r_{15}$. Se l'oracolo risponde $\mathcal{O}(y_0'',y_1)$= \textit{True}, sappiamo calcolare anche il penultimo byte di $x_1$ con al massimo $256$ chiamate all'oracolo. 
+\[
+    x'_i = D_K(y_i) \oplus y'_{i-1}.
+\]
 
-\vspace{0.2cm} \noindent Il processo può ripetersi, fino a calcolare tutti i $16$ byte di $x_1$.  \\ Il numero di chiamate all'oracolo è al massimo $16 \times 256=4096$. 
+\noindent Di conseguenza, variando un byte di $y'_{i-1}$ si può variare
+il byte corrispondente di $x'_i$, senza conoscere la chiave
+di cifratura.
+
+
+\vspace{0.2cm} \noindent Un \textit{padding oracle attack} si riferisce a un modello di attacco in cui l'avversario può sottoporre il \emph{ciphertext} a un \emph{oracolo}.\\ Matematicamente, l'oracolo è una funzione $\mathcal{O}(y_0, y_1, \dots, y_n)$  che restituisce \textit{true}, se il \emph{plaintext} contiene un padding corretto, \textit{false} altrimenti.
+
+\noindent L'oracolo non rivela direttamente il plaintext né la chiave
+segreta. Comunica soltanto se il padding è valido.
+
+\vspace{1em}\noindent L'attaccante può quindi modificare il blocco precedente a quello
+che vuole decifrare e inviare ripetutamente il ciphertext modificato
+all'oracolo. In base alla risposta ricevuta, può dedurre informazioni
+sui byte del plaintext.
+
+
+\vspace{1em}
+\noindent
+Sia $y_1$ il primo blocco del \emph{ciphertext}, mentre
+$y_0$ è l'IV originale. Il plaintext corrispondente è:
+
+\[
+    x_1 = D_K(y_1) \oplus y_0.
+\]
+
+\noindent
+L'attaccante può sostituire l'IV con un valore scelto
+$y'_0 = r_1r_2\dots r_{16}$, mantenendo fisso $y_1$.
+I primi 15 byte possono essere scelti arbitrariamente,
+mentre $r_{16}$ viene fatto variare tra i 256 valori possibili,
+da \texttt{00} a \texttt{FF}.\\ Quando l'oracolo segnala un padding valido, si cerca di
+individuare il caso in cui l'ultimo byte del plaintext
+modificato sia \texttt{01}. In tal caso:
+
+\[
+    D_K(y_1)_{16} \oplus r_{16} = \texttt{01} \iff     D_K(y_1)_{16} = r_{16} \oplus \texttt{01}.
+\]
+
+\noindent Per ricavare l'ultimo byte del \textit{plaintext} originale, si usa l'IV originale:
+
+\[
+    \boxed{
+    x_{1,16} =
+    r_{16} \oplus \texttt{01} \oplus y_{0,16}
+    }.
+\]
+
+\vspace{0.5em}
+\noindent Dopo aver individuato il valore che produce il padding
+\texttt{01}, l'attaccante modifica l'ultimo byte dell'IV
+per ottenere un padding di due byte, cioè
+\texttt{02 02}. Il nuovo valore dell'ultimo byte è:
+
+\[
+    r'_{16} =
+    r_{16} \oplus \texttt{01} \oplus \texttt{02}.
+\]
+
+\noindent Successivamente, prova i 256 valori possibili del penultimo
+byte, indicato con $r_{15}$, mantenendo l'ultimo byte impostato
+in modo da produrre \texttt{02}.\\ Se il padding \texttt{02 02} è valido,
+si ha:
+
+\[
+    D_K(y_1)_{15} \oplus r_{15} = \texttt{02} \quad \text{(pertanto)} \quad x_{1,15} = r_{15} \oplus \texttt{02} \oplus y_{0,15}.
+\]
+
+
+\vspace{0.5em}
+\noindent Il procedimento viene ripetuto procedendo da destra verso
+sinistra. Per recuperare il byte in posizione $j$, si imposta
+un padding di lunghezza $p=16-j+1$, in cui gli ultimi $p$
+byte del plaintext modificato devono essere tutti uguali a $p$. \\ Se $r_j$ è il valore del byte modificato che produce il padding
+desiderato, si ricava il byte originale mediante:
+
+\[
+    \boxed{
+    x_{1,j} = r_j \oplus p \oplus y_{0,j}
+    }.
+\]
+
+
+\vspace{0.2cm} \noindent Il numero di chiamate all'oracolo è al massimo $16 \times 256=4096$. 
 
 \vspace{0.2cm} \noindent L'attaccante può quindi recuperare il \emph{plaintext} del messaggio cifrato.
 
-\vspace{0.2cm} \noindent Perché funziona? Poiché CBC combina \texttt{xor} col blocco precedente, modificando il \emph{ciphertext} precedente si controlla il \emph{plaintext} del blocco successivo, pur non conoscendo la chiave.
+
 
 % \subsection{Attacchi lineari a Cifrari a blocchi}
 % L'idea dell'analisi lineare è basata sul trovare una relazione probabilistica tra un sottoinsieme di bit nel \emph{plaintext} e un sottoinsieme di bit nel \emph{ciphertext} che precede la permutazione dell'ultimo round. Assumendo di avere a disposizione un grande numero di coppie, per un attacco \emph{known-plaintext}, per ogni coppia si cerca di decifrare l'ultimo round, e per ogni chiave provata si calcolano le relazioni tra i bit rilevanti, si cerca di capire quanto la relazione ideata si verifica per ogni chiave provata, alla fine del processo si spera di trovare una chiave per cui la relazione si applica almeno a $1/2$ bit della relazione. 
