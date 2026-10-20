@@ -287,7 +287,7 @@ k_{i,j}=
 % \end{definition}
 
 
-\noindent Il cifrario è polialfabetico perché il plaintext viene suddiviso in blocchi di $m$ lettere, ciascuno dei quali viene  cifrato mediante combinazioni lineari dei valori numerici delle lettere che lo compongono. \\ Si ricorda che affinché una matrice sia invertvile, il suo determinante deve essere diverso da $0$, e deve quindi valere che $ \gcd(\det K,26)=1$.
+\noindent Il cifrario è polialfabetico perché il \textit{plaintext} viene suddiviso in blocchi di $m$ lettere, ciascuno dei quali viene  cifrato mediante combinazioni lineari dei valori numerici delle lettere che lo compongono. \\ Si ricorda che affinché una matrice sia invertibile, il suo determinante deve essere diverso da $0$, e deve quindi valere che $ \gcd(\det K,26)=1$.
 
 
 \vspace{1em}
@@ -317,7 +317,7 @@ X^{-1}Y=X^{-1}XK \pmod{26} \iff  K=X^{-1}Y \pmod{26}.
 altre coppie di plaintext e ciphertext. 
 
 \newpage
-\section{Crittosistemi classici: Cifrari a Stream}
+\section{Cifrari a Stream}
 Diversamente dai cifrari a blocchi, in cui un messaggio viene cifrato usando sempre la stessa chiave ($y_i=e_K(x_i) \ \forall i$ ), nei cifrari a flusso si può generare una sequenza di valori, detta \textit{keystream}, i cui elementi vengono usati per cifrare ciascun elemento del \textit{plaintext}. 
 \subsection{Cifrari a Stream sincroni}
 
@@ -389,3 +389,42 @@ Sono cifrari nei quali ogni elemento del keystream può dipendere, oltre che dal
 \[
 z_1=K,\qquad z_i=x_{i-1}\quad\text{per }i\geq 2.
 \]
+
+\newpage
+\subsection{\textit{Correlation Attack on a Combination Generator}}
+Un \textit{Combination Generator} è un generatore di \textit{keystream} che combina le sequenze prodotte da più LFSR attraverso una funzione booleana. 
+
+\noindent Si considera il caso in cui si hanno 3 LFSR:
+    \begin{itemize}
+        \item LFSR $1$ produce il bit $z_1$;
+        \item LFSR $2$ produce il bit $z_2$;
+        \item LFSR $3$ produce il bit $z_3$;
+        \item la funzione combinatrice è data da: \[z=f(z_1, z_2, z_3)=(z_1 \land z_2) \oplus (z_1 \land z_3) \oplus (z_2 \land z_3) \text{, in cui $z$ è il keystream finale. } \]
+    \end{itemize}
+
+\noindent La sicurezza dovrebbe derivare dal fatto che, conoscendo il \textit{keystream} finale, non sia facile risalire agli stati iniziali dei tre LFSR. Il problema è che la funzione combinatrice scelta introduce una \textbf{correlazione statistica} tra ciascun bit prodotto dai singoli LFSR e il bit d’uscita della funzione,ed è propriò ciò che permette l'attacco. \\ La funzione $f(z_1, z_2, z_3)$ è anche detta \textit{majority function} perché restituisce il bit presente nella maggioranza dei tre ingressi. 
+
+\vspace{1em} \noindent Supponiamo che tutte le otto combinazioni dei tre bit siano equiprobabili. Per capire qual è la probabilità che il bit d'uscita coincida col bit prodotto dal primo, secondo e terzo LFSR, si consulta la tabella, secondo cui: 
+\[
+\Pr[z=z_j]=\frac{3}{4}=75\% \ j=1,2,3.
+\] 
+
+\noindent Quindi, considerando separatamente ogni ingresso, la sua probabilità di coincidere con l'uscita è del 75\%. \\ Se l'uscita fosse indipendente da ciascun ingresso, conoscere il keystream finale non aiuterebbe a individuare gli stati iniziali degli LFSR, ma grazie alla correlazione, lo stato iniziale corretto di un LFSR genera una sequenza che, in media, coincide con il keystream osservato nel 75\% dei casi. Per uno stato iniziale errato, invece, ci si aspetta una percentuale di corrispondenze vicina al 50\%
+
+\vspace{1em} \noindent Si ipotizza dunque un \textit{known plaintext attack}. Si ricava il \textit{keystream} mediante: 
+\[
+z_i=m_i \oplus c_i.
+\]
+
+L'obiettivo dell'attaccante è utilizzare il \textit{keystream} conosciuto per ricostruire la chiave segreta, ovvero gli stati iniziali dei tre LFSR. 
+
+\noindent L'idea è quella di attaccare separatamente ciascun LFSR, per individuare lo stato iniziale più probabile. \\ Supponendo che i tre LFSR abbiano rispettivamente stati iniziali di lunghezza $L_1, L_2, L_3$, si ha:
+\begin{itemize}
+    \item Si attacca il primo LFSR: si provano tutti i $2^{L_1}$ stati iniziali possibili. Per ciascuno si genera una sequenza e si conta quante volte coincide col \textit{keystream} osservato;
+    \item Analogamente per il secondo e terzo LFSR;
+    \item Per ciascun LFSR si seleziona lo stato iniziale che presenta il maggior numero di corrispondenze. Infine, si combinano i tre stati individuati, si rigenera il keystream e lo si confronta con quello osservato. Se le sequenze coincidono, la chiave è corretta.
+\end{itemize}  
+
+\noindent Lo stato iniziale corretto si sceglie provando tutti gli stati iniziali possibili e contando quanti bit generati coincidono con il keystream conosciuto. 
+
+\noindent La complessità finale è data da: $\mathcal{O}(2^{L_1}+2^{L_2}+2^{L_3})$, a differenza del $\mathcal{O}(2^{L_1}\cdot 2^{L_2}\cdot 2^{L_3})$ del \textit{brute force}. 
