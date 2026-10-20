@@ -1,0 +1,84 @@
+\subsection{Campi}
+
+\paragraph{\textbf{Anello}} Un anello è una tripla $R=(X, \cdot, +)$ dove X è un insieme finito e $\cdot, +$ operazioni binarie definite su $X$:
+\begin{itemize}
+    \item $(X, +)$ è un gruppo abeliano con l'$id=0$;
+    \item $\cdot$ è \textbf{associativa}: $(a \cdot b) \cdot c= a \cdot( b \cdot c) \quad \forall,b,c \in X$;
+    \item $\cdot, +$ sono \textbf{distributive}: $(a+b) \cdot c = a \cdot b + a \cdot c \quad \forall,b,c \in X$. 
+\end{itemize}
+
+Esempi di anelli (infiniti) sono: $\mathbb{Z}, \mathbb{R}, \mathbb{C}, \dots$
+
+\paragraph{$(\mathbb{Z}_m, \cdot, +)$} È un anello \textbf{finito} $\forall m \geq 2$.  
+
+\paragraph{\textbf{Ideale}} Sia $R=(X, \cdot, +)$ è un anello commutativo. Un ideale $I$ è un sottoinsieme di $X$ tale che:
+\begin{itemize}
+    \item $(I, +)$ è un gruppo abeliano;
+    \item $ab \in I$ quando $a \in X, b \in I$.
+\end{itemize}
+
+\paragraph{\textbf{Ideale principale}} Sia $R=(X, \cdot, +)$ è un anello commutativo e sia $c \in X$. L'ideale principale generato da $c$, è: 
+\[
+    (c)={ac: a \in X}. 
+\]
+
+\paragraph{\textbf{Campo}} Un anello $R=(X, \cdot, +)$ è un campo se è un anello commutativo con elemento neutro tale che ogni elemento non nullo abbia un'inversa moltiplicativa (ovvero, $R \setminus \{0\}$). 
+
+\vspace{1em} \noindent $(\mathbb{Z}_n, \cdot, +)$ è un campo finito se e solo se $n$ è primo. 
+\vspace{1em} \noindent Il prodotto diretto di due campi finiti non è un campo. 
+
+\paragraph{Polinomio irriducibile} Supponiamo $A$ è un campo. Un polinomio irriducibile $f(x) \in A[x]$ è irriducibile se $f(x)$ non può essere scritto come il prodotto di due polinomi $f_1(x)f_2(x)$, dove $f_1$ ed $f_2$ hanno entrambi grado positivo. 
+
+\vspace{1em} \noindent Supponiamo che $A$ è un qualunque campo finito e supponiamo $n$ un intero positivo. Allora, esiste \textbf{almeno} un polinomio irriducibile di grado $n$ in $(A[x], \cdot, +)$. 
+
+\begin{theorem}
+    Esiste un campo finito di ordine $q$ se e solo se $q=p^k$ con $p$ primo e $k \geq 1$ un intero.  Esso è detto avere \textbf{caratteristica} $p$. 
+\end{theorem}
+
+\begin{proof}
+
+    $\rightarrow$ (hp: Se esiste un campo finito di ordine $q$, allora $q=p^k$).
+
+    $\leftarrow$ (hp: Se $q=p^k$, allora esiste un campo finito di ordine $q$). 
+
+    
+\end{proof}
+
+\newpage
+
+\begin{theorem}
+    Supponiamo $p$ primo e $k \geq 2$. Un campo finito di ordine $p^k$ può esser costruito come segue. Sia $f(x) \in \mathbb{Z}_p[x]$ un polinomio irriducibile di grado $k$. Allora l'anello quoziente $\mathbb{Z}_p[x]/f(x)$ è un campo finito di ordine $p^k$. 
+\end{theorem}
+
+\begin{proof}
+    
+\end{proof}
+\begin{example}
+    Poiché $x^2+x+1$ è irriducibile in $\mathbb{Z}_2[x]$, segue che $\mathbb{Z}_2[x]/(x^2+x+1)$ è un campo finito di ordine 4. I polinomi in $\mathbb{Z}_2[x]/(x^2+x+1)$ sono $0,1,x,x+1$. \\ L'inversa moltiplicativa di $x$ è $x+1$ perché $x(x+1)=x^2+x=x+1+x=1$. 
+\end{example}
+\paragraph{Isomorfismo} Per qualunque polinomio $f(x) \in \mathbb{Z}_p[x]$ aventi grado $k$, il gruppo additivo $(\mathbb{Z}_p[x]/(f(x),+))$ è isomorfo a $(\mathbb{Z}_p)^k$. 
+
+\begin{theorem}
+    Tutti i campi finiti di un dato ordine $n$ sono isomorfi. 
+\end{theorem}
+
+\vspace{1em} \noindent L'unico campo finito di ordine $q$ (a meno di isomorfismo) lo denotiamo con $\mathbb{F}_q$. 
+
+\begin{theorem}
+    Il gruppo moltiplicativo $(\mathbb{F}_q)\setminus \{0\}, \cdot$ è ciclico. 
+\end{theorem}
+
+\paragraph{Generatore} Un generatore di $(\mathbb{F}_q)\setminus \{0\}, \cdot$ è detto \textbf{elemento primitivo} in $\mathbb{F}_q$. 
+
+\begin{example}
+    $\mathbb{F}_8=\mathbb{F}_2[x]/(x^3+x+1)$. Le potenze di $x$ sono le seguenti:
+    \begin{align*}
+        x^0&=1\\
+        x^1&=x\\
+        x^2&=x^2\\
+        x^3&=x+1\\
+        x^4&=x^2+x\\
+        x^5&=x^2+x+1\\
+        x^6&=x^2+1.
+    \end{align*}
+\end{example}
