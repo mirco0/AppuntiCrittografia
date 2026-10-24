@@ -1,0 +1,100 @@
+\section{Crittografia a chiave pubblica}
+
+La crittografia a chiave pubblica, detta \textit{crittografia asimmetrica}, è stata introdotta da Diffie e Hellman nel 1976. A differenza della crittografia simmetrica, che utilizza un'unica chiave segreta condivisa $K$, precedentemente accordata su un canale sicuro tra mittente e destinatario, la crittografia asimmetrica si basa su una \textbf{coppia di chiavi} distinte ma matematicamente correlate:
+\begin{itemize}
+    \item \textbf{Chiave pubblica} $K_{\mathrm{pub}}$: accessibile a chiunque, viene utilizzata per cifrare;
+    \item \textbf{Chiave privata} $K_{\mathrm{priv}}$: è posseduta solo dal destinatario ed è  utilizzata per decifrare. 
+\end{itemize}
+
+Infatti:
+\[
+    y=e_{K_{\mathrm{pub}}}(x).
+\]
+\[
+    x=d_{K_{\mathrm{priv}}}(y).
+\]
+
+
+Infatti vale la proprietà fondamentale:
+\[
+    d_{K_{\mathrm{priv}}}
+    \left(e_{K_{\mathrm{pub}}}(x)\right)=x \quad \text{\textbf{Sistema funzionale}}.
+\]
+
+
+\vspace{1em} Bisogna notare che i crittosistemi a chiave pubblica sono molto più lenti di quelli a chiave privata, come l'\textit{AES}. Pertanto, nella pratica, i crittosistemi a chiave pubblica non vengono quasi mai impiegati per cifrare messaggi lunghi, ma il loro uso principale è cifrare chiavi brevi, a loro volta impiegate in crittosistemi simmetrici.  \\ Questo procedimento è noto come crittografia \textbf{ibrida}:
+
+\begin{itemize}
+    \item Alice prima sceglie una chiave $L$ per un crittosistema simmetrico e calcola $y=e_L(x)$;
+    \item Alice poi cifra $L$ usando la chiave pubblica di Bob per un crittosistema asimmetrico: $z=e_{K_{\text{Bob}}}(L)$;
+    \item Bob prima decifra $z$ usando la sua chiave privata: $L=d_{K_{\text{Bob}}}(z)$;
+    \item Bob usa $L$ per decifrare $y$: $x=d_L(y)$. 
+\end{itemize}
+
+
+In questo modo, la crittografia asimmetrica risolve il problema della distribuzione delle chiavi, mentre quella simmetrica permette di cifrare grandi quantità di dati in modo efficiente.
+
+\vspace{2em} In crittografia asimmetrica, chiunque conosca la chiave può cifrare un messaggio, anche un attaccante. Se l'attaccante intercetta un \textit{ciphertext} $y$, non conoscendo la chiave privata, potrebbe:
+\begin{itemize}
+    \item prendere un possibile \textit{plaintext} $x_1$;
+    \item cifrare $x_1$ usando la chiave pubblica;
+    \item controlla se $e_K(x_1)=y$;
+    \item se non coincide prova $x_2$, poi $x_3$, \dots
+    \item quando trova un messaggio tale che $e_k(x)=y$ ha recuperato il \textit{plaintext} originale. 
+\end{itemize}
+
+Quindi, se lo spazio dei messaggi $M$ è finito, l'attaccante può recuperarli tutti per tentativi. \\ Dunque, la crittografia asimmetrica non può garantire sicurezza incondizionata. \\ Di conseguenza, si studia quella computazionale.  
+
+\vspace{2em} Si introduce quindi il concetto di \textbf{trapdoor one-way
+function}, ossia una funzione che:
+
+\noindent
+\begin{tabular}{@{}l@{\hspace{3pt}}l@{\hspace{5pt}}l@{}}
+\begin{minipage}{0.76\linewidth}
+    \vspace{0.5em}
+\begin{itemize}
+    \item è facile da calcolare in avanti (calcolare $y$ conoscendo $x$)
+    per chiunque;
+    \item è difficile da invertire senza informazioni segrete
+    (calcolare $x$ conoscendo $y$);
+    \item diventa facile da invertire conoscendo tali informazioni.
+\end{itemize}
+\end{minipage}
+&
+$\left.\rule{0pt}{2.5em}\right\}$
+&
+\begin{minipage}{0.18\linewidth}
+\textbf{Funzione one-way}\\
+(a senso unico)
+\end{minipage}
+\end{tabular}
+
+
+\vspace{1em}Infatti:
+\begin{itemize}
+    \item la funzione $e_K$ è pubblica e viene utilizzata per cifrare;
+    \item la funzione $d_K$ è privata e viene utilizzata per decifrare;
+    \item la chiave privata $K$ fornisce le informazioni necessarie, ovvero la \textit{trapdoor},
+    per invertire efficientemente la funzione di cifratura (affinché \textbf{solo} il destinatario possa decifrare).
+\end{itemize}
+
+
+\newpage
+Nel caso di RSA:
+\begin{itemize}
+    \item la funzione pubblica:
+        \[
+            e_{K_{\text{pub}}}(x)=x^b \bmod n, \qquad n=pq, \quad (\text{$p,q$ primi}),
+        \]
+        \[
+            \gcd(b,\varphi(n))=\gcd(b, (p-1)(q-1))=1.
+        \]
+    \item la funzione inversa:
+        \[
+            d_{K_{\text{priv}}}(y)=y^a \bmod n, \quad \text{dove $a$ è l'esponente privato tale che:} \quad ab \equiv 1 \pmod{\varphi(n)}.
+        \]
+\end{itemize}
+
+La chiave pubblica è costituita da $(n,b)$, mentre la chiave
+privata comprende l'esponente $a$ e può includere altre
+informazioni segrete utili alla decifratura.
